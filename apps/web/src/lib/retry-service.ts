@@ -162,7 +162,7 @@ export async function retryFBRSubmission(invoiceId: string): Promise<{
     // Format invoice for PRAL API
     const pralInvoice = {
       InvoiceType: invoice.documentType as 'Sale Invoice' | 'Debit Note',
-      InvoiceDate: invoice.invoiceDate.toISOString().split('T')[0],
+      InvoiceDate: invoice.invoiceDate?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
       
       // Seller information
       SellerNTNCNIC: invoice.business.ntnNumber,
@@ -208,7 +208,7 @@ export async function retryFBRSubmission(invoiceId: string): Promise<{
     // Submit to FBR
     let fbrResponse
     try {
-      fbrResponse = await pralClient.postInvoice(pralInvoice)
+      fbrResponse = await pralClient.postInvoice(pralInvoice as any)
       
       // Check validation status
       if (fbrResponse.ValidationResponse.StatusCode !== '00') {
@@ -263,9 +263,9 @@ export async function retryFBRSubmission(invoiceId: string): Promise<{
         const qrData = {
           fbrInvoiceNumber: fbrResponse.InvoiceNumber,
           sellerNTN: invoice.business.ntnNumber,
-          invoiceDate: invoice.invoiceDate.toISOString(),
+          invoiceDate: invoice.invoiceDate?.toISOString() || new Date().toISOString(),
           totalAmount: invoice.totalAmount,
-          buyerNTN: invoice.customer?.ntnNumber,
+          buyerNTN: invoice.customer?.ntnNumber || undefined,
           fbrTimestamp: fbrResponse.Dated
         }
         

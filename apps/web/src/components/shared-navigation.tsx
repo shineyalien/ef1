@@ -18,7 +18,7 @@ export function SharedNavigation({
   return (
     <div className="flex items-center space-x-4 mb-6">
       {backUrl && (
-        <Link href={backUrl as string}>
+        <Link href={backUrl as any}>
           <Button variant="outline" size="sm" className="flex items-center space-x-2">
             <ArrowLeft className="h-4 w-4" />
             <span>{backLabel}</span>

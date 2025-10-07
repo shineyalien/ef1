@@ -106,7 +106,7 @@ export default function EditInvoicePage() {
         // Populate form fields
         setCustomerId(data.customerId || '')
         setDocumentType(data.documentType || 'Sale Invoice')
-        setInvoiceDate(data.invoiceDate ? new Date(data.invoiceDate).toISOString().split('T')[0] : '')
+        setInvoiceDate((data.invoiceDate ? new Date(data.invoiceDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]) as string)
         setTaxPeriod(data.taxPeriod || '')
         setPaymentMode(data.paymentMode || 'Cash')
         setNotes(data.notes || '')
@@ -211,18 +211,25 @@ export default function EditInvoicePage() {
 
   const updateItem = (index: number, field: keyof InvoiceItem, value: any) => {
     const updatedItems = [...items]
+    if (!updatedItems[index]) return
+    
     updatedItems[index] = { ...updatedItems[index], [field]: value }
 
     // Recalculate if quantity or unitPrice changes
     if (field === 'quantity' || field === 'unitPrice' || field === 'taxRate') {
       const item = updatedItems[index]
-      const baseValue = item.quantity * item.unitPrice
-      const taxAmount = (baseValue * item.taxRate) / 100
+      if (!item) return
+      
+      const baseValue = (item.quantity || 0) * (item.unitPrice || 0)
+      const taxAmount = (baseValue * (item.taxRate || 0)) / 100
 
-      updatedItems[index].valueSalesExcludingST = baseValue
-      updatedItems[index].salesTaxApplicable = taxAmount
-      updatedItems[index].totalValue = baseValue + taxAmount + (item.salesTaxWithheldAtSource || 0)
-      updatedItems[index].fixedNotifiedValueOrRetailPrice = baseValue
+      updatedItems[index] = {
+        ...updatedItems[index],
+        valueSalesExcludingST: baseValue,
+        salesTaxApplicable: taxAmount,
+        totalValue: baseValue + taxAmount + (item.salesTaxWithheldAtSource || 0),
+        fixedNotifiedValueOrRetailPrice: baseValue
+      }
     }
 
     setItems(updatedItems)

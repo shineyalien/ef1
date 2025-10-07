@@ -53,9 +53,19 @@ export async function POST(request: NextRequest) {
     for (let i = 0; i < invoices.length; i++) {
       const invoiceData = invoices[i]
       
+      if (!invoiceData) {
+        results.failed++
+        results.errors.push({
+          index: i,
+          error: 'Invoice data is undefined',
+          customerName: 'Unknown'
+        })
+        continue
+      }
+      
       try {
         // Calculate totals
-        const subtotal = invoiceData.items.reduce((sum, item) => 
+        const subtotal = invoiceData.items.reduce((sum, item) =>
           sum + (item.quantity * item.unitPrice), 0
         )
         

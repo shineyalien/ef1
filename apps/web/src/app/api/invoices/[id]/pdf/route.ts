@@ -78,8 +78,21 @@ export async function GET(
     }
 
     // Generate PDF blob using the simple PDF generator
-    const { generateSimpleInvoicePDFBlob } = await import('@/lib/pdf-generator-simple')
-    const pdfBlob = await generateSimpleInvoicePDFBlob(invoiceData)
+    const { generateEnhancedPDF } = await import('@/lib/pdf-generator-enhanced')
+    const pdfStream = await generateEnhancedPDF(invoiceData, 'default')
+    
+    // Convert stream to buffer
+    const reader = pdfStream.getReader()
+    const chunks = []
+    let done = false
+    
+    while (!done) {
+      const { value, done: readerDone } = await reader.read()
+      done = readerDone
+      if (value) chunks.push(value)
+    }
+    
+    const pdfBlob = new Blob(chunks, { type: 'application/pdf' })
 
     // Return PDF as response
     return new NextResponse(pdfBlob, {
@@ -177,8 +190,21 @@ export async function POST(
     }
 
     // Generate PDF blob using the simple PDF generator
-    const { generateSimpleInvoicePDFBlob } = await import('@/lib/pdf-generator-simple')
-    const pdfBlob = await generateSimpleInvoicePDFBlob(invoiceData)
+    const { generateEnhancedPDF } = await import('@/lib/pdf-generator-enhanced')
+    const pdfStream = await generateEnhancedPDF(invoiceData, 'default')
+    
+    // Convert stream to buffer
+    const reader = pdfStream.getReader()
+    const chunks = []
+    let done = false
+    
+    while (!done) {
+      const { value, done: readerDone } = await reader.read()
+      done = readerDone
+      if (value) chunks.push(value)
+    }
+    
+    const pdfBlob = new Blob(chunks, { type: 'application/pdf' })
 
     // Return download response
     return new NextResponse(pdfBlob, {

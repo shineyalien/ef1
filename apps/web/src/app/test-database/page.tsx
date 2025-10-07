@@ -93,12 +93,14 @@ export default function TestDatabasePage() {
                 </ul>
               </div>
               <div className="flex space-x-2">
-                <Link href="/api/test-db" target="_blank">
-                  <Button variant="outline" size="sm">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Test API
+                <a href="/api/test-db" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" asChild>
+                    <>
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Test API
+                    </>
                   </Button>
-                </Link>
+                </a>
               </div>
             </CardContent>
           </Card>

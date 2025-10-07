@@ -78,7 +78,17 @@ export default function MobileInvoiceForm() {
 
   const updateItem = (index: number, field: string, value: any) => {
     const newItems = [...invoice.items]
-    newItems[index] = { ...newItems[index], [field]: value }
+    const currentItem = newItems[index]
+    
+    if (!currentItem) return
+    
+    // Ensure all required fields have proper values
+    newItems[index] = {
+      description: field === 'description' ? (value || '') : currentItem.description,
+      quantity: field === 'quantity' ? (value || 0) : currentItem.quantity,
+      price: field === 'price' ? (value || 0) : currentItem.price,
+      total: currentItem.total
+    }
     
     if (field === 'quantity' || field === 'price') {
       newItems[index].total = newItems[index].quantity * newItems[index].price

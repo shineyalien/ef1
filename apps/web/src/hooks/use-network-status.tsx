@@ -32,6 +32,9 @@ export function useNetworkStatus() {
         window.removeEventListener('offline', handleOffline)
       }
     }
+
+    // Return empty cleanup function for SSR
+    return () => {}
   }, [])
 
   return {

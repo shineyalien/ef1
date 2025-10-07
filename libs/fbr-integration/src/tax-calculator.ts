@@ -200,7 +200,7 @@ export class PakistaniTaxCalculator {
         sroScheduleNo: item.sroScheduleNo,
         sroItemSerialNo: item.sroItemSerialNo || '',
         applicableRate: salesTaxInfo.rate,
-        applicableFrom: new Date().toISOString().split('T')[0]
+        applicableFrom: new Date().toISOString().split('T')[0] || '2024-01-01'
       } : undefined
     )
     

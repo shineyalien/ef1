@@ -218,12 +218,16 @@ export default function CreateInvoicePage() {
         const businessData = await businessRes.json()
         const business = businessData.business
         
-        // Use FBR scenarios library instead of API to avoid hardcoded fallback
-        const { getApplicableScenarios } = await import('@/lib/fbr-scenarios')
-        const scenarioResult = getApplicableScenarios(business.businessType || '', business.sector || '')
+        // Fetch scenarios from API
+        const scenariosRes = await fetch(
+          `/api/fbr/scenarios?businessType=${encodeURIComponent(business.businessType || '')}&sector=${encodeURIComponent(business.sector || '')}&includeGeneral=true`
+        )
         
-        setScenarios(scenarioResult.scenarios)
-        console.log(`✅ Loaded ${scenarioResult.scenarios.length} scenarios for ${business.businessType} (${business.sector})`)
+        if (scenariosRes.ok) {
+          const data = await scenariosRes.json()
+          setScenarios(data.data || [])
+        }
+        console.log(`✅ Loaded scenarios for ${business.businessType} (${business.sector})`)
         
         // Always set default scenario from business settings if available
         if (business.defaultScenario) {
@@ -234,10 +238,12 @@ export default function CreateInvoicePage() {
           console.log(`✅ Set default scenario from business settings: ${business.defaultScenario}`)
         }
       } else {
-        // Fallback: load general scenarios
-        const { getApplicableScenarios } = await import('@/lib/fbr-scenarios')
-        const scenarioResult = getApplicableScenarios('', 'All Other Sectors')
-        setScenarios(scenarioResult.scenarios)
+        // Fallback: load all general scenarios
+        const scenariosRes = await fetch('/api/fbr/scenarios?includeGeneral=true')
+        if (scenariosRes.ok) {
+          const data = await scenariosRes.json()
+          setScenarios(data.data || [])
+        }
       }
     } catch (error) {
       console.error('Error loading scenarios:', error)

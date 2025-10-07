@@ -90,12 +90,6 @@ const SECTORS = [
   'Other'
 ]
 
-// Import FBR scenario functions
-import {
-  getApplicableScenarios,
-  getScenarioDescription,
-  validateScenarioApplicability
-} from '@/lib/fbr-scenarios'
 
 export default function BusinessSettingsPage() {
   const { data: session, status } = useSession()
@@ -407,14 +401,6 @@ export default function BusinessSettingsPage() {
                     value={formData.businessType}
                     onValueChange={(value) => {
                       setFormData({ ...formData, businessType: value })
-                      // Update available scenarios when business type changes
-                      const scenarios = getApplicableScenarios(value, formData.sector)
-                      if (scenarios.scenarios.length > 0) {
-                        setFormData(prev => ({
-                          ...prev,
-                          defaultScenario: scenarios.defaultScenario
-                        }))
-                      }
                     }}
                   >
                     <SelectTrigger>
@@ -436,14 +422,6 @@ export default function BusinessSettingsPage() {
                     value={formData.sector}
                     onValueChange={(value) => {
                       setFormData({ ...formData, sector: value })
-                      // Update available scenarios when sector changes
-                      const scenarios = getApplicableScenarios(formData.businessType, value)
-                      if (scenarios.scenarios.length > 0) {
-                        setFormData(prev => ({
-                          ...prev,
-                          defaultScenario: scenarios.defaultScenario
-                        }))
-                      }
                     }}
                   >
                     <SelectTrigger>
@@ -460,53 +438,6 @@ export default function BusinessSettingsPage() {
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="defaultScenario">Default FBR Scenario</Label>
-                <Select
-                  value={formData.defaultScenario || ''}
-                  onValueChange={(value) => setFormData({ ...formData, defaultScenario: value })}
-                  disabled={!formData.businessType || !formData.sector}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select business type and sector first">
-                      {formData.defaultScenario && (
-                        <span className="font-medium">{formData.defaultScenario}</span>
-                      )}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {(() => {
-                      if (!formData.businessType || !formData.sector) return []
-                      const scenarios = getApplicableScenarios(formData.businessType, formData.sector)
-                      return scenarios.scenarios.map((scenario) => (
-                        <SelectItem key={scenario.code} value={scenario.code}>
-                          <div className="flex flex-col items-start">
-                            <span className="font-medium text-sm">{scenario.code}</span>
-                            <span className="text-xs text-gray-600 mt-1 leading-tight">{scenario.description}</span>
-                          </div>
-                        </SelectItem>
-                      ))
-                    })()}
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-gray-500 mt-1">
-                  This scenario will be used for FBR sandbox testing. Production submissions use actual invoice data.
-                </p>
-              </div>
-
-              {/* Scenario Information */}
-              {formData.defaultScenario && (
-                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h4 className="font-medium text-blue-900 mb-2">Selected Scenario Information</h4>
-                  <div className="text-sm text-blue-800">
-                    <p><strong>Scenario:</strong> {formData.defaultScenario}</p>
-                    <p><strong>Description:</strong> {getScenarioDescription(formData.defaultScenario)}</p>
-                    <p className="text-xs text-blue-600 mt-2">
-                      This scenario is applicable for your business type and sector according to FBR guidelines.
-                    </p>
-                  </div>
-                </div>
-              )}
             </CardContent>
           </Card>
 

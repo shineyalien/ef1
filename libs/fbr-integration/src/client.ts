@@ -127,7 +127,7 @@ export class PRALAPIClient {
       try {
         const validation = await this.validateInvoiceSandbox(invoice)
         if (validation.validationResponse?.statusCode !== "00") {
-          console.warn('Pre-validation failed, proceeding with direct submission:', validation.validationResponse.error)
+          console.warn('Pre-validation failed, proceeding with direct submission:', validation.validationResponse?.error || 'Unknown validation error')
         }
       } catch (error) {
         console.warn('Pre-validation failed, proceeding with direct submission:', error)

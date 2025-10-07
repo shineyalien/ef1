@@ -159,7 +159,7 @@ export class QRCodeGenerator {
   static async generateTestQRCode(testInvoiceNumber: string): Promise<string> {
     const testData = {
       sellerNTN: '1234567',
-      invoiceDate: new Date().toISOString().split('T')[0],
+      invoiceDate: new Date().toISOString().split('T')[0] || '2024-01-01',
       totalAmount: 1000,
       buyerNTN: '7654321'
     }
