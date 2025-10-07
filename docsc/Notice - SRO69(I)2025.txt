@@ -1,0 +1,620 @@
+﻿                                           Government  of Pakistan 
+                                               Revenue  Division 
+
+                                          Federal  Board of Revenue 
+                                                       *+**+ 
+
+                                                                         Islamabad,  the 29th  January,  2025. 
+
+                                               NOTIFICATION 
+
+           S.R.O.  69  (l) I 2025.-  In exercise  of the powers  conferred  by section  50 of the 
+
+Sales Tax Act,  1990 read with  sub-section (9A) of section 3, sections  22.23  and 40C thereof, 
+
+the  Federal  Board of Revenue  is pleased to direct  that  the following further  amendments  shall 
+
+be made  in the  Sales  Tax  Rules.  2006,  namely:- 
+
+          In the  aforesaid  rules, 
+
+          (  I  )  for  Chapter XIV. the following shall  be substituted, namely:  - 
+
+                                                               "Chapter XIV 
+
+                   PROCEDT]RE  FOR  LICENSING  ISSUANCE  OF ELECTRONIC SALES 
+                      TAX  INVOICf,  S AND  INTEGRATION  OF REGISTERED  PERSONS 
+
+                             150Q. Application.-  (l) Subject to sub-rule  (2). provisions  of this 
+
+                   Chapter  shall  apply to all registered  persons  for electronic integration  of their 
+
+                   hardware and software  used for  generation and  transmission  of electronic 
+
+                   invoices through  license  integrator  or otherwise  as  provided  in these  rules. 
+
+                             (2) The  Board shall  notifu such  registered  persons or class  of 
+                   registered  persons through  a notification  in the official  Gazette  for the 
+
+                   purposes of sub-rule  (  l): 
+
+                             Provided  that  the registered  persons  who  have already  registered  and 
+
+                   integrated  their point of sale with the  Board's  computerised  system  shall be 
+
+                   treated  to  have been  integrated with  Board's computerised  system  under these 
+
+                   rules. 
+
+                             150R, Obligations and  requirements.-  (l)The registered  person 
+                    notified under sub-rule  (2) olrule l50Q  hereinafter  refered to as  "integrated 
+
+                    person"  in this Chapter.  shall  register. install  and integrate his electronic 
+
+                    invoicing  hardware and  software  with the  Board's  computerized  system  in the 
+
+                   manner specified  by the  Board through  a  Sales  Tax  General  Order. 
+
+                                                           I 
+﻿         (2)   The inte$ated  person through  Board's  online system  shall 
+provide  information  of his outlets,  points  of sale or electronic  invoicing 
+
+machines  as the  case  may  be. 
+
+         (3)   No supply  shall be made by the integrated  person. except 
+through  the  integrated outlets.  point of sale or electronic  invoice  issuing 
+
+machines. 
+
+         (4)   The  point  ofsale  or the  electronic invoice issuing  machine shall 
+
+perform  the  following functions,  namely:  
+                                                   - 
+
+                  (a)      generate,  receive,  record, analyze  and  store  invoice  data; 
+
+                  (b)       issue  sales  tax  invoices  in the  prescribed  format,  create 
+                           the  digital  signature  and  record  the  digital  signature on 
+                           the  sales  tax  invoice: 
+
+                  (c)      transmit  the  invoice  data  to the  Board's  Computerized 
+                            System through  secure means and  receive the  unique 
+                            F  BR invoice  number: 
+
+                  (d)   encrypt and  preserve  the  reported  sales  tax  invoice  data 
+                            in an  irrevocable  and  secure  manner; 
+
+                  (e)   generate the  QR  Code  on the  base ofunique FBR 
+                            invoice  number and  print the  QR Code  on  receipt; 
+
+                  (0        must  perform  closing  on close  ofthe  day,  week and 
+                           month; and 
+
+                  G)       every  adjustment,  modification  or cancellation  must be 
+                            recorded  duly  maintaining  logs for each  activity; and 
+                           system  events  need to  be  recorded. 
+
+         (5)   The Annexure{  of the  sales tax  retum shall  be auto-filled 
+
+from the  electronic  invoices  issued by the  integrated  person. 
+
+         (6)   The electronic  invoicing  software  or point  of sales  software 
+
+shall  be capable  of generating and sending alert  messages  to the  Board's 
+
+computerized  system  in case  of any malpractice  or error  or any  inconsistent 
+
+action  noticed  in the  system  and  keeping a  log thereof. 
+
+         (7)   l'he Board  may require an  integrated  person  to  integrate  the 
+
+facility of debit and credit card machine. QR Code  or any other  mode of 
+
+digital transaction  available at all the sale points  and the sales through 
+
+aloresaid  means  shall  not be ordinarilv  refused. 
+
+         (8)      The Board may require an                 integrated person  to record 
+
+                                      2 
+﻿transactions  on each point  of sales  by a CCTV camera  and  the  recording 
+
+thereof shall  be retained  for  a period of at least  one  month. Such recordings 
+
+shall  be provided  to the Commissioner  concemed  as and when  demanded  and 
+
+for  the  period of time as specified  by the Board through a sales tax general 
+
+order. 
+
+         (9)      In case  of supply  of exempt  items, the  electronic invoices  shall 
+
+also  be issued through  system  integrated with the  Board's  Computerized 
+
+System  under these  rules. 
+
+         (10) The cost for  integration  including  the cost of equipment  and 
+
+electronic  invoicing  software  or point of sales software  shall  be borne  by the 
+
+integrated person. 
+
+         (l l)   The  integrated  person  shall  prominently  display on each  ofthe 
+
+notified outlets,  points  of sale or electronic  invoicing  machines  a signboard 
+
+bearing  FBR's official logo  along with  the text  "lntegrated  with  FBR"  and 
+
+also the  registration number  of each  electronic  invoicing  software  or point of 
+
+sales  software  verifiable through  the  Board's verification  services. 
+
+         (12) In case  of online  sale  including online  market  place, the 
+
+integrated  person  shall  register  such website,  software  and  mobile application 
+
+with  the  Board's Computerised  System to  record the auto-electronic invoices 
+
+as  specified  by the  Board through  a Sales  Tax  General Order. 
+
+         (13) The  electronic  invoice  generated  under  these  rules shall contain 
+
+the  following  particulars,  namely:- 
+
+                 (a)      unique  FBR  invoice number (XXXXXX- 
+                          DDMMYYHHMMSS-0001   ). 
+
+                 (b)      unique and verifiable  QR code  dimensions:  7X7MM; 
+
+                 (c)      unique  electronic invoicing or point  ofsales  software 
+                          registration  number; 
+
+                 (d)      logo of  FBR digital invoicing system: 
+
+                  (e)     name of the  seller: 
+
+                  (0      address  ofthe seller; 
+
+                 (e)      seller  registration  number; 
+
+                  (h)     name of the  recipient; 
+
+                  (i)     address  of the  recipient; 
+﻿                C)       recipient  registration  number; 
+                 (k)   date of issue  ofinvoice; 
+                 0)      tax  period: 
+                 (m)  description; 
+                 (n)   quantity; 
+                 (o)   value exclusive  oftax; 
+                 (p)   sales  tax rate; 
+                 (q)   amount of sales  tax; 
+                 (r)     sales tax withheld  at sourca; 
+                 (s)   extra tax; 
+                 (t)     further  tax; 
+                 (u)   federal excise  duty  payable in sales  tax mode; 
+                 (v)   total  discount 
+                 (w)  invoice  reference  no 
+                 (x)     HS code; 
+                 (V)  unit of measurement;  and 
+                 (z)      SRO  and serial  number applicable: 
+
+         Provided  that  the  particulars in respect of serial  numbers  (s), (t), (u) 
+
+and  (z) may  not apply to a  retailer  issuing electronic  invoices to general  public 
+
+other  than  a manufacturer-cum-retailer  or an  importer-cum-retailer. 
+
+         1505. Issuance ofelectronic  invoice and  record.-  (l) The  integrated 
+
+person shall  issue a  real-time verifiable  electronic sales tax  invoice for  every 
+
+taxable  supply  and  service.  The  invoice  so issued  shall  be retained as  record 
+
+for a  period  of six years  on electronic  media as  provided  under section  24 of 
+
+the Act. 
+
+         (2)   The  debit  note and  credit  note shall also  be issued  electronically 
+through  the integrated  system  and  retained  for a period  of six years  as 
+
+provided  in sub-rule  (l). 
+
+         (3)   ln case  of online  sale  including online  market  place. the 
+
+electronic  invoices  shall  be issued  automatically  and  the  record  thereof shall 
+
+be maintained for a period of six years  as  provided in sub-rule  (3). 
+
+                                    1 
+﻿                150T. Conditions  for electronic  storage.-  The electronic 
+documents  specified  in rule l50S shall  be stored  in such manner  that 
+information  at the time of original  transmission  of the document  is re- 
+
+created  at the time  of departmental audit. 
+
+                  150U. Audit.  - (l) The  integrated person  shall provide  access 
+
+to  premises  and  all the  record specified  in sections  22  and 23  ofthe Act for the 
+
+purposes  of sections  25 and  38 ofthe Act to the  Officer  of  lnland Revenue as 
+
+authorized  by the  Commissioner  having jurisdiction. 
+
+         (2)   The  Board may  issue instructions  for technical  audit. 
+
+         150V. Extension  in due  date  of  Integration       The  Commissioner  lnland 
+                                                          -  
+Revenue  having jurisdiction  may allow extension  in time. for  up to sixty  days 
+
+in aggregate with  fifteen days intervals, for  integration or compliance  under 
+
+this  chapter: 
+
+         Provided  that such  integrated  person shall continue  to issue  paper 
+
+invoices until such time  as  extended  by the  Commissioner. 
+
+         150W.  Provisions of Electronic  Transactions  Ordinance,  2002.  
+                                                                                          - 
+All the  provisions  of  Electronic Transactions  Ordinance,  2002 (Ll of 2002), 
+
+ relating to  the  recognition  of  documents,  records,  information, 
+communication and transaction  in  electronic  form, accreditation  of 
+
+certification  service providers  and for  matters  ancillary thereto, shall apply. 
+
+          150X.  Consequences  of  non-compliance  or contravention.-  (1) The 
+
+ integrated  person  who  is found  to  have  tampered  with the system  or made 
+
+ sales  in the  manner otherwise  than as prescribed in this  Chapter, or who 
+
+ contravenes  any of the  provisions of this  Chapter,  shall  be subject to  penalty 
+
+ under section  33 and any  restriction  under any  provisions  of the Act  or the 
+
+ rules made thereunder. 
+
+          l50XA. Responsibilities  of the  Integrated Persons.               The 
+                                                                         -  
+ integrated  person  shall  
+                           - 
+                   (a)   make all electronic  invoicing  hardware and software 
+
+                           including  payment  counters  comprising  point  of sale  at 
+
+                           each  outlet,  available  for  installation ofthe systems; 
+
+                   (b)     be responsible for smooth functioning  of all the 
+
+                                      5 
+﻿                          hardware  and  software: 
+
+                 (c)      report  to the  Board and the  concemed  Commissioner 
+
+                          within  twenty-four  hours ol any  operational  failure, 
+
+                          damage disruptions  or tampering  ofthe system;  or 
+
+                 (d)      report  any  inoperative  electronic  invoicing hardware 
+
+                          and software within twenty-four hours with  reasons 
+
+                          along  with  documentary  evidence to the  Commissioner 
+
+                          holding  the j  urisdiction. 
+
+         l50XB.  Provision of verification facility by the Board.-  The  Board 
+
+shall  provide a facility on its website  to the  buyer  of an  integrated  person to 
+
+verify  if the  invoice issued to him by such  integrated  person  has been 
+
+communicated  to the  Board's  Computerized  System. 
+
+         l50XC.  Internet  Interruption. - The  invoices generated during  any 
+
+period of failure  of electronic  invoicing software  or point of sales software 
+
+including  disruption  caused  by intemet or  power failure  shall  be clearly 
+
+identified as  invoices  issued  in the  offline  mode  and  shall  be uploaded within 
+
+24  hours  of  restoration. 
+
+         l50XD. Functions  of the  Officer  of  Inland  Revenue.-   l) (              The 
+
+Officer of  Inland  Revenue having jurisdiction,  shall  monitor  operation  of the 
+
+system  through  periodic  visits authorized  in this  behalf  by, the  Commissioner. 
+
+         (2)   Where  an integrated  person  does not account for  sales without 
+
+generating an  invoice  countering  QR code or  FBR invoice number, the  Officer 
+
+of Inland  Revenue  shall compute the taxes  on such goods  relating to 
+
+unaccounted for  invoices,  and  recover the  same  under the relevant  provisions 
+
+of law, besides any other  action  including  penal action  that  may be taken 
+
+under the Act  or the  rules  made there  under. 
+
+         l50XE.  Licensing.        (l) Save  as  provided  in rule l50XF,  no person 
+                                -  
+shall carry out  integration of the notified  registered  persons through  sofiware 
+
+unless he has obtained a license  under these rules. 
+
+         (2) No licensee  under  these  rules shall  maintain  or operate  system  or 
+
+provide  any  other service,  which  is not authorized  under these rules. 
+
+                                    6 
+﻿        (3)  Every electronic  invoicing software  or point  of sales  software 
+
+including  payment  counter  whether fixed  or portable  of the  notified  registered 
+
+person  which generates  invoices for  receipt ofpayment  either in cash  or through 
+
+debit or credit  card shall  be integrated  with the Board through  the  licensed 
+
+integrator. 
+
+         l50XF.  PRAL to act as a licensed integrator.  (l) Notwithstanding 
+
+the  provisions  ofrules  l50XH,  l50XI, sub-rule  (2) of rule  l5OXJ  and  l50XK, 
+
+PRAL shall act as  licensed  integrator for  the  purposes  of  rules l50XE, sub- 
+
+rule  (1) of rule  l50XJ and  rule  150XL. 
+
+         (2)  PRAL shall  provide free  of cost  integration services  to the 
+
+registered persons on demand. 
+
+         (3) PRAL, as and when  required  by the  Board, shall  provide a free 
+
+of cost downloadable  electronic  invoicing software  or point of sales software 
+
+on  Board's  official website. 
+
+         t50XG.  Functions  of the licensing committee.               (l) Board shall 
+                                                                  -  
+notifo a licensing  committee which  shall  perform function  in accordance  with 
+
+the  provisions  of rules  l50Xl,  l50XK and l50XN  or any other instructions  or 
+
+procedures,  issued  by the  Board. 
+
+         (2) Board  shall notifo  convenor ofthe licensing committee. 
+         l50XH. Application  for grant  of  licence.           (l) An  application  for 
+                                                           -  
+grant of licence  for  integration  of any  registered  person shall be made  in 
+
+duplicate  to the  Board. 
+
+         (2) No application  under  sub-rule  (1) shall  be considered. unless  it is 
+accompanied  by- 
+                 (a)   a comprehensive profile ofthe company; 
+                 (b)      brief about  managerial  and technical  personnel 
+                          indicating  name,  position,  qualification  and  experience; 
+
+                 (c)     total  number ofcurrent  employees; 
+                 (d)   documents  showing  relevant capacity of  the 
+                          development  and  integration  with enterprise  resource 
+                          planning  systems  and  Payment Processing  Systems; 
+
+                 (e)      registration  certificate  issued  by Pakistan software 
+                          houses Association  or  Institute of  Chartered 
+                          Accountants  of Pakistan: 
+
+                 (f)      audited  statement  of accounts for the  last three  financial 
+
+                                    1 
+﻿                           years 
+
+                  (g)   list of major  clientele: 
+                  (h)   incorporation  certificate  under the  Companies  Act; 
+                  (D       National  Tax  Number  (NTN) Certificate: 
+                  0)       the  paid up capital for  the  latest  financial  year  is at  least 
+                           Rs.  l0 million  or abovel 
+
+                  (k)      registration  with Sales  Tax  Department  if required; 
+                  (l)      Computerized  National Identity  Cards  (CNICs)  of 
+                           directors  ofthe  incorporated company; 
+
+                  (m)  undertaking that the  company  has never  been  blacklisted 
+                           by any  Govemment  or  Provincial  department  or 
+                           organization  and  has  not  been  involved in confirmed 
+                           cases offiscal fraud; 
+
+                  (n)   list ofprojects  executed  in the  last three  years;  and 
+                  (o)   any  other  documents  required through  instructions 
+                           orders  issued  by the  Board. 
+
+          l50XI. Procedure for grant of licence.                     (l)  On  receipt  of 
+                                                                -  
+ application  for grant of licence  in the  Board, the  licensing  committee  shall 
+
+ scrutinize the documents  provided and  it shall  evaluate  the  eligibility  of the 
+
+ applicant  within seven days  of receipt ofapplication. 
+
+         (2)   The  licensing  committee  may also carry out visits,  if necessary 
+
+for  physical  inspection to ascertain  the  eligibility ofthe applicant  for  licensing 
+
+ under  lhese  rules. 
+
+         (3) The licensing committee  shall  recommend  or  rejecr an  application 
+
+within  fifteen  days  ofdate of submission ofthe application,  specifying reasons 
+
+fbr  recommendation or rejection  ofthe  application  under these  rules. 
+
+         (4)   The  licensing  committee  shall make recommendations  to the 
+
+Board for grant  of  licences  in respect  of the  companies who  meet the  criteria 
+
+under these  rules. 
+
+         (5)   The  licensing committee shall grant the licence to the 
+
+recommended  applicant with  the  prior approval  from  the  Board. 
+
+         l50XJ. Right granted  to the  licensee.  (l) A licensee shall  have 
+
+the  right to  install,  configure,  integrate.  operate  and maintain  the  electronic 
+
+invoicing  software  or  point of sales software  on  real time  basis  in accordance 
+
+with  conditions  of the  licence issued  to  him. 
+
+                                     8 
+﻿        (2)   The  licence granted  under these  rules shall  be subject to 
+
+provisions  ofthe Act  and  shall be valid for  five years  from date ofissuance. 
+
+        (3)   The  licence  granted  under these  rules  shall  be non-transferable 
+
+and shall  not be allowed to  be used  by any sub-contractor. 
+
+         150XK. Renewal of licence.- (  l) The  application  for  renewal  of 
+
+licence shall  be  made to the  Board three  months before its expiry. 
+
+         (2) The  licensing  committee  shall  evaluate  the application and  make 
+
+recommendations to the  Board for  the  renewal oflicence. 
+
+         (3)   The  licensee shall  be required  to  comply  with  all the 
+
+provisions  of these  rules for the renewal  period. 
+
+         l50XL. Technical  support.-  (l) The  licensee shall  be responsible 
+
+for  post deployment  maintenance  ofthe system,  including  
+                                                                 - 
+                 (a)   setting  up and  maintenance  ofall  information 
+                         technology  equipment  connected  to the  eleckonic 
+                         invoicing  hardware and  software:  and 
+
+                 (b)     is authorized to,  
+                                            - 
+                         (i)      upgrade  the  system  hardware  and software; 
+                          (ii)    fix all bugs;  and 
+                          (iii)   immediately  respond  to troubleshoot  any  post 
+                                  deployment problems  for   uninterrupted 
+                                  working  of the system. 
+
+         (2)   The  licensee shall  be responsible for safe and  secure capture  of 
+
+ real-time transmission  of sales data from  the  electronic  invoicing  software  or 
+
+ point  of sales  software to  FBR database  at  all times. 
+
+         150XM. Supervision  of the  System.-  The  Board shall  notiry the team 
+
+ responsible  for  overall  supervision  of the system  and the steps to be taken  to 
+
+ address  problems encountered  during  operation  ofthe systems. 
+
+         l50XN.  Procedure  for  cancellation or termination of  licence'-  (l) 
+
+ The Team notified  by the  Board as  a  result  of supervision  of the  system  or on 
+
+ receipt of a report from  any  of the  Commissioners  lnland Revenue, or on a 
+
+ valid complaint,  shall  initiate  process for  cancellation  oithe  licence by causing 
+
+ to serve  a notice upon  the licensee  immediately  or within fifteen  days of 
+
+ receipt  ofthe  report  ofthe  Commissioner  or  a valid  complaint, to show cause 
+
+                                    9 
+﻿ as to why  the  licence issued under these  rules, may  not bc cancelled  or 
+
+ terminated  if it has a  reason  to  believe  that the  licensee  has 
+
+                   (a)     failed to  provide specified  services  to the  satisfaction  of 
+                           the  Board; 
+
+                  (b)      contravened  any  of the  conditions  ofthe license; 
+
+                  (c)      contravened  any  provision ofthese  rules  or the Act;  or 
+
+                  (d)      violated  any applicable  law while  being  a licensee 
+                           under these  rules: 
+
+          Provided  that  if on the basis of  material evidence,  there  exists  prima 
+
+ facie sufficient  grounds against  the  licensee, the  licensing  committee  may 
+
+ suspend the  license to safeguard  public  finances  and  to prevent any other 
+
+ serious  damage. 
+
+          (2)   The licensing committee  may, after giving the licensee 
+ adequate  opportunity of being  heard and after  examination  of the  record. 
+
+ cancel  or terminate the  licence issued under these rules. 
+
+          (3)   ln case ofcancellation  oflicence  under  these  rules.  the affected 
+
+ person  or  company  shall  have the  right to file  representation  against  the  order 
+
+ of the  licensing committee  before  the  Board. 
+
+         (4)   The  Board shall  decide  the  representation  after  giving proper 
+
+ opportunity ofbeing heard and the  decision ofthe Board shall  be final. 
+
+         l50XO.  Fee and charges.              (l) The  licensee shall charge  fee for 
+                                           -  
+ configuration  and  integration  of electronic  invoicing  software  or  point of sale 
+
+software from  the  integmted  persons  not above  the threshold  as mav  be 
+
+specified  by the  Board through  a sales  tax general  order. 
+
+         (2)   No fee  shall  be  payable  by the  Board  and any ofits field 
+lbrmations. 
+
+         150XP. Establishment  of  Inland Revenue  enforcement  network 
+
+The  Board shall establish  Inland Revenue enlorcement  network  which  shall be 
+
+responsible for combatting  evasion  and  leakage  oftaxes  payable  on goods  and 
+
+services  by way  ofenfbrcement  units of the  concemed filed  lormations. 
+
+         l50XQ.  Functioning  of  Inland  Revenue enforcement network.  
+                                                                                         - 
+To  check  and  verily any  of the  eventualities,  the  enforcement  squads  of lnland 
+
+                                    10 
+﻿                  Revenue  shall  petrol the  premises  of the  integrated persons and verif, whether 
+
+                  all the electronic  invoicing software  or  point of sales  software  are  integrated 
+
+                  and invoices  are being  reported to  FBR in real-time  and  shall report  such 
+
+                  invoices generated from  non-integrated  electronic  invoicing software  or 
+
+                  point  of sales software  to Commissioner  Inland Revenue.  The  Commissioner, 
+
+                  after receipt of the  report from  the  enforcement  network, shall  recover the  tax 
+
+                  in accordance  with the  provisions  ofthe Act."; 
+
+      (z',)   Chapter XIV- AA  and the  rules  contained  therein  shall  be omitted;  and 
+
+      (3)     Chapter XIV-  BB and  the  rules  contained  therein  shall  be omitted. 
+
+[C. No. l(17)  DD/Misc-Dl/2024lPart  Filel] 
+                                                                                                                  -, 
+
+                                                                          Second  Secretary  (ST& 
+
+                                                          ll 

@@ -1,0 +1,1110 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+
+interface Customer {
+  id: string
+  name: string
+  email?: string
+  phone?: string
+  address?: string
+  ntnNumber?: string
+  registrationType: 'REGISTERED' | 'UNREGISTERED'
+  buyerProvince?: string
+  buyerCity?: string
+}
+
+interface Product {
+  id: string
+  name: string
+  description?: string
+  hsCode: string
+  unitOfMeasurement: string
+  unitPrice: number
+  taxRate: number
+  category?: string
+}
+
+interface InvoiceItem {
+  id: string
+  productId: string
+  productName: string
+  hsCode: string
+  unitOfMeasurement: string
+  quantity: number
+  unitPrice: number
+  subtotal: number
+  taxRate: number
+  taxAmount: number
+  total: number
+}
+
+interface Province {
+  stateProvinceCode: number
+  stateProvinceDesc: string
+}
+
+interface HSCode {
+  hS_CODE: string
+  description: string
+}
+
+interface UOM {
+  uoM_ID: number
+  description: string
+}
+
+export default function CreateInvoicePage() {
+  const router = useRouter()
+  const { data: session, status } = useSession()
+
+  // Customer management
+  const [customers, setCustomers] = useState<Customer[]>([])
+  const [selectedCustomerId, setSelectedCustomerId] = useState('')
+  const [customerSearch, setCustomerSearch] = useState('')
+  const [showCustomerDialog, setShowCustomerDialog] = useState(false)
+  const [newCustomer, setNewCustomer] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    ntnNumber: '',
+    registrationType: 'UNREGISTERED' as 'REGISTERED' | 'UNREGISTERED',
+    buyerProvince: '',
+    buyerCity: ''
+  })
+
+  // Product management
+  const [products, setProducts] = useState<Product[]>([])
+  const [selectedProductId, setSelectedProductId] = useState('')
+  const [productSearch, setProductSearch] = useState('')
+  const [showProductDialog, setShowProductDialog] = useState(false)
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    description: '',
+    hsCode: '',
+    unitOfMeasurement: '',
+    unitPrice: 0,
+    taxRate: 18,
+    category: 'General'
+  })
+
+  // FBR data
+  const [provinces, setProvinces] = useState<Province[]>([])
+  const [hsCodes, setHSCodes] = useState<HSCode[]>([])
+  const [uoms, setUOMs] = useState<UOM[]>([])
+  const [availableUOMs, setAvailableUOMs] = useState<UOM[]>([]) // Filtered UOMs for selected HS Code
+
+  // Invoice data
+  const [invoiceItems, setInvoiceItems] = useState<InvoiceItem[]>([])
+  const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().split('T')[0])
+  const [documentType, setDocumentType] = useState('SALE_INVOICE')
+  const [paymentMode, setPaymentMode] = useState('CASH')
+  const [notes, setNotes] = useState('')
+
+  // UI state
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [searchingCustomers, setSearchingCustomers] = useState(false)
+  const [searchingProducts, setSearchingProducts] = useState(false)
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false)
+  const [showProductDropdown, setShowProductDropdown] = useState(false)
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login?callbackUrl=/invoices/create')
+    }
+  }, [status, router])
+
+  // Fetch initial data
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetchCustomers()
+      fetchProducts()
+      fetchProvinces()
+      fetchHSCodes()
+      fetchUOMs()
+    }
+  }, [status])
+
+  // Search customers with debounce
+  useEffect(() => {
+    if (customerSearch.length < 2) {
+      return
+    }
+
+    const timer = setTimeout(() => {
+      searchCustomers(customerSearch)
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [customerSearch])
+
+  // Search products with debounce
+  useEffect(() => {
+    if (productSearch.length < 2) {
+      return
+    }
+
+    const timer = setTimeout(() => {
+      searchProducts(productSearch)
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [productSearch])
+
+  // Fetch functions
+  const fetchCustomers = async () => {
+    try {
+      const response = await fetch('/api/customers')
+      if (response.ok) {
+        const data = await response.json()
+        setCustomers(data.customers || [])
+      }
+    } catch (err) {
+      console.error('Failed to fetch customers:', err)
+    }
+  }
+
+  const searchCustomers = async (query: string) => {
+    setSearchingCustomers(true)
+    try {
+      const response = await fetch(`/api/customers/search?q=${encodeURIComponent(query)}`)
+      if (response.ok) {
+        const data = await response.json()
+        setCustomers(data.customers || [])
+      }
+    } catch (err) {
+      console.error('Failed to search customers:', err)
+    } finally {
+      setSearchingCustomers(false)
+    }
+  }
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('/api/products')
+      if (response.ok) {
+        const data = await response.json()
+        setProducts(data.products || [])
+      }
+    } catch (err) {
+      console.error('Failed to fetch products:', err)
+    }
+  }
+
+  const searchProducts = async (query: string) => {
+    setSearchingProducts(true)
+    try {
+      const response = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`)
+      if (response.ok) {
+        const data = await response.json()
+        setProducts(data.products || [])
+      }
+    } catch (err) {
+      console.error('Failed to search products:', err)
+    } finally {
+      setSearchingProducts(false)
+    }
+  }
+
+  const fetchProvinces = async () => {
+    try {
+      const response = await fetch('/api/fbr/lookup?type=provinces')
+      if (response.ok) {
+        const data = await response.json()
+        setProvinces(data.data || [])
+      }
+    } catch (err) {
+      console.error('Failed to fetch provinces:', err)
+    }
+  }
+
+  const fetchHSCodes = async () => {
+    try {
+      const response = await fetch('/api/fbr/lookup?type=hsCodes')
+      if (response.ok) {
+        const data = await response.json()
+        setHSCodes(data.data || [])
+      }
+    } catch (err) {
+      console.error('Failed to fetch HS codes:', err)
+    }
+  }
+
+  const fetchUOMs = async () => {
+    try {
+      const response = await fetch('/api/fbr/lookup?type=uom')
+      if (response.ok) {
+        const data = await response.json()
+        setUOMs(data.data || [])
+      }
+    } catch (err) {
+      console.error('Failed to fetch UOMs:', err)
+    }
+  }
+
+  // **CRITICAL DATA CHAINING**: HS Code → UOM
+  const fetchUOMsForHSCode = async (hsCode: string) => {
+    try {
+      const response = await fetch('/api/fbr/lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'hsUom', hsCode })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        const validUOMs = data.data || []
+        setAvailableUOMs(validUOMs)
+
+        // Auto-select first UOM if available
+        if (validUOMs.length > 0 && !newProduct.unitOfMeasurement) {
+          setNewProduct(prev => ({
+            ...prev,
+            unitOfMeasurement: validUOMs[0].description
+          }))
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch UOMs for HS code:', err)
+      // Fallback to all UOMs if chain fails
+      setAvailableUOMs(uoms)
+    }
+  }
+
+  // Handle new customer creation
+  const handleCreateCustomer = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/customers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newCustomer)
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create customer')
+      }
+
+      const data = await response.json()
+      setCustomers(prev => [data.customer, ...prev])
+      setSelectedCustomerId(data.customer.id)
+      setShowCustomerDialog(false)
+      setSuccess('Customer created successfully!')
+
+      // Reset form
+      setNewCustomer({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        ntnNumber: '',
+        registrationType: 'UNREGISTERED',
+        buyerProvince: '',
+        buyerCity: ''
+      })
+    } catch (err: any) {
+      setError(err.message || 'Failed to create customer')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Handle new product creation
+  const handleCreateProduct = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProduct)
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create product')
+      }
+
+      const data = await response.json()
+      setProducts(prev => [data.product, ...prev])
+      setSelectedProductId(data.product.id)
+      setShowProductDialog(false)
+      setSuccess('Product created successfully!')
+
+      // Reset form
+      setNewProduct({
+        name: '',
+        description: '',
+        hsCode: '',
+        unitOfMeasurement: '',
+        unitPrice: 0,
+        taxRate: 18,
+        category: 'General'
+      })
+      setAvailableUOMs([])
+    } catch (err: any) {
+      setError(err.message || 'Failed to create product')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Add item to invoice
+  const handleAddItem = () => {
+    if (!selectedProductId) {
+      setError('Please select a product')
+      return
+    }
+
+    const product = products.find(p => p.id === selectedProductId)
+    if (!product) return
+
+    const existingItem = invoiceItems.find(item => item.productId === selectedProductId)
+    if (existingItem) {
+      // Update quantity if already exists
+      updateItemQuantity(existingItem.id, existingItem.quantity + 1)
+      return
+    }
+
+    const newItem: InvoiceItem = {
+      id: Date.now().toString(),
+      productId: product.id,
+      productName: product.name,
+      hsCode: product.hsCode,
+      unitOfMeasurement: product.unitOfMeasurement,
+      quantity: 1,
+      unitPrice: product.unitPrice,
+      subtotal: product.unitPrice,
+      taxRate: product.taxRate,
+      taxAmount: (product.unitPrice * product.taxRate) / 100,
+      total: product.unitPrice + (product.unitPrice * product.taxRate) / 100
+    }
+
+    setInvoiceItems(prev => [...prev, newItem])
+    setSelectedProductId('')
+    setProductSearch('')
+  }
+
+  // Update item quantity
+  const updateItemQuantity = (itemId: string, quantity: number) => {
+    if (quantity < 1) return
+
+    setInvoiceItems(prev =>
+      prev.map(item => {
+        if (item.id !== itemId) return item
+
+        const subtotal = item.unitPrice * quantity
+        const taxAmount = (subtotal * item.taxRate) / 100
+        const total = subtotal + taxAmount
+
+        return {
+          ...item,
+          quantity,
+          subtotal,
+          taxAmount,
+          total
+        }
+      })
+    )
+  }
+
+  // Remove item from invoice
+  const removeItem = (itemId: string) => {
+    setInvoiceItems(prev => prev.filter(item => item.id !== itemId))
+  }
+
+  // Calculate totals
+  const calculateTotals = () => {
+    const subtotal = invoiceItems.reduce((sum, item) => sum + item.subtotal, 0)
+    const taxAmount = invoiceItems.reduce((sum, item) => sum + item.taxAmount, 0)
+    const total = invoiceItems.reduce((sum, item) => sum + item.total, 0)
+
+    return { subtotal, taxAmount, total }
+  }
+
+  // Handle invoice submission
+  const handleSubmit = async (isDraft: boolean) => {
+    if (!selectedCustomerId) {
+      setError('Please select a customer')
+      return
+    }
+
+    if (invoiceItems.length === 0) {
+      setError('Please add at least one item')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      const { subtotal, taxAmount, total } = calculateTotals()
+
+      const invoiceData = {
+        customerId: selectedCustomerId,
+        invoiceDate,
+        documentType,
+        paymentMode,
+        notes,
+        subtotal,
+        taxAmount,
+        totalAmount: total,
+        status: isDraft ? 'DRAFT' : 'PENDING',
+        items: invoiceItems.map(item => ({
+          productId: item.productId,
+          hsCode: item.hsCode,
+          unitOfMeasurement: item.unitOfMeasurement,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          taxRate: item.taxRate
+        }))
+      }
+
+      const response = await fetch('/api/invoices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(invoiceData)
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create invoice')
+      }
+
+      const data = await response.json()
+
+      if (isDraft) {
+        setSuccess('Invoice saved as draft successfully!')
+        router.push('/invoices')
+      } else {
+        // Submit to FBR
+        await submitToFBR(data.invoice.id)
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to create invoice')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Submit to FBR
+  const submitToFBR = async (invoiceId: string) => {
+    try {
+      const response = await fetch(`/api/invoices/${invoiceId}/submit`, {
+        method: 'POST'
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit to FBR')
+      }
+
+      setSuccess('Invoice submitted to FBR successfully!')
+      router.push('/invoices')
+    } catch (err: any) {
+      setError(err.message || 'Failed to submit to FBR')
+    }
+  }
+
+  if (status === 'loading') {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-lg">Loading...</div>
+      </div>
+    )
+  }
+
+  const totals = calculateTotals()
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">Create Invoice</h1>
+
+        {/* Status messages */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
+            {success}
+          </div>
+        )}
+
+        <div className="bg-white shadow-md rounded-lg p-6 space-y-6">
+          {/* Invoice Details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Invoice Date
+              </label>
+              <input
+                type="date"
+                value={invoiceDate}
+                onChange={(e) => setInvoiceDate(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Document Type
+              </label>
+              <select
+                value={documentType}
+                onChange={(e) => setDocumentType(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="SALE_INVOICE">Sale Invoice</option>
+                <option value="DEBIT_NOTE">Debit Note</option>
+                <option value="CREDIT_NOTE">Credit Note</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Payment Mode
+              </label>
+              <select
+                value={paymentMode}
+                onChange={(e) => setPaymentMode(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="CASH">Cash</option>
+                <option value="CREDIT">Credit</option>
+                <option value="BANK_TRANSFER">Bank Transfer</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Customer Selection - Searchable Dropdown */}
+          <div>
+            <div className="flex justify-between items-center mb-1">
+              <label className="block text-sm font-medium text-gray-700">
+                Customer *
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowCustomerDialog(true)}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                + Create New Customer
+              </button>
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search and select customer..."
+                value={customerSearch}
+                onChange={(e) => {
+                  setCustomerSearch(e.target.value)
+                  setShowCustomerDropdown(true)
+                  if (!e.target.value) {
+                    setSelectedCustomerId('')
+                  }
+                }}
+                onFocus={() => setShowCustomerDropdown(true)}
+                onBlur={() => setTimeout(() => setShowCustomerDropdown(false), 200)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              
+              {/* Searchable Dropdown Results */}
+              {showCustomerDropdown && customerSearch && customers.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                  {customers.map(customer => (
+                    <div
+                      key={customer.id}
+                      onClick={() => {
+                        setSelectedCustomerId(customer.id)
+                        setCustomerSearch(customer.name)
+                        setShowCustomerDropdown(false)
+                      }}
+                      className="px-3 py-2 hover:bg-blue-50 cursor-pointer border-b border-gray-100"
+                    >
+                      <div className="font-medium">{customer.name}</div>
+                      <div className="text-sm text-gray-600">
+                        {customer.ntnNumber && `NTN: ${customer.ntnNumber} • `}
+                        {customer.phone} • {customer.address}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {selectedCustomerId && customerSearch && (
+                <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
+                  <div className="text-sm text-blue-800">
+                    ✓ Selected: {customers.find(c => c.id === selectedCustomerId)?.name}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Product Selection - Searchable Dropdown */}
+          <div>
+            <div className="flex justify-between items-center mb-1">
+              <label className="block text-sm font-medium text-gray-700">
+                Add Product
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowProductDialog(true)}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                + Create New Product
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  placeholder="Search and select product..."
+                  value={productSearch}
+                  onChange={(e) => {
+                    setProductSearch(e.target.value)
+                    setShowProductDropdown(true)
+                    if (!e.target.value) {
+                      setSelectedProductId('')
+                    }
+                  }}
+                  onFocus={() => setShowProductDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowProductDropdown(false), 200)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                
+                {/* Searchable Dropdown Results */}
+                {showProductDropdown && productSearch && products.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                    {products.map(product => (
+                      <div
+                        key={product.id}
+                        onClick={() => {
+                          setSelectedProductId(product.id)
+                          setProductSearch(product.name)
+                          setShowProductDropdown(false)
+                        }}
+                        className="px-3 py-2 hover:bg-blue-50 cursor-pointer border-b border-gray-100"
+                      >
+                        <div className="font-medium">{product.name}</div>
+                        <div className="text-sm text-gray-600">
+                          <span className="font-mono text-xs bg-gray-100 px-1 py-0.5 rounded">HS: {product.hsCode}</span>
+                          {' • '}
+                          {product.unitOfMeasurement}
+                          {' • '}
+                          PKR {product.unitPrice.toFixed(2)}
+                          {' • '}
+                          <span className="text-green-600">Tax: {product.taxRate}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={handleAddItem}
+                disabled={!selectedProductId}
+                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-gray-400"
+              >
+                Add Item
+              </button>
+            </div>
+          </div>
+
+          {/* Invoice Items Table */}
+          {invoiceItems.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">HS Code</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">UOM</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Qty</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Unit Price</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Subtotal</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tax Rate</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tax Amount</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                    <th className="px-3 py-2"></th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {invoiceItems.map(item => (
+                    <tr key={item.id}>
+                      <td className="px-3 py-2 text-sm text-gray-900">{item.productName}</td>
+                      <td className="px-3 py-2 text-sm text-gray-600 font-mono">{item.hsCode}</td>
+                      <td className="px-3 py-2 text-sm text-gray-600">{item.unitOfMeasurement}</td>
+                      <td className="px-3 py-2">
+                        <input
+                          type="number"
+                          min="1"
+                          value={item.quantity}
+                          onChange={(e) => updateItemQuantity(item.id, parseInt(e.target.value) || 1)}
+                          className="w-16 px-2 py-1 border border-gray-300 rounded text-sm"
+                        />
+                      </td>
+                      <td className="px-3 py-2 text-sm text-gray-900">
+                        {item.unitPrice.toFixed(2)}
+                      </td>
+                      <td className="px-3 py-2 text-sm text-gray-900">
+                        {item.subtotal.toFixed(2)}
+                      </td>
+                      <td className="px-3 py-2 text-sm text-gray-600">
+                        {item.taxRate}%
+                      </td>
+                      <td className="px-3 py-2 text-sm text-gray-900">
+                        {item.taxAmount.toFixed(2)}
+                      </td>
+                      <td className="px-3 py-2 text-sm font-medium text-gray-900">
+                        {item.total.toFixed(2)}
+                      </td>
+                      <td className="px-3 py-2">
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="text-red-600 hover:text-red-800 text-xs"
+                        >
+                          ×
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Totals */}
+          {invoiceItems.length > 0 && (
+            <div className="border-t pt-4">
+              <div className="flex justify-end space-x-8">
+                <div className="text-right">
+                  <div className="text-sm text-gray-600">Subtotal:</div>
+                  <div className="text-sm text-gray-600 mt-1">Tax:</div>
+                  <div className="text-lg font-bold mt-1">Total:</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm text-gray-900">PKR {totals.subtotal.toFixed(2)}</div>
+                  <div className="text-sm text-gray-900 mt-1">PKR {totals.taxAmount.toFixed(2)}</div>
+                  <div className="text-lg font-bold mt-1">PKR {totals.total.toFixed(2)}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Notes */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Notes (Optional)
+            </label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Add any additional notes..."
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => router.push('/invoices')}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => handleSubmit(true)}
+              disabled={loading || invoiceItems.length === 0}
+              className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors disabled:bg-gray-400"
+            >
+              Save as Draft
+            </button>
+            <button
+              onClick={() => handleSubmit(false)}
+              disabled={loading || invoiceItems.length === 0}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-gray-400"
+            >
+              {loading ? 'Submitting...' : 'Submit to FBR'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Create Customer Dialog */}
+      {showCustomerDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-4">Create New Customer</h2>
+
+            <form onSubmit={handleCreateCustomer} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={newCustomer.name}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  value={newCustomer.email}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+                <input
+                  type="tel"
+                  required
+                  value={newCustomer.phone}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Address *</label>
+                <textarea
+                  required
+                  value={newCustomer.address}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, address: e.target.value })}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Province *</label>
+                <select
+                  required
+                  value={newCustomer.buyerProvince}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, buyerProvince: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select province...</option>
+                  {provinces.map(province => (
+                    <option key={province.stateProvinceCode} value={province.stateProvinceDesc}>
+                      {province.stateProvinceDesc}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                <input
+                  type="text"
+                  required
+                  value={newCustomer.buyerCity}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, buyerCity: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Registration Type *</label>
+                <select
+                  required
+                  value={newCustomer.registrationType}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, registrationType: e.target.value as 'REGISTERED' | 'UNREGISTERED' })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="UNREGISTERED">Unregistered</option>
+                  <option value="REGISTERED">Registered</option>
+                </select>
+              </div>
+
+              {newCustomer.registrationType === 'REGISTERED' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">NTN Number *</label>
+                  <input
+                    type="text"
+                    required={newCustomer.registrationType === 'REGISTERED'}
+                    value={newCustomer.ntnNumber}
+                    onChange={(e) => setNewCustomer({ ...newCustomer, ntnNumber: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowCustomerDialog(false)}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+                >
+                  {loading ? 'Creating...' : 'Create Customer'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Create Product Dialog */}
+      {showProductDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-4">Create New Product</h2>
+
+            <form onSubmit={handleCreateProduct} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Product Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={newProduct.name}
+                  onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={newProduct.description}
+                  onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">HS Code *</label>
+                <select
+                  required
+                  value={newProduct.hsCode}
+                  onChange={(e) => {
+                    const hsCode = e.target.value
+                    setNewProduct({ ...newProduct, hsCode, unitOfMeasurement: '' })
+                    // **DATA CHAINING**: Fetch valid UOMs for selected HS code
+                    if (hsCode) {
+                      fetchUOMsForHSCode(hsCode)
+                    } else {
+                      setAvailableUOMs([])
+                    }
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select HS Code...</option>
+                  {hsCodes.map(code => (
+                    <option key={code.hS_CODE} value={code.hS_CODE}>
+                      {code.hS_CODE} - {code.description.substring(0, 50)}...
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Unit of Measurement * {availableUOMs.length > 0 && `(${availableUOMs.length} valid for HS Code)`}
+                </label>
+                <select
+                  required
+                  value={newProduct.unitOfMeasurement}
+                  onChange={(e) => setNewProduct({ ...newProduct, unitOfMeasurement: e.target.value })}
+                  disabled={!newProduct.hsCode}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                >
+                  <option value="">Select UOM...</option>
+                  {(availableUOMs.length > 0 ? availableUOMs : uoms).map(uom => (
+                    <option key={uom.uoM_ID} value={uom.description}>
+                      {uom.description}
+                    </option>
+                  ))}
+                </select>
+                {newProduct.hsCode && availableUOMs.length === 0 && (
+                  <p className="text-sm text-blue-600 mt-1">Loading valid UOMs for this HS Code...</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Unit Price (PKR) *</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  required
+                  value={newProduct.unitPrice}
+                  onChange={(e) => setNewProduct({ ...newProduct, unitPrice: parseFloat(e.target.value) || 0 })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tax Rate (%) *</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="100"
+                  required
+                  value={newProduct.taxRate}
+                  onChange={(e) => setNewProduct({ ...newProduct, taxRate: parseFloat(e.target.value) || 0 })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <input
+                  type="text"
+                  value={newProduct.category}
+                  onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowProductDialog(false)
+                    setAvailableUOMs([])
+                  }}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+                >
+                  {loading ? 'Creating...' : 'Create Product'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

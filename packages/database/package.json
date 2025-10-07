@@ -1,0 +1,24 @@
+{
+  "name": "@easyfiler/database",
+  "version": "1.0.0",
+  "description": "Database schema and client for Easy Filer",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "generate": "prisma generate",
+    "push": "prisma db push",
+    "migrate": "prisma migrate dev",
+    "studio": "prisma studio",
+    "seed": "tsx src/seed.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.20.0",
+    "tsx": "^4.7.0",
+    "@types/node": "^22.7.0"
+  }
+}

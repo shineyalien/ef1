@@ -1,0 +1,513 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String           @id @default(cuid())
+  email            String           @unique
+  password         String
+  firstName        String
+  lastName         String
+  isActive         Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  subscriptionPlan SubscriptionPlan @default(FREE)
+  country          String           @default("Pakistan")
+  phoneNumber      String?
+  
+  // Notification Preferences
+  emailNotifications        Boolean @default(true)
+  invoiceNotifications      Boolean @default(true)
+  fbrSubmissionNotifications Boolean @default(true)
+  marketingEmails           Boolean @default(false)
+  
+  accounts         Account[]
+  businesses       Business[]
+  sessions         Session[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Business {
+  id                          String          @id @default(cuid())
+  userId                      String
+  companyName                 String
+  ntnNumber                   String          @unique
+  address                     String
+  province                    String
+  businessType                String
+  sector                      String
+  fbrSetupComplete            Boolean         @default(false)
+  fbrSetupSkipped             Boolean         @default(false)
+  integrationMode             IntegrationMode @default(LOCAL)
+  sandboxValidated            Boolean         @default(false)
+  sandboxToken                String?
+  productionToken             String?
+  createdAt                   DateTime        @default(now())
+  updatedAt                   DateTime        @updatedAt
+  productionTokenAvailable    Boolean         @default(false)
+  // FBR Seller Fields
+  sellerCity                  String?
+  sellerContact               String?
+  sellerEmail                 String?
+  posId                       String?         // FBR POS ID
+  electronicSoftwareRegNo     String?         // Electronic invoicing software registration number
+  fbrIntegratorLicenseNo      String?         // Licensed integrator number (if using third-party)
+  // Phase 2: Business Customization Fields
+  logoUrl                     String?         // Company logo URL/path
+  invoicePrefix               String          @default("INV") // Invoice number prefix (e.g., "INV", "SLS")
+  defaultPaymentTerms         String?         // Default payment terms text
+  footerText                  String?         // Custom footer text for invoices
+  sandboxTokenValidated       Boolean         @default(false) // Token validation status
+  productionTokenValidated    Boolean         @default(false) // Token validation status
+  lastTokenValidation         DateTime?       // Last time tokens were validated
+  
+  // PDF Customization Fields
+  invoiceTemplate             String          @default("default") // PDF template: default, modern, classic
+  taxIdLabel                  String?         // Custom tax ID label (NTN, GST, etc.)
+  defaultCurrency             String          @default("PKR") // Default currency code
+  primaryColor                String?         // Primary brand color for PDFs
+  secondaryColor              String?         // Secondary brand color for PDFs
+  
+  // FBR Scenario Selection
+  defaultScenario              String?         // Default FBR scenario for sandbox testing
+  user                        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customers                   Customer[]
+  invoices                    Invoice[]
+  products                    Product[]
+
+  @@map("businesses")
+}
+
+model Customer {
+  id               String           @id @default(cuid())
+  businessId       String
+  name             String
+  email            String?
+  phone            String?
+  address          String?
+  ntnNumber        String?
+  registrationType RegistrationType @default(UNREGISTERED)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  // FBR Buyer Fields
+  buyerType        String?          // 1=NTN, 2=CNIC, 3=Passport
+  buyerNTN         String?
+  buyerCNIC        String?
+  buyerPassport    String?
+  buyerCity        String?
+  buyerProvince    String?
+  buyerContact     String?
+  buyerEmail       String?
+  business         Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  invoices         Invoice[]
+
+  @@map("customers")
+}
+
+model Product {
+  id                String        @id @default(cuid())
+  businessId        String
+  name              String
+  description       String?
+  hsCode            String
+  unitOfMeasurement String
+  unitPrice         Float
+  taxRate           Float         @default(18)
+  category          String?       // Now optional text input (Step 3a)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  isActive          Boolean       @default(true)
+  
+  // FBR Product Fields (Original)
+  fbrSaleType       String?       // Internal field for FBR sale type classification
+  
+  // NEW: Step 3b - Internal tracking
+  serialNumber      String?       // Product serial number (e.g., PRD-2025-0001)
+  
+  // NEW: Step 3c - FBR Compliance Fields with Data Chaining
+  hsCodeDescription   String?     // Step 3c.4: Full HS Code description from FBR
+  transactionType     String?     // Step 3c.3: FBR transaction type code
+  transactionTypeDesc String?     // Step 3c.3: Transaction type description
+  rateId              String?     // Step 3c.3: Tax rate ID from FBR
+  rateDescription     String?     // Step 3c.3: Tax rate description from FBR
+  sroNo               String?     // Step 3c.5: SRO Schedule number
+  sroItemSerialNo     String?     // Step 3c.6: SRO Item serial number
+  
+  // Relations
+  invoiceItems      InvoiceItem[]
+  business          Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("products")
+}
+
+model Invoice {
+  id                  String          @id @default(cuid())
+  businessId          String
+  customerId          String?
+  subtotal            Float
+  taxAmount           Float
+  totalAmount         Float
+  status              InvoiceStatus   @default(DRAFT)
+  mode                IntegrationMode @default(LOCAL)
+  fbrSubmitted        Boolean         @default(false)
+  fbrValidated        Boolean         @default(false)
+  submissionTimestamp DateTime?
+  fbrInvoiceNumber    String?         // FBR-issued IRN (Invoice Reference Number)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  invoiceNumber       String          // Our internal invoice number
+  invoiceSequence     Int             // Sequential number for business
+  qrCode              String?         // Generated QR code (Base64 or URL)
+  qrCodeData          String?         // QR code raw data for verification
+  invoiceDate         DateTime
+  dueDate             DateTime?
+  
+  // FBR Mandatory Fields
+  documentType        String          @default("Sale Invoice") // Sale Invoice, Credit Note, Debit Note
+  scenarioId          String?         // FBR Scenario ID (e.g., SN001 - Registered to Registered)
+  referenceInvoiceNo  String?         // Required for Credit/Debit Notes
+  paymentMode         String          @default("1") // 1=Cash, 2=Credit Card, 3=Debit Card, 4=Cheque, 5=Bank Transfer
+  taxPeriod           String?         // YYYY-MM format (e.g., 2025-01)
+  
+  // FBR Production Compliance Fields
+  fbrBuyerNTN         String?         // Buyer NTN for FBR (separate from customer NTN)
+  fbrBuyerCNIC        String?         // Buyer CNIC for FBR
+  fbrBuyerPassport    String?         // Buyer Passport for FBR
+  fbrBuyerType        String?         // 1=NTN, 2=CNIC, 3=Passport
+  fbrBuyerCity        String?         // Buyer city for FBR
+  fbrBuyerProvince    String?         // Buyer province for FBR
+  fbrBuyerAddress     String?         // Buyer address for FBR
+  fbrBuyerContact     String?         // Buyer contact for FBR
+  fbrBuyerEmail       String?         // Buyer email for FBR
+  
+  // FBR Response Data
+  fbrResponse         Json?           // Complete FBR API response (JSON)
+  fbrResponseData     String?         // Complete FBR API response (JSON) - deprecated, use fbrResponse
+  fbrTimestamp        DateTime?       // FBR processing timestamp
+  fbrTransactionId    String?         // FBR internal transaction ID
+  fbrErrorCode        String?         // Error code if submission failed
+  fbrErrorMessage     String?         // Error message from FBR
+  
+  // Error Recovery & Retry Fields
+  retryCount          Int             @default(0) // Number of retry attempts
+  lastRetryAt         DateTime?       // Timestamp of last retry attempt
+  maxRetries          Int             @default(3) // Maximum number of retries allowed
+  retryEnabled        Boolean         @default(true) // Whether automatic retry is enabled
+  nextRetryAt         DateTime?       // Scheduled time for next retry (exponential backoff)
+  
+  // Auto-calculated totals
+  totalBillAmount     Float?          // Sum of all line items
+  totalQuantity       Float?          // Sum of all quantities
+  totalDiscount       Float?          @default(0)
+  totalSalesTax       Float?          @default(0)
+  totalWithholdingTax Float?          @default(0)
+  totalExtraTax       Float?          @default(0)
+  totalFurtherTax     Float?          @default(0)
+  totalFED            Float?          @default(0) // Federal Excise Duty
+  
+  // Offline mode support
+  isOfflineInvoice    Boolean         @default(false)
+  offlineCreatedAt    DateTime?       // When created offline
+  syncedAt            DateTime?       // When synced to FBR
+  
+  // Additional fields
+  notes               String?         // Additional notes or comments
+  
+  items               InvoiceItem[]
+  business            Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer            Customer?       @relation(fields: [customerId], references: [id])
+
+  @@index([businessId, status])
+  @@index([fbrInvoiceNumber])
+  @@index([invoiceNumber])
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id                String   @id @default(cuid())
+  invoiceId         String
+  productId         String?
+  
+  // Basic Item Info
+  itemCode          String?  // Internal product code
+  description       String   // Item name/description
+  hsCode            String   // Harmonized System Code (mandatory)
+  quantity          Float    // Quantity sold
+  unitOfMeasurement String  // UOM (e.g., KG, PCS, LTR)
+  
+  // Pricing (all amounts are exclusive of tax initially)
+  unitPrice         Float    // Price per unit (excl. tax)
+  saleValue         Float    // Same as unitPrice but explicit for FBR
+  discount          Float    @default(0)
+  valueSalesExcludingST Float // Total value before tax: (unitPrice * quantity) - discount
+  
+  // Tax Calculations
+  taxRate           Float    // Tax rate percentage (e.g., 18 for 18%)
+  salesTaxApplicable Float   @default(0) // Calculated sales tax amount
+  taxCharged        Float?   // Same as salesTaxApplicable
+  taxAmount         Float    // Final tax amount (for backward compatibility)
+  
+  // Special Taxes
+  salesTaxWithheldAtSource Float @default(0) // Withholding tax
+  extraTax          Float    @default(0)
+  furtherTax        Float    @default(0)
+  fedPayable        Float    @default(0) // Federal Excise Duty in sales tax mode
+  
+  // SRO (Tax Exemption) References
+  sroScheduleNo     String?  // SRO schedule number
+  sroItemSerialNo   String?  // SRO item serial number
+  salesTaxAct       String   @default("SALES TAX ACT, 1990")
+  
+  // Totals
+  totalValue        Float    // Final line total: valueSalesExcludingST + all taxes
+  fixedNotifiedValueOrRetailPrice Float @default(0) // For specific categories
+  
+  // Sale classification
+  saleType          String   @default("Standard") // Standard, Reduced Rate, Exempt, etc.
+  
+  // FBR Production Compliance Fields
+  fbrSaleType       String?  // FBR-specific sale type classification
+  fbrRateId         String?  // FBR tax rate ID
+  fbrRateDesc       String?  // FBR tax rate description
+  fbrTransactionTypeId String? // FBR transaction type ID
+  fbrTransactionTypeDesc String? // FBR transaction type description
+  
+  invoice           Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  product           Product? @relation(fields: [productId], references: [id])
+
+  @@index([invoiceId])
+  @@map("invoice_items")
+}
+
+enum SubscriptionPlan {
+  FREE
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum IntegrationMode {
+  LOCAL
+  SANDBOX
+  PRODUCTION
+}
+
+enum RegistrationType {
+  REGISTERED
+  UNREGISTERED
+}
+
+enum InvoiceStatus {
+  DRAFT           // Local draft - not yet saved
+  SAVED           // Saved locally - can be edited
+  SUBMITTED       // Submitted to FBR - awaiting response
+  VALIDATED       // FBR validated successfully
+  PUBLISHED       // Published to production - cannot be edited
+  FAILED          // FBR submission failed
+  CANCELLED       // Cancelled by user
+}
+
+// FBR Lookup Data Cache Tables
+model FBRProvince {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("fbr_provinces")
+}
+
+model FBRHSCode {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("fbr_hs_codes")
+}
+
+model FBRUnitOfMeasurement {
+  id          String   @id @default(cuid())
+  code        String   
+  hsCode      String?  // Optional filter by HS Code
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([code, hsCode])
+  @@map("fbr_uom")
+}
+
+model FBRDocumentType {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("fbr_document_types")
+}
+
+model FBRScenario {
+  id           String   @id @default(cuid())
+  code         String   @unique
+  description  String
+  isActive     Boolean  @default(true)
+  
+  // NEW: Step 2 - Business type and sector filtering
+  businessType String?  // e.g., "Manufacturer", "Trader", "Service Provider", "Distributor"
+  sector       String?  // e.g., "Steel", "Textile", "Electronics", "Food & Beverage"
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([businessType, sector])
+  @@map("fbr_scenarios")
+}
+
+model FBRPaymentMode {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("fbr_payment_modes")
+}
+
+// FBR Sale Type Codes (for invoice items - different from transaction types)
+model FBRSaleTypeCode {
+  id          String   @id @default(cuid())
+  code        String   
+  hsCode      String?  // Filter by HS Code
+  scenarioId  String?  // Filter by Scenario
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([code, hsCode, scenarioId])
+  @@map("fbr_sale_type_codes")
+}
+
+model FBRTaxRate {
+  id             String   @id @default(cuid())
+  hsCode         String
+  saleType       String
+  sellerProvince String
+  buyerProvince  String
+  scenarioId     String
+  rate           Float    // Tax rate percentage
+  description    String
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([hsCode, saleType, sellerProvince, buyerProvince, scenarioId])
+  @@map("fbr_tax_rates")
+}
+
+// FBR Transaction Types (from PRAL API - used for tax rate lookups)
+// Note: Referring to sale types in FBR terminology
+model FBRTransactionType {
+  id            String   @id @default(cuid())
+  transTypeId   Int      @unique // FBR transaction/sale type ID
+  transTypeDesc String   // Transaction/sale type description
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("fbr_transaction_types")
+}
+
+model FBRSROSchedule {
+  id          String   @id @default(cuid())
+  scheduleNo  String   
+  scenarioId  String?  // Filter by Scenario
+  hsCode      String?  // Filter by HS Code
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([scheduleNo, scenarioId, hsCode])
+  @@map("fbr_sro_schedules")
+}
+
+model FBRSROItem {
+  id             String   @id @default(cuid())
+  itemSerialNo   String   
+  sroScheduleNo  String   // Links to FBRSROSchedule
+  description    String
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([itemSerialNo, sroScheduleNo])
+  @@map("fbr_sro_items")
+}
+
+// Cache metadata to track when FBR data was last synced
+model FBRCacheMetadata {
+  id            String   @id @default(cuid())
+  lookupType    String   @unique // "provinces", "hscodes", "uom", etc.
+  lastSyncAt    DateTime
+  recordCount   Int      @default(0)
+  syncStatus    String   @default("pending") // "success", "failed", "pending"
+  errorMessage  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("fbr_cache_metadata")
+}
