@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: easy-filer-db
+    environment:
+      POSTGRES_DB: easyfiler
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./tools/docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - easy-filer-network
+    restart: unless-stopped
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: easy-filer-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - easy-filer-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: easy-filer-app
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/easyfiler
+      REDIS_URL: redis://redis:6379
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      # FBR Integration
+      FBR_SANDBOX_USERNAME: ${FBR_SANDBOX_USERNAME}
+      FBR_SANDBOX_PASSWORD: ${FBR_SANDBOX_PASSWORD}
+      FBR_PRODUCTION_USERNAME: ${FBR_PRODUCTION_USERNAME}
+      FBR_PRODUCTION_PASSWORD: ${FBR_PRODUCTION_PASSWORD}
+      # File Upload
+      UPLOAD_DIR: /tmp/uploads
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads_data:/tmp/uploads
+      - ./apps/web/prisma:/app/apps/web/prisma
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - easy-filer-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads_data:
+
+networks:
+  easy-filer-network:
+    driver: bridge
