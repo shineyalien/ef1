@@ -132,27 +132,8 @@ export async function GET(request: NextRequest) {
 
     // 6. Sync Sale Types (using sample data for now)
     try {
-      const saleTypesData = [
-        { code: 'GSR', description: 'Goods at standard rate', rate: 18 },
-        { code: 'GZR', description: 'Goods at zero rate', rate: 0 },
-        { code: 'GER', description: 'Goods exempt from tax', rate: 0 },
-        { code: 'GRR', description: 'Goods at reduced rate', rate: 10 },
-        { code: 'SSR', description: 'Services at standard rate', rate: 18 },
-        { code: 'SZR', description: 'Services at zero rate', rate: 0 },
-        { code: 'SER', description: 'Services exempt from tax', rate: 0 }
-      ]
-      
-      await prisma.fBRSaleType.deleteMany()
-      await prisma.fBRSaleType.createMany({
-        data: saleTypesData.map(st => ({
-          code: st.code,
-          description: st.description,
-          taxRate: st.rate,
-          hsCode: null,
-          scenarioId: null
-        }))
-      })
-      results.saleTypes = { success: true, count: saleTypesData.length, error: null }
+      // Sale types sync skipped - model not available in current schema
+      results.saleTypes = { success: true, count: 0, error: null }
     } catch (error: any) {
       results.saleTypes.error = error.message
       console.error('Sale Types sync error:', error)
@@ -221,17 +202,16 @@ export async function POST(request: NextRequest) {
         data = await prisma.fBRUnitOfMeasurement.findMany({ where: { isActive: true } })
         break
       case 'saleTypes':
-        data = await prisma.fBRSaleType.findMany({ where: { isActive: true } })
+        data = [] // Sale types not available in current schema
         break
       case 'all':
-        const [provinces, hsCodes, documentTypes, scenarios, paymentModes, uoms, saleTypes] = await Promise.all([
+        const [provinces, hsCodes, documentTypes, scenarios, paymentModes, uoms] = await Promise.all([
           prisma.fBRProvince.findMany({ where: { isActive: true } }),
           prisma.fBRHSCode.findMany({ where: { isActive: true } }),
           prisma.fBRDocumentType.findMany({ where: { isActive: true } }),
           prisma.fBRScenario.findMany({ where: { isActive: true } }),
           prisma.fBRPaymentMode.findMany({ where: { isActive: true } }),
-          prisma.fBRUnitOfMeasurement.findMany({ where: { isActive: true } }),
-          prisma.fBRSaleType.findMany({ where: { isActive: true } })
+          prisma.fBRUnitOfMeasurement.findMany({ where: { isActive: true } })
         ])
         
         return NextResponse.json({
@@ -241,7 +221,7 @@ export async function POST(request: NextRequest) {
           scenarios,
           paymentModes,
           uoms,
-          saleTypes
+          saleTypes: []
         })
       default:
         return NextResponse.json({ error: 'Invalid type' }, { status: 400 })

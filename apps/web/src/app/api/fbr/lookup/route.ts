@@ -385,33 +385,36 @@ export async function GET(request: NextRequest) {
       }
 
       let data = await getCachedData(type, { hsCode })
+      let transformedData: any[] = []
       
       // Transform data to match expected format
       if (type === 'provinces') {
-        data = data.map((p: any) => ({
+        transformedData = (data as any[]).map((p: any) => ({
           stateProvinceCode: parseInt(p.code) || 0,
           stateProvinceDesc: p.name
         }))
       } else if (type === 'hscodes') {
-        data = data.map((h: any) => ({
+        transformedData = (data as any[]).map((h: any) => ({
           hS_CODE: h.code,
           description: h.description
         }))
       } else if (type === 'uom') {
-        data = data.map((u: any) => ({
+        transformedData = (data as any[]).map((u: any) => ({
           uoM_ID: parseInt(u.code) || 0,
           description: u.description
         }))
       } else if (type === 'documentTypes') {
-        data = data.map((d: any) => ({
+        transformedData = (data as any[]).map((d: any) => ({
           docTypeId: parseInt(d.code) || 0,
           docDescription: d.description
         }))
+      } else {
+        transformedData = data as any[]
       }
 
-      return NextResponse.json({ 
+      return NextResponse.json({
         success: true,
-        data 
+        data: transformedData
       })
     }
 

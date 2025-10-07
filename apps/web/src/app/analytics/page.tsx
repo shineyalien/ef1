@@ -79,7 +79,7 @@ export default function AnalyticsPage() {
       
       setBusinesses(mockBusinesses)
 
-      if (mockBusinesses.length > 0) {
+      if (mockBusinesses.length > 0 && mockBusinesses[0]) {
         const response = await fetch(`/api/analytics?businessId=${mockBusinesses[0].id}&period=${selectedPeriod}`)
         const data = await response.json()
         
