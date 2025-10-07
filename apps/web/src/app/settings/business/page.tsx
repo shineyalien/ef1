@@ -25,6 +25,8 @@ import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
 import { SharedLoading } from "@/components/shared-loading"
 import { SharedNavigation } from "@/components/shared-navigation"
+import { useError } from '@/contexts/error-context'
+import ErrorBoundary from '@/components/error-boundary'
 
 interface BusinessProfile {
   companyName: string
@@ -90,10 +92,26 @@ const SECTORS = [
   'Other'
 ]
 
+// Import FBR scenario functions
+import {
+  getApplicableScenarios,
+  getScenarioDescription,
+  validateScenarioApplicability,
+  type FBRScenario
+} from '@/lib/fbr-scenarios'
 
 export default function BusinessSettingsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const {
+    showErrorToast,
+    showSuccessToast,
+    handleNetworkError,
+    handleValidationError,
+    handleApiError,
+    handleGenericError
+  } = useError()
+  
   const [business, setBusiness] = useState<BusinessProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -137,6 +155,10 @@ export default function BusinessSettingsPage() {
   const loadBusiness = async () => {
     try {
       const response = await fetch('/api/settings/business')
+      if (!response.ok) {
+        throw new Error(`Failed to load business settings: ${response.status}`)
+      }
+      
       const data = await response.json()
       
       if (data.success) {
@@ -166,9 +188,13 @@ export default function BusinessSettingsPage() {
           pdfTheme: (data.business as any).invoiceTemplate || 'default',
           defaultScenario: (data.business as any).defaultScenario || null
         })
+      } else {
+        throw new Error(data.error?.message || 'Failed to load business settings')
       }
     } catch (error) {
       console.error('Failed to load business:', error)
+      handleApiError(error instanceof Error ? error : new Error('Failed to load business settings'), 'Loading business settings')
+      showErrorToast('Failed to Load', 'Could not load your business settings. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -180,13 +206,15 @@ export default function BusinessSettingsPage() {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file')
+      handleValidationError('Please upload an image file', 'logo')
+      showErrorToast('Invalid File', 'Please upload an image file (PNG, JPG, etc.)')
       return
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('File size too large. Maximum size is 5MB.')
+      handleValidationError('File size too large. Maximum size is 5MB.', 'logo')
+      showErrorToast('File Too Large', 'Please upload an image smaller than 5MB.')
       return
     }
 
@@ -200,17 +228,22 @@ export default function BusinessSettingsPage() {
         body: formData
       })
 
+      if (!response.ok) {
+        throw new Error(`Failed to upload logo: ${response.status}`)
+      }
+
       const result = await response.json()
 
       if (result.success) {
         await loadBusiness()
-        alert('Logo uploaded successfully!')
+        showSuccessToast('Logo Uploaded', 'Your company logo has been updated successfully!')
       } else {
-        throw new Error(result.error || 'Failed to upload logo')
+        throw new Error(result.error?.message || 'Failed to upload logo')
       }
     } catch (error) {
       console.error('Logo upload error:', error)
-      alert('Failed to upload logo. Please try again.')
+      handleNetworkError(error instanceof Error ? error : new Error('Failed to upload logo'), 'Uploading logo')
+      showErrorToast('Upload Failed', 'Failed to upload logo. Please try again.')
     } finally {
       setUploadingLogo(false)
     }
@@ -224,21 +257,45 @@ export default function BusinessSettingsPage() {
         method: 'DELETE'
       })
 
+      if (!response.ok) {
+        throw new Error(`Failed to remove logo: ${response.status}`)
+      }
+
       const result = await response.json()
 
       if (result.success) {
         await loadBusiness()
-        alert('Logo removed successfully!')
+        showSuccessToast('Logo Removed', 'Your company logo has been removed successfully!')
       } else {
-        throw new Error(result.error || 'Failed to remove logo')
+        throw new Error(result.error?.message || 'Failed to remove logo')
       }
     } catch (error) {
       console.error('Logo remove error:', error)
-      alert('Failed to remove logo. Please try again.')
+      handleNetworkError(error instanceof Error ? error : new Error('Failed to remove logo'), 'Removing logo')
+      showErrorToast('Removal Failed', 'Failed to remove logo. Please try again.')
     }
   }
 
   const saveBusiness = async () => {
+    // Validate required fields
+    if (!formData.companyName || formData.companyName.trim() === '') {
+      handleValidationError('Company name is required', 'companyName')
+      showErrorToast('Validation Error', 'Company name is required')
+      return
+    }
+    
+    if (!formData.ntnNumber || formData.ntnNumber.trim() === '') {
+      handleValidationError('NTN number is required', 'ntnNumber')
+      showErrorToast('Validation Error', 'NTN number is required')
+      return
+    }
+    
+    if (!formData.address || formData.address.trim() === '') {
+      handleValidationError('Business address is required', 'address')
+      showErrorToast('Validation Error', 'Business address is required')
+      return
+    }
+    
     setSaving(true)
     try {
       const response = await fetch('/api/settings/business', {
@@ -249,17 +306,22 @@ export default function BusinessSettingsPage() {
         body: JSON.stringify(formData)
       })
 
+      if (!response.ok) {
+        throw new Error(`Failed to update business settings: ${response.status}`)
+      }
+
       const result = await response.json()
       
       if (result.success) {
         await loadBusiness()
-        alert('Business settings updated successfully!')
+        showSuccessToast('Settings Saved', 'Your business settings have been updated successfully!')
       } else {
-        throw new Error(result.error || 'Failed to update business settings')
+        throw new Error(result.error?.message || 'Failed to update business settings')
       }
     } catch (error) {
       console.error('Save error:', error)
-      alert('Failed to update business settings. Please try again.')
+      handleApiError(error instanceof Error ? error : new Error('Failed to update business settings'), 'Saving business settings')
+      showErrorToast('Save Failed', 'Failed to update business settings. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -270,7 +332,8 @@ export default function BusinessSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-50">
       <main className="p-6 max-w-4xl mx-auto">
         {/* Navigation */}
         <SharedNavigation
@@ -437,6 +500,60 @@ export default function BusinessSettingsPage() {
                   </Select>
                 </div>
               </div>
+
+              <div>
+                <Label htmlFor="defaultScenario">Default FBR Scenario</Label>
+                <Select
+                  value={formData.defaultScenario || ''}
+                  onValueChange={(value) => {
+                    setFormData({ ...formData, defaultScenario: value })
+                    // Update available scenarios when business type or sector changes
+                    const scenarios = getApplicableScenarios(formData.businessType, formData.sector)
+                    if (scenarios.scenarios.length > 0 && !value) {
+                      setFormData(prev => ({
+                        ...prev,
+                        defaultScenario: scenarios.defaultScenario
+                      }))
+                    }
+                  }}
+                  disabled={!formData.businessType || !formData.sector}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select business type and sector first" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(() => {
+                      if (!formData.businessType || !formData.sector) return []
+                      const scenarios = getApplicableScenarios(formData.businessType, formData.sector)
+                      return scenarios.scenarios.map((scenario: FBRScenario) => (
+                        <SelectItem key={scenario.code} value={scenario.code}>
+                          <div className="flex flex-col items-start">
+                            <span className="font-medium text-sm">{scenario.code}</span>
+                            <span className="text-xs text-gray-600 mt-1 leading-tight">{scenario.description}</span>
+                          </div>
+                        </SelectItem>
+                      ))
+                    })()}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-gray-500 mt-1">
+                  This scenario will be used for FBR sandbox testing. Production submissions use actual invoice data.
+                </p>
+              </div>
+
+              {/* Scenario Information */}
+              {formData.defaultScenario && (
+                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h4 className="font-medium text-blue-900 mb-2">Selected Scenario Information</h4>
+                  <div className="text-sm text-blue-800">
+                    <p><strong>Scenario:</strong> {formData.defaultScenario}</p>
+                    <p><strong>Description:</strong> {getScenarioDescription(formData.defaultScenario)}</p>
+                    <p className="text-xs text-blue-600 mt-2">
+                      This scenario is applicable for your business type and sector according to FBR guidelines.
+                    </p>
+                  </div>
+                </div>
+              )}
 
             </CardContent>
           </Card>
@@ -768,6 +885,7 @@ export default function BusinessSettingsPage() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }

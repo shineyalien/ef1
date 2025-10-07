@@ -26,6 +26,9 @@ import {
 import Link from 'next/link'
 import { SharedLoading } from "@/components/shared-loading"
 import { SharedNavigation } from "@/components/shared-navigation"
+import { EnhancedProductSearch } from "@/components/enhanced-product-search"
+import { useError } from '@/contexts/error-context'
+import ErrorBoundary, { AppError, ErrorSeverity, ErrorCategory } from '@/components/error-boundary'
 
 interface InvoiceItem {
   id: string
@@ -70,6 +73,14 @@ interface LookupData {
 export default function CreateInvoicePage() {
   const router = useRouter()
   const { data: session, status } = useSession()
+  const {
+    showErrorToast,
+    showSuccessToast,
+    handleNetworkError,
+    handleValidationError,
+    handleApiError,
+    handleGenericError
+  } = useError()
   
   // State management
   const [loading, setLoading] = useState(false)
@@ -89,11 +100,9 @@ export default function CreateInvoicePage() {
   const [scenarios, setScenarios] = useState<Array<{ code: string; description: string; businessTypes?: string[]; sectors?: string[] }>>([])
   const [loadingScenarios, setLoadingScenarios] = useState(false)
   
-  // Product search state - prefetch all products
-  const [allProducts, setAllProducts] = useState<any[]>([]) // All products prefetched
-  const [loadingAllProducts, setLoadingAllProducts] = useState(false)
+  // Product search state - using enhanced search
   const [productSearchQueries, setProductSearchQueries] = useState<Record<string, string>>({}) // itemId → search query
-  const [productDropdownOpen, setProductDropdownOpen] = useState<Record<string, boolean>>({}) // itemId → dropdown state
+  const [selectedProducts, setSelectedProducts] = useState<Record<string, any>>({}) // itemId → selected product
   
   // Ref to prevent duplicate selections
   const selectingProductRef = useRef<boolean>(false)
@@ -165,20 +174,31 @@ export default function CreateInvoicePage() {
         setLoading(true)
         
         // Load customers
-        const customersRes = await fetch('/api/customers')
-        if (customersRes.ok) {
-          const data = await customersRes.json()
-          setCustomers(data.customers || [])
-          setFilteredCustomers(data.customers || [])
+        try {
+          const customersRes = await fetch('/api/customers')
+          if (customersRes.ok) {
+            const data = await customersRes.json()
+            if (data.success) {
+              setCustomers(data.customers || [])
+              setFilteredCustomers(data.customers || [])
+            } else {
+              throw new Error(data.error?.message || 'Failed to load customers')
+            }
+          } else {
+            throw new Error(`Failed to load customers: ${customersRes.status}`)
+          }
+        } catch (customerError) {
+          console.error('Error loading customers:', customerError)
+          handleApiError(customerError, 'Loading customers')
         }
         
-        // Prefetch all products
-        await loadAllProducts()
+        // Products are now loaded on-demand with enhanced search
         
         // Load scenarios based on user's business profile
         await loadScenarios()
       } catch (error) {
         console.error('Error loading data:', error)
+        handleGenericError(error instanceof Error ? error : new Error('Failed to load required data'), 'Loading initial data')
         setError('Failed to load required data')
       } finally {
         setLoading(false)
@@ -190,22 +210,6 @@ export default function CreateInvoicePage() {
     }
   }, [status])
 
-  // Prefetch all products
-  const loadAllProducts = async () => {
-    try {
-      setLoadingAllProducts(true)
-      const response = await fetch('/api/products')
-      if (response.ok) {
-        const data = await response.json()
-        setAllProducts(data.products || [])
-        console.log(`✅ Prefetched ${data.products?.length || 0} products`)
-      }
-    } catch (error) {
-      console.error('Failed to prefetch products:', error)
-    } finally {
-      setLoadingAllProducts(false)
-    }
-  }
 
   // Load FBR scenarios based on business type and sector
   const loadScenarios = async () => {
@@ -213,40 +217,60 @@ export default function CreateInvoicePage() {
       setLoadingScenarios(true)
       
       // First, get user's business profile from settings API
-      const businessRes = await fetch('/api/settings/business')
-      if (businessRes.ok) {
-        const businessData = await businessRes.json()
-        const business = businessData.business
-        
-        // Fetch scenarios from API
-        const scenariosRes = await fetch(
-          `/api/fbr/scenarios?businessType=${encodeURIComponent(business.businessType || '')}&sector=${encodeURIComponent(business.sector || '')}&includeGeneral=true`
-        )
-        
-        if (scenariosRes.ok) {
-          const data = await scenariosRes.json()
-          setScenarios(data.data || [])
+      try {
+        const businessRes = await fetch('/api/settings/business')
+        if (businessRes.ok) {
+          const businessData = await businessRes.json()
+          const business = businessData.business
+          
+          // Fetch scenarios from API
+          const scenariosRes = await fetch(
+            `/api/fbr/scenarios?businessType=${encodeURIComponent(business.businessType || '')}&sector=${encodeURIComponent(business.sector || '')}&includeGeneral=true`
+          )
+          
+          if (scenariosRes.ok) {
+            const data = await scenariosRes.json()
+            if (data.success) {
+              setScenarios(data.data || [])
+              console.log(`✅ Loaded scenarios for ${business.businessType} (${business.sector})`)
+            } else {
+              throw new Error(data.error?.message || 'Failed to load scenarios')
+            }
+          } else {
+            throw new Error(`Failed to load scenarios: ${scenariosRes.status}`)
+          }
+          
+          // Always set default scenario from business settings if available
+          if (business.defaultScenario) {
+            setInvoiceData(prev => ({
+              ...prev,
+              scenarioId: business.defaultScenario
+            }))
+            console.log(`✅ Set default scenario from business settings: ${business.defaultScenario}`)
+          }
+        } else {
+          throw new Error(`Failed to load business settings: ${businessRes.status}`)
         }
-        console.log(`✅ Loaded scenarios for ${business.businessType} (${business.sector})`)
+      } catch (businessError) {
+        console.error('Error loading business settings:', businessError)
+        handleApiError(businessError instanceof Error ? businessError : new Error('Failed to load business settings'), 'Loading business settings')
         
-        // Always set default scenario from business settings if available
-        if (business.defaultScenario) {
-          setInvoiceData(prev => ({
-            ...prev,
-            scenarioId: business.defaultScenario
-          }))
-          console.log(`✅ Set default scenario from business settings: ${business.defaultScenario}`)
-        }
-      } else {
         // Fallback: load all general scenarios
-        const scenariosRes = await fetch('/api/fbr/scenarios?includeGeneral=true')
-        if (scenariosRes.ok) {
-          const data = await scenariosRes.json()
-          setScenarios(data.data || [])
+        try {
+          const scenariosRes = await fetch('/api/fbr/scenarios?includeGeneral=true')
+          if (scenariosRes.ok) {
+            const data = await scenariosRes.json()
+            if (data.success) {
+              setScenarios(data.data || [])
+            }
+          }
+        } catch (fallbackError) {
+          console.error('Error loading fallback scenarios:', fallbackError)
         }
       }
     } catch (error) {
       console.error('Error loading scenarios:', error)
+      handleGenericError(error instanceof Error ? error : new Error('Failed to load scenarios'), 'Loading scenarios')
       // Continue without scenarios (they're optional)
     } finally {
       setLoadingScenarios(false)
@@ -309,63 +333,31 @@ export default function CreateInvoicePage() {
           // The product already has a UoM set from the product data
           // User can manually change it if needed
         }
+      } else {
+        console.warn(`Failed to fetch UOMs for HS Code ${hsCode}: ${response.status}`)
       }
     } catch (error) {
       console.error('Failed to fetch UOMs for HS Code:', error)
+      handleNetworkError(error instanceof Error ? error : new Error('Failed to fetch UOMs'), `Fetching UOMs for HS ${hsCode}`)
     }
   }
 
-  // Filter products from prefetched list, fallback to database search
-  const getFilteredProducts = useCallback((query: string, itemId: string) => {
-    if (!query || query.trim() === '') {
-      // Return all products if no search query
-      return allProducts
-    }
-
-    const searchLower = query.toLowerCase()
+  // Handle product selection from enhanced search
+  const handleProductSelect = useCallback((product: any, itemIndex: number) => {
+    setSelectedProducts(prev => ({
+      ...prev,
+      [items[itemIndex].id]: product
+    }))
     
-    // First, filter from prefetched products
-    const filteredFromCache = allProducts.filter(p => 
-      p.name?.toLowerCase().includes(searchLower) ||
-      p.description?.toLowerCase().includes(searchLower) ||
-      p.hsCode?.toLowerCase().includes(searchLower)
-    )
-
-    // If found in cache, return immediately
-    if (filteredFromCache.length > 0) {
-      return filteredFromCache
-    }
-
-    // If not found in cache and query is long enough, search database
-    if (query.length >= 2) {
-      searchProductsFromDatabase(query, itemId)
-    }
-
-    return []
-  }, [allProducts])
-
-  // Fallback: Search database for newly added products not in cache
-  const searchProductsFromDatabase = async (query: string, itemId: string) => {
-    try {
-      const response = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`)
-      if (response.ok) {
-        const data = await response.json()
-        const newProducts = data.products || []
-        
-        // Add newly found products to cache
-        if (newProducts.length > 0) {
-          setAllProducts(prev => {
-            const existingIds = new Set(prev.map(p => p.id))
-            const uniqueNew = newProducts.filter((p: any) => !existingIds.has(p.id))
-            return [...prev, ...uniqueNew]
-          })
-          console.log(`🔄 Added ${newProducts.length} newly found products to cache`)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to search products from database:', error)
-    }
-  }
+    // Auto-fill line item from selected product
+    selectProduct(product, itemIndex)
+    
+    // Update search query to show selected product name
+    setProductSearchQueries(prev => ({
+      ...prev,
+      [items[itemIndex].id]: product.name
+    }))
+  }, [items, selectProduct])
 
   // Auto-fill line item from selected product
   const selectProduct = async (product: any, itemIndex: number, event?: React.MouseEvent) => {
@@ -455,15 +447,7 @@ export default function CreateInvoicePage() {
   // Select product by ID for pre-filling
   const selectProductById = async (productId: string) => {
     try {
-      // Find product in prefetched list first
-      const product = allProducts.find(p => p.id === productId)
-      if (product) {
-        await selectProduct(product, 0)
-        console.log('✅ Pre-selected product from URL:', product.name)
-        return
-      }
-      
-      // If not in cache, fetch directly
+      // Fetch product directly
       const response = await fetch(`/api/products/${productId}`)
       if (response.ok) {
         const data = await response.json()
@@ -585,11 +569,19 @@ export default function CreateInvoicePage() {
       
       // Validate required fields
       if (!invoiceData.customerId) {
-        throw new Error('Please select a customer')
+        const errorMsg = 'Please select a customer'
+        if (!isAutoSave) {
+          handleValidationError(errorMsg, 'customerId')
+        }
+        throw new Error(errorMsg)
       }
       
       if (items.length === 0) {
-        throw new Error('Please add at least one item')
+        const errorMsg = 'Please add at least one item'
+        if (!isAutoSave) {
+          handleValidationError(errorMsg, 'items')
+        }
+        throw new Error(errorMsg)
       }
       
       // Validate each item has required fields
@@ -598,16 +590,32 @@ export default function CreateInvoicePage() {
         if (!item) continue
         
         if (!item.description && !item.hsCode) {
-          throw new Error(`Item ${i + 1}: Please add a description or HS code`)
+          const errorMsg = `Item ${i + 1}: Please add a description or HS code`
+          if (!isAutoSave) {
+            handleValidationError(errorMsg, `item${i}.description`)
+          }
+          throw new Error(errorMsg)
         }
         if (!item.hsCode) {
-          throw new Error(`Item ${i + 1}: HS Code is required`)
+          const errorMsg = `Item ${i + 1}: HS Code is required`
+          if (!isAutoSave) {
+            handleValidationError(errorMsg, `item${i}.hsCode`)
+          }
+          throw new Error(errorMsg)
         }
         if (item.quantity <= 0) {
-          throw new Error(`Item ${i + 1}: Quantity must be greater than 0`)
+          const errorMsg = `Item ${i + 1}: Quantity must be greater than 0`
+          if (!isAutoSave) {
+            handleValidationError(errorMsg, `item${i}.quantity`)
+          }
+          throw new Error(errorMsg)
         }
         if (item.unitPrice < 0) {
-          throw new Error(`Item ${i + 1}: Unit price cannot be negative`)
+          const errorMsg = `Item ${i + 1}: Unit price cannot be negative`
+          if (!isAutoSave) {
+            handleValidationError(errorMsg, `item${i}.unitPrice`)
+          }
+          throw new Error(errorMsg)
         }
       }
       
@@ -669,7 +677,19 @@ export default function CreateInvoicePage() {
       if (!response.ok) {
         const errorData = await response.json()
         console.error('❌ Save failed:', errorData)
-        throw new Error(errorData.error || errorData.details || 'Failed to save invoice')
+        const errorMessage = errorData.error?.message || errorData.error || 'Failed to save invoice'
+        
+        if (!isAutoSave) {
+          if (response.status === 400) {
+            handleValidationError(errorMessage)
+          } else if (response.status >= 500) {
+            handleApiError(new Error(errorMessage), 'Saving invoice')
+          } else {
+            handleGenericError(new Error(errorMessage), 'Saving invoice')
+          }
+        }
+        
+        throw new Error(errorMessage)
       }
       
       const data = await response.json()
@@ -682,6 +702,7 @@ export default function CreateInvoicePage() {
       
       if (!isAutoSave) {
         setSuccess('Invoice saved successfully!')
+        showSuccessToast('Invoice Saved', 'Your invoice has been saved successfully.')
         setTimeout(() => setSuccess(''), 3000)
       }
       
@@ -689,6 +710,7 @@ export default function CreateInvoicePage() {
       console.error('Save error:', error)
       if (!isAutoSave) {
         setError(error.message || 'Failed to save invoice')
+        showErrorToast('Save Failed', error.message || 'Failed to save invoice')
       }
     } finally {
       if (isAutoSave) {
@@ -709,7 +731,9 @@ export default function CreateInvoicePage() {
       if (!invoiceId) {
         await handleSave()
         if (!invoiceId) {
-          throw new Error('Failed to save invoice before submission')
+          const errorMsg = 'Failed to save invoice before submission'
+          handleApiError(new Error(errorMsg), 'Saving invoice before submission')
+          throw new Error(errorMsg)
         }
       }
       
@@ -722,11 +746,22 @@ export default function CreateInvoicePage() {
       
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to submit to FBR')
+        const errorMessage = errorData.error?.message || errorData.error || 'Failed to submit to FBR'
+        
+        if (response.status === 400) {
+          handleValidationError(errorMessage)
+        } else if (response.status >= 500) {
+          handleApiError(new Error(errorMessage), 'Submitting to FBR sandbox')
+        } else {
+          handleGenericError(new Error(errorMessage), 'Submitting to FBR sandbox')
+        }
+        
+        throw new Error(errorMessage)
       }
       
       const data = await response.json()
       setSuccess(`Invoice submitted to FBR Sandbox! IRN: ${data.fbrInvoiceNumber}`)
+      showSuccessToast('Submitted to FBR', `Invoice submitted to FBR Sandbox! IRN: ${data.fbrInvoiceNumber}`)
       
       // Redirect to invoice list after 2 seconds
       setTimeout(() => {
@@ -736,6 +771,7 @@ export default function CreateInvoicePage() {
     } catch (error: any) {
       console.error('Submit error:', error)
       setError(error.message || 'Failed to submit to FBR')
+      showErrorToast('Submission Failed', error.message || 'Failed to submit to FBR')
     } finally {
       setSaving(false)
     }
@@ -748,7 +784,8 @@ export default function CreateInvoicePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto p-6 max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -1053,81 +1090,18 @@ export default function CreateInvoicePage() {
                     )}
                   </div>
 
-                  {/* Product Autocomplete - Type to search with suggestions */}
-                  <div className="mb-4 product-autocomplete-container">
+                  {/* Enhanced Product Search */}
+                  <div className="mb-4">
                     <Label>Select Product (Optional)</Label>
-                    <div className="relative">
-                      <Input
-                        placeholder="Type product name to search..."
-                        value={productSearchQueries[item.id] || ''}
-                        onChange={(e) => {
-                          setProductSearchQueries(prev => ({ ...prev, [item.id]: e.target.value }))
-                          setProductDropdownOpen(prev => ({ ...prev, [item.id]: true }))
-                        }}
-                        onFocus={() => setProductDropdownOpen(prev => ({ ...prev, [item.id]: true }))}
-                        className="pr-10"
-                      />
-                      <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-                      
-                      {/* Dropdown suggestions */}
-                      {productDropdownOpen[item.id] && (
-                        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-                          {loadingAllProducts ? (
-                            <div className="flex items-center justify-center py-8">
-                              <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-                              <span className="ml-2 text-sm text-gray-500">Loading products...</span>
-                            </div>
-                          ) : (() => {
-                            const filteredProducts = getFilteredProducts(productSearchQueries[item.id] || '', item.id)
-                            return filteredProducts.length > 0 ? (
-                              <div>
-                                <div className="sticky top-0 bg-gray-50 px-4 py-2 border-b border-gray-200">
-                                  <p className="text-xs font-medium text-gray-600">
-                                    {filteredProducts.length} Products Available
-                                  </p>
-                                </div>
-                                <div className="divide-y divide-gray-100">
-                                  {filteredProducts.map((product) => (
-                                    <button
-                                      key={product.id}
-                                      type="button"
-                                      onMouseDown={(e) => {
-                                        e.preventDefault()
-                                        e.stopPropagation()
-                                        selectProduct(product, index, e)
-                                      }}
-                                      className="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors focus:outline-none focus:bg-blue-50"
-                                    >
-                                      <div className="flex justify-between items-start pointer-events-none">
-                                        <span className="font-medium text-gray-900">{product.name}</span>
-                                        <span className="text-sm font-semibold text-blue-600 ml-2">PKR {product.price?.toFixed(2)}</span>
-                                      </div>
-                                      <div className="text-xs text-gray-500 mt-1 pointer-events-none">
-                                        HS: {product.hsCode} • {product.unitOfMeasurement} • Tax: {product.taxRate}%
-                                      </div>
-                                      {product.description && (
-                                        <div className="text-xs text-gray-400 mt-0.5 truncate pointer-events-none">{product.description}</div>
-                                      )}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="p-8 text-center text-gray-500">
-                                <p className="text-sm">No products found</p>
-                                <Link href="/products/new">
-                                  <Button type="button" variant="link" size="sm" className="mt-2">
-                                    Create new product
-                                  </Button>
-                                </Link>
-                              </div>
-                            )
-                          })()}
-                        </div>
-                      )}
-                    </div>
+                    <EnhancedProductSearch
+                      onSelect={(product) => handleProductSelect(product, index)}
+                      placeholder="Search products by name, code, or category..."
+                      className="mt-1"
+                      showAdvancedFilters={false}
+                      enableCaching={true}
+                    />
                     <p className="text-xs text-gray-500 mt-1">
-                      {allProducts.length} products loaded • Type to filter or leave empty to see all • Auto-fills all fields
+                      Search from your product catalog • Auto-fills all fields when selected
                     </p>
                   </div>
 
@@ -1385,6 +1359,7 @@ export default function CreateInvoicePage() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }

@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf'
+import { generateFBRQRCode, validateQRCodeData } from './qr-generator'
 
 interface BusinessSettings {
   companyName: string
@@ -538,6 +539,43 @@ const drawSummary = (
   }
 }
 
+const drawQRCode = (
+  doc: jsPDF,
+  theme: PDFTheme,
+  colors: ThemeColors,
+  invoice: InvoiceData,
+  yPosition: number
+): number => {
+  if (!invoice.qrCode || !invoice.fbrInvoiceNumber) {
+    return yPosition
+  }
+
+  // Add QR code section
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(10)
+  doc.setTextColor(colors.text)
+  doc.text('FBR QR Code', 105, yPosition, { align: 'center' })
+  
+  // Add QR code image (placeholder for now - in real implementation, this would render the actual QR code)
+  try {
+    // For now, we'll add a placeholder rectangle
+    // In a real implementation, you would convert the base64 QR code to an image
+    doc.setFillColor(0, 0, 0)
+    doc.rect(85, yPosition + 5, 40, 40, 'S') // Border for QR code
+    
+    // Add QR code text representation
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(6)
+    doc.setTextColor(colors.mediumGray)
+    doc.text(`IRN: ${invoice.fbrInvoiceNumber}`, 105, yPosition + 50, { align: 'center' })
+    
+    return yPosition + 55
+  } catch (error) {
+    console.error('Error adding QR code to PDF:', error)
+    return yPosition + 10
+  }
+}
+
 const drawFooter = (
   doc: jsPDF,
   theme: PDFTheme,
@@ -579,6 +617,7 @@ export const generateEnhancedPDF = async (
   yPosition = drawInvoiceDetails(doc, theme, colors, invoice, yPosition)
   yPosition = drawItemsTable(doc, theme, colors, invoice, yPosition)
   yPosition = drawSummary(doc, theme, colors, invoice, yPosition)
+  yPosition = drawQRCode(doc, theme, colors, invoice, yPosition)
   drawFooter(doc, theme, colors, invoice, yPosition)
   
   // Return as ReadableStream

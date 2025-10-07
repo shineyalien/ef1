@@ -233,7 +233,7 @@ async function handlePageRequest(request) {
   }
 }
 
-// Background sync for offline invoice creation
+// Background sync for offline data
 self.addEventListener('sync', (event) => {
   console.log('[SW] Background sync triggered:', event.tag)
   
@@ -241,18 +241,41 @@ self.addEventListener('sync', (event) => {
     event.waitUntil(syncInvoices())
   }
   
+  if (event.tag === 'sync-customers') {
+    event.waitUntil(syncCustomers())
+  }
+  
   if (event.tag === 'sync-bulk-operations') {
     event.waitUntil(syncBulkOperations())
+  }
+  
+  if (event.tag === 'process-sync-queue') {
+    event.waitUntil(processSyncQueue())
   }
 })
 
 async function syncInvoices() {
   try {
-    // Get stored offline invoices from IndexedDB
+    console.log('[SW] Starting invoice sync...')
     const offlineInvoices = await getOfflineInvoices()
     
+    if (offlineInvoices.length === 0) {
+      console.log('[SW] No invoices to sync')
+      return true
+    }
+    
+    let syncSuccess = true
     for (const invoice of offlineInvoices) {
       try {
+        // Add to sync queue for retry mechanism
+        await addToSyncQueue({
+          type: 'invoice',
+          id: invoice.id,
+          data: invoice.data,
+          endpoint: '/api/invoices',
+          method: 'POST'
+        })
+        
         const response = await fetch('/api/invoices', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -260,33 +283,701 @@ async function syncInvoices() {
         })
         
         if (response.ok) {
-          // Remove from offline storage
-          await removeOfflineInvoice(invoice.id)
+          // Mark as synced in the original store
+          await markInvoiceAsSynced(invoice.id)
+          // Remove from sync queue if it exists
+          await removeFromSyncQueue(invoice.id)
           console.log('[SW] Synced offline invoice:', invoice.id)
+          
+          // Send notification for successful sync
+          self.registration.showNotification('Easy Filer', {
+            body: `Invoice ${invoice.data.invoiceNumber || invoice.id} synced successfully`,
+            icon: '/icons/icon-192x192.png',
+            tag: 'sync-success'
+          })
+        } else if (response.status === 409) {
+          // Conflict detected
+          console.log('[SW] Conflict detected for invoice:', invoice.id)
+          await handleSyncConflict('invoice', invoice, await response.json())
+          syncSuccess = false
+        } else {
+          throw new Error(`Server responded with ${response.status}: ${response.statusText}`)
         }
       } catch (error) {
         console.log('[SW] Failed to sync invoice:', invoice.id, error)
+        
+        // Add to sync queue for retry
+        await addToSyncQueue({
+          type: 'invoice',
+          id: invoice.id,
+          data: invoice.data,
+          endpoint: '/api/invoices',
+          method: 'POST',
+          error: error.message
+        })
+        
+        syncSuccess = false
       }
     }
+    
+    return syncSuccess
   } catch (error) {
     console.log('[SW] Background sync failed:', error)
+    return false
+  }
+}
+
+async function syncCustomers() {
+  try {
+    console.log('[SW] Starting customer sync...')
+    const offlineCustomers = await getOfflineCustomers()
+    
+    if (offlineCustomers.length === 0) {
+      console.log('[SW] No customers to sync')
+      return true
+    }
+    
+    let syncSuccess = true
+    for (const customer of offlineCustomers) {
+      try {
+        // Add to sync queue for retry mechanism
+        await addToSyncQueue({
+          type: 'customer',
+          id: customer.id,
+          data: customer.data,
+          endpoint: '/api/customers',
+          method: 'POST'
+        })
+        
+        const response = await fetch('/api/customers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(customer.data)
+        })
+        
+        if (response.ok) {
+          // Mark as synced in the original store
+          await markCustomerAsSynced(customer.id)
+          // Remove from sync queue if it exists
+          await removeFromSyncQueue(customer.id)
+          console.log('[SW] Synced offline customer:', customer.id)
+          
+          // Send notification for successful sync
+          self.registration.showNotification('Easy Filer', {
+            body: `Customer ${customer.data.name || customer.id} synced successfully`,
+            icon: '/icons/icon-192x192.png',
+            tag: 'sync-success'
+          })
+        } else if (response.status === 409) {
+          // Conflict detected
+          console.log('[SW] Conflict detected for customer:', customer.id)
+          await handleSyncConflict('customer', customer, await response.json())
+          syncSuccess = false
+        } else {
+          throw new Error(`Server responded with ${response.status}: ${response.statusText}`)
+        }
+      } catch (error) {
+        console.log('[SW] Failed to sync customer:', customer.id, error)
+        
+        // Add to sync queue for retry
+        await addToSyncQueue({
+          type: 'customer',
+          id: customer.id,
+          data: customer.data,
+          endpoint: '/api/customers',
+          method: 'POST',
+          error: error.message
+        })
+        
+        syncSuccess = false
+      }
+    }
+    
+    return syncSuccess
+  } catch (error) {
+    console.log('[SW] Customer sync failed:', error)
+    return false
   }
 }
 
 async function syncBulkOperations() {
-  // Similar implementation for bulk operations
-  console.log('[SW] Syncing bulk operations...')
+  try {
+    console.log('[SW] Syncing bulk operations...')
+    // Implementation for bulk operations
+    return true
+  } catch (error) {
+    console.log('[SW] Bulk operations sync failed:', error)
+    return false
+  }
+}
+
+async function processSyncQueue() {
+  try {
+    console.log('[SW] Processing sync queue...')
+    const syncQueue = await getSyncQueue()
+    
+    if (syncQueue.length === 0) {
+      console.log('[SW] Sync queue is empty')
+      return true
+    }
+    
+    const now = Date.now()
+    let processedItems = 0
+    
+    for (const item of syncQueue) {
+      // Check if we should retry this item based on exponential backoff
+      if (item.lastRetry && !shouldRetryNow(item.lastRetry, item.retryCount)) {
+        continue
+      }
+      
+      try {
+        // Attempt to sync the item
+        const response = await fetch(item.endpoint, {
+          method: item.method || 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item.data)
+        })
+        
+        if (response.ok) {
+          // Success - remove from queue and mark as synced
+          await removeFromSyncQueue(item.id)
+          
+          if (item.type === 'invoice') {
+            await markInvoiceAsSynced(item.id)
+          } else if (item.type === 'customer') {
+            await markCustomerAsSynced(item.id)
+          }
+          
+          console.log(`[SW] Successfully synced ${item.type}:`, item.id)
+          processedItems++
+          
+          // Send notification for successful sync
+          self.registration.showNotification('Easy Filer', {
+            body: `${item.type.charAt(0).toUpperCase() + item.type.slice(1)} synced successfully after retry`,
+            icon: '/icons/icon-192x192.png',
+            tag: 'sync-retry-success'
+          })
+        } else if (response.status === 409) {
+          // Conflict detected
+          console.log(`[SW] Conflict detected for ${item.type}:`, item.id)
+          await handleSyncConflict(item.type, item, await response.json())
+          
+          // Update the item in the queue with conflict status
+          await updateSyncQueueItem(item.id, {
+            status: 'conflict',
+            lastRetry: now,
+            retryCount: item.retryCount + 1,
+            conflictData: await response.json()
+          })
+        } else {
+          throw new Error(`Server responded with ${response.status}: ${response.statusText}`)
+        }
+      } catch (error) {
+        console.log(`[SW] Failed to sync ${item.type}:`, item.id, error)
+        
+        // Update the item with retry information
+        await updateSyncQueueItem(item.id, {
+          status: 'failed',
+          lastRetry: now,
+          retryCount: item.retryCount + 1,
+          error: error.message
+        })
+        
+        // If max retries reached, notify user
+        if (item.retryCount >= 5) {
+          console.log(`[SW] Max retries reached for ${item.type}:`, item.id)
+          
+          // Send notification for failed sync
+          self.registration.showNotification('Easy Filer - Sync Failed', {
+            body: `Failed to sync ${item.type} after multiple attempts. Please check your connection and try manually.`,
+            icon: '/icons/icon-192x192.png',
+            tag: 'sync-failed',
+            requireInteraction: true,
+            actions: [
+              {
+                action: 'retry',
+                title: 'Retry Now'
+              },
+              {
+                action: 'dismiss',
+                title: 'Dismiss'
+              }
+            ]
+          })
+        }
+      }
+    }
+    
+    console.log(`[SW] Processed ${processedItems} items from sync queue`)
+    return true
+  } catch (error) {
+    console.log('[SW] Failed to process sync queue:', error)
+    return false
+  }
+}
+
+// Helper functions for managing sync status
+async function markInvoiceAsSynced(id) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => reject(request.error)
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('invoices')) {
+        resolve(false)
+        return
+      }
+      
+      const transaction = db.transaction(['invoices'], 'readwrite')
+      const store = transaction.objectStore('invoices')
+      
+      // First get the existing invoice
+      const getRequest = store.get(id)
+      getRequest.onerror = () => reject(getRequest.error)
+      
+      getRequest.onsuccess = () => {
+        const invoice = getRequest.result
+        if (!invoice) {
+          resolve(false)
+          return
+        }
+        
+        // Update the synced status
+        invoice.synced = true
+        invoice.syncedAt = Date.now()
+        
+        const putRequest = store.put(invoice)
+        putRequest.onerror = () => reject(putRequest.error)
+        putRequest.onsuccess = () => resolve(true)
+      }
+    }
+  })
+}
+
+async function markCustomerAsSynced(id) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => reject(request.error)
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('customers')) {
+        resolve(false)
+        return
+      }
+      
+      const transaction = db.transaction(['customers'], 'readwrite')
+      const store = transaction.objectStore('customers')
+      
+      // First get the existing customer
+      const getRequest = store.get(id)
+      getRequest.onerror = () => reject(getRequest.error)
+      
+      getRequest.onsuccess = () => {
+        const customer = getRequest.result
+        if (!customer) {
+          resolve(false)
+          return
+        }
+        
+        // Update the synced status
+        customer.synced = true
+        customer.syncedAt = Date.now()
+        
+        const putRequest = store.put(customer)
+        putRequest.onerror = () => reject(putRequest.error)
+        putRequest.onsuccess = () => resolve(true)
+      }
+    }
+  })
+}
+
+// Handle sync conflicts
+async function handleSyncConflict(type, localItem, serverData) {
+  // Store conflict information for user resolution
+  await addToSyncQueue({
+    type: type,
+    id: localItem.id,
+    data: localItem.data,
+    endpoint: type === 'invoice' ? '/api/invoices' : '/api/customers',
+    method: 'POST',
+    status: 'conflict',
+    serverData: serverData,
+    localData: localItem.data,
+    timestamp: Date.now()
+  })
+  
+  // Send notification about conflict
+  self.registration.showNotification('Easy Filer - Sync Conflict', {
+    body: `Conflict detected for ${type}. Please resolve in the app.`,
+    icon: '/icons/icon-192x192.png',
+    tag: 'sync-conflict',
+    requireInteraction: true,
+    actions: [
+      {
+        action: 'resolve',
+        title: 'Resolve Conflict'
+      }
+    ]
+  })
+}
+
+// Calculate if an item should be retried now based on exponential backoff
+function shouldRetryNow(lastRetry, retryCount) {
+  const now = Date.now()
+  const delay = Math.min(Math.pow(2, retryCount) * 1000, 30000) // Max 30 seconds
+  return (now - lastRetry) >= delay
 }
 
 // Helper functions for IndexedDB operations
 async function getOfflineInvoices() {
-  // Implementation would use IndexedDB to store/retrieve offline data
-  return []
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => {
+      console.log('[SW] Failed to open IndexedDB:', request.error)
+      reject(request.error)
+    }
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      // Check if the invoices store exists
+      if (!db.objectStoreNames.contains('invoices')) {
+        console.log('[SW] Invoices store not found in IndexedDB')
+        resolve([])
+        return
+      }
+      
+      const transaction = db.transaction(['invoices'], 'readonly')
+      const store = transaction.objectStore('invoices')
+      const getAllRequest = store.getAll()
+      
+      getAllRequest.onerror = () => {
+        console.log('[SW] Failed to get offline invoices:', getAllRequest.error)
+        reject(getAllRequest.error)
+      }
+      
+      getAllRequest.onsuccess = () => {
+        const invoices = getAllRequest.result || []
+        // Filter for unsynced invoices
+        const unsyncedInvoices = invoices.filter(invoice => !invoice.synced)
+        console.log(`[SW] Found ${unsyncedInvoices.length} unsynced invoices`)
+        resolve(unsyncedInvoices)
+      }
+    }
+    
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result
+      
+      // Create object stores if they don't exist
+      if (!db.objectStoreNames.contains('invoices')) {
+        const invoiceStore = db.createObjectStore('invoices', { keyPath: 'id', autoIncrement: true })
+        invoiceStore.createIndex('timestamp', 'timestamp')
+      }
+      
+      if (!db.objectStoreNames.contains('customers')) {
+        const customerStore = db.createObjectStore('customers', { keyPath: 'id', autoIncrement: true })
+        customerStore.createIndex('timestamp', 'timestamp')
+      }
+      
+      if (!db.objectStoreNames.contains('bulkOperations')) {
+        const bulkStore = db.createObjectStore('bulkOperations', { keyPath: 'id', autoIncrement: true })
+        bulkStore.createIndex('timestamp', 'timestamp')
+      }
+      
+      if (!db.objectStoreNames.contains('syncQueue')) {
+        const syncQueueStore = db.createObjectStore('syncQueue', { keyPath: 'id', autoIncrement: true })
+        syncQueueStore.createIndex('timestamp', 'timestamp')
+        syncQueueStore.createIndex('retryCount', 'retryCount')
+      }
+    }
+  })
 }
 
 async function removeOfflineInvoice(id) {
-  // Implementation would remove item from IndexedDB
-  console.log('[SW] Removing offline invoice:', id)
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => {
+      console.log('[SW] Failed to open IndexedDB:', request.error)
+      reject(request.error)
+    }
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('invoices')) {
+        console.log('[SW] Invoices store not found in IndexedDB')
+        resolve(false)
+        return
+      }
+      
+      const transaction = db.transaction(['invoices'], 'readwrite')
+      const store = transaction.objectStore('invoices')
+      const deleteRequest = store.delete(id)
+      
+      deleteRequest.onerror = () => {
+        console.log('[SW] Failed to remove offline invoice:', deleteRequest.error)
+        reject(deleteRequest.error)
+      }
+      
+      deleteRequest.onsuccess = () => {
+        console.log('[SW] Successfully removed offline invoice:', id)
+        resolve(true)
+      }
+    }
+  })
+}
+
+async function getOfflineCustomers() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => {
+      console.log('[SW] Failed to open IndexedDB:', request.error)
+      reject(request.error)
+    }
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('customers')) {
+        console.log('[SW] Customers store not found in IndexedDB')
+        resolve([])
+        return
+      }
+      
+      const transaction = db.transaction(['customers'], 'readonly')
+      const store = transaction.objectStore('customers')
+      const getAllRequest = store.getAll()
+      
+      getAllRequest.onerror = () => {
+        console.log('[SW] Failed to get offline customers:', getAllRequest.error)
+        reject(getAllRequest.error)
+      }
+      
+      getAllRequest.onsuccess = () => {
+        const customers = getAllRequest.result || []
+        // Filter for unsynced customers
+        const unsyncedCustomers = customers.filter(customer => !customer.synced)
+        console.log(`[SW] Found ${unsyncedCustomers.length} unsynced customers`)
+        resolve(unsyncedCustomers)
+      }
+    }
+  })
+}
+
+async function removeOfflineCustomer(id) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => {
+      console.log('[SW] Failed to open IndexedDB:', request.error)
+      reject(request.error)
+    }
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('customers')) {
+        console.log('[SW] Customers store not found in IndexedDB')
+        resolve(false)
+        return
+      }
+      
+      const transaction = db.transaction(['customers'], 'readwrite')
+      const store = transaction.objectStore('customers')
+      const deleteRequest = store.delete(id)
+      
+      deleteRequest.onerror = () => {
+        console.log('[SW] Failed to remove offline customer:', deleteRequest.error)
+        reject(deleteRequest.error)
+      }
+      
+      deleteRequest.onsuccess = () => {
+        console.log('[SW] Successfully removed offline customer:', id)
+        resolve(true)
+      }
+    }
+  })
+}
+
+async function getSyncQueue() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => {
+      console.log('[SW] Failed to open IndexedDB:', request.error)
+      reject(request.error)
+    }
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('syncQueue')) {
+        console.log('[SW] Sync queue store not found in IndexedDB')
+        resolve([])
+        return
+      }
+      
+      const transaction = db.transaction(['syncQueue'], 'readonly')
+      const store = transaction.objectStore('syncQueue')
+      const getAllRequest = store.getAll()
+      
+      getAllRequest.onerror = () => {
+        console.log('[SW] Failed to get sync queue:', getAllRequest.error)
+        reject(getAllRequest.error)
+      }
+      
+      getAllRequest.onsuccess = () => {
+        const queue = getAllRequest.result || []
+        // Sort by timestamp and retry count
+        queue.sort((a, b) => {
+          if (a.retryCount !== b.retryCount) {
+            return a.retryCount - b.retryCount // Items with fewer retries first
+          }
+          return a.timestamp - b.timestamp // Older items first
+        })
+        resolve(queue)
+      }
+    }
+  })
+}
+
+async function addToSyncQueue(item) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => {
+      console.log('[SW] Failed to open IndexedDB:', request.error)
+      reject(request.error)
+    }
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('syncQueue')) {
+        console.log('[SW] Sync queue store not found in IndexedDB')
+        resolve(false)
+        return
+      }
+      
+      const transaction = db.transaction(['syncQueue'], 'readwrite')
+      const store = transaction.objectStore('syncQueue')
+      const addRequest = store.add({
+        ...item,
+        timestamp: Date.now(),
+        retryCount: 0,
+        lastRetry: null,
+        status: 'pending'
+      })
+      
+      addRequest.onerror = () => {
+        console.log('[SW] Failed to add to sync queue:', addRequest.error)
+        reject(addRequest.error)
+      }
+      
+      addRequest.onsuccess = () => {
+        console.log('[SW] Added item to sync queue:', item.type, item.id)
+        resolve(true)
+      }
+    }
+  })
+}
+
+async function updateSyncQueueItem(id, updates) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => {
+      console.log('[SW] Failed to open IndexedDB:', request.error)
+      reject(request.error)
+    }
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('syncQueue')) {
+        console.log('[SW] Sync queue store not found in IndexedDB')
+        resolve(false)
+        return
+      }
+      
+      const transaction = db.transaction(['syncQueue'], 'readwrite')
+      const store = transaction.objectStore('syncQueue')
+      
+      // First get the existing item
+      const getRequest = store.get(id)
+      getRequest.onerror = () => {
+        console.log('[SW] Failed to get sync queue item:', getRequest.error)
+        reject(getRequest.error)
+      }
+      
+      getRequest.onsuccess = () => {
+        const existingItem = getRequest.result
+        if (!existingItem) {
+          console.log('[SW] Sync queue item not found:', id)
+          resolve(false)
+          return
+        }
+        
+        // Update the item
+        const updatedItem = { ...existingItem, ...updates }
+        const putRequest = store.put(updatedItem)
+        
+        putRequest.onerror = () => {
+          console.log('[SW] Failed to update sync queue item:', putRequest.error)
+          reject(putRequest.error)
+        }
+        
+        putRequest.onsuccess = () => {
+          console.log('[SW] Updated sync queue item:', id)
+          resolve(true)
+        }
+      }
+    }
+  })
+}
+
+async function removeFromSyncQueue(id) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('EasyFilerDB', 1)
+    
+    request.onerror = () => {
+      console.log('[SW] Failed to open IndexedDB:', request.error)
+      reject(request.error)
+    }
+    
+    request.onsuccess = (event) => {
+      const db = event.target.result
+      
+      if (!db.objectStoreNames.contains('syncQueue')) {
+        console.log('[SW] Sync queue store not found in IndexedDB')
+        resolve(false)
+        return
+      }
+      
+      const transaction = db.transaction(['syncQueue'], 'readwrite')
+      const store = transaction.objectStore('syncQueue')
+      const deleteRequest = store.delete(id)
+      
+      deleteRequest.onerror = () => {
+        console.log('[SW] Failed to remove from sync queue:', deleteRequest.error)
+        reject(deleteRequest.error)
+      }
+      
+      deleteRequest.onsuccess = () => {
+        console.log('[SW] Removed item from sync queue:', id)
+        resolve(true)
+      }
+    }
+  })
 }
 
 // Push notifications for FBR status updates

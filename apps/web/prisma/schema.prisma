@@ -238,6 +238,8 @@ model Invoice {
   maxRetries          Int             @default(3) // Maximum number of retries allowed
   retryEnabled        Boolean         @default(true) // Whether automatic retry is enabled
   nextRetryAt         DateTime?       // Scheduled time for next retry (exponential backoff)
+  retryProcessing     Boolean         @default(false) // Whether invoice is currently being processed for retry
+  retryProcessingSince DateTime?     // When retry processing started (for timeout detection)
   
   // Auto-calculated totals
   totalBillAmount     Float?          // Sum of all line items
@@ -264,6 +266,24 @@ model Invoice {
   @@index([businessId, status])
   @@index([fbrInvoiceNumber])
   @@index([invoiceNumber])
+  
+  // Performance indexes for retry mechanism
+  @@index([status, retryEnabled, fbrSubmitted, fbrValidated, nextRetryAt],
+          name: "invoices_retry_ready_idx",
+          where: { status: "FAILED", retryEnabled: true })
+  @@index([retryProcessing, retryProcessingSince],
+          name: "invoices_retry_processing_idx",
+          where: { retryProcessing: true })
+  @@index([retryCount, maxRetries, status],
+          name: "invoices_retry_count_status_idx",
+          where: { status: "FAILED" })
+  @@index([lastRetryAt],
+          name: "invoices_last_retry_at_idx",
+          where: { lastRetryAt: { not: null } })
+  @@index([fbrErrorCode, fbrErrorMessage, status],
+          name: "invoices_error_analysis_idx",
+          where: { fbrErrorCode: { not: null } })
+  
   @@map("invoices")
 }
 

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Functionality Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .test-case {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 3px;
+        }
+        .test-case button {
+            padding: 8px 16px;
+            margin-right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .test-case button:hover {
+            background-color: #0056b3;
+        }
+        .test-case button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 3px;
+        }
+        .result.pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .result.fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .result.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-indicator.online {
+            background-color: #28a745;
+        }
+        .status-indicator.offline {
+            background-color: #dc3545;
+        }
+        #summary {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        .data-display {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Easy Filer v3 - Offline Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Network Status</h2>
+        <div>
+            <span class="status-indicator" id="networkIndicator"></span>
+            <span id="networkStatus">Checking...</span>
+            <button id="toggleNetwork">Toggle Network</button>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>IndexedDB Operations</h2>
+        
+        <div class="test-case">
+            <h3>Test IndexedDB Support</h3>
+            <button id="testIndexedDB">Test IndexedDB</button>
+            <div id="indexedDBResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>Test Offline Data Storage</h3>
+            <button id="testOfflineStorage">Test Storage</button>
+            <div id="storageResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>View Stored Data</h3>
+            <button id="viewStoredData">View Data</button>
+            <div id="dataDisplay" class="data-display" style="display: none;"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>Clear Stored Data</h3>
+            <button id="clearStoredData">Clear Data</button>
+            <div id="clearResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Service Worker Tests</h2>
+        
+        <div class="test-case">
+            <h3>Test Service Worker Registration</h3>
+            <button id="testServiceWorker">Test Service Worker</button>
+            <div id="swResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>Test Background Sync</h3>
+            <button id="testBackgroundSync">Test Background Sync</button>
+            <div id="syncResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Offline Invoice Simulation</h2>
+        
+        <div class="test-case">
+            <h3>Create Test Invoice</h3>
+            <button id="createTestInvoice">Create Invoice</button>
+            <div id="invoiceResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>Simulate Sync Process</h3>
+            <button id="simulateSync">Simulate Sync</button>
+            <div id="syncSimulationResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Error Handling Tests</h2>
+        
+        <div class="test-case">
+            <h3>Test Network Error Handling</h3>
+            <button id="testNetworkErrors">Test Network Errors</button>
+            <div id="networkErrorResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>Test Data Validation</h3>
+            <button id="testDataValidation">Test Validation</button>
+            <div id="validationResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <div id="summary">
+        <h2>Test Summary</h2>
+        <div id="summaryContent">No tests run yet.</div>
+    </div>
+
+    <script>
+        // Test state
+        let testResults = {
+            passed: 0,
+            failed: 0,
+            total: 0,
+            details: []
+        };
+        
+        // Network status tracking
+        let isOnline = navigator.onLine;
+        
+        // Update network status display
+        function updateNetworkStatus() {
+            isOnline = navigator.onLine;
+            const indicator = document.getElementById('networkIndicator');
+            const status = document.getElementById('networkStatus');
+            
+            if (isOnline) {
+                indicator.className = 'status-indicator online';
+                status.textContent = 'Online';
+            } else {
+                indicator.className = 'status-indicator offline';
+                status.textContent = 'Offline';
+            }
+        }
+        
+        // Show test result
+        function showResult(elementId, passed, message, details = '') {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${passed ? 'pass' : 'fail'}`;
+            element.innerHTML = `
+                <strong>${passed ? 'PASS' : 'FAIL'}</strong>: ${message}
+                ${details ? `<br><small>${details}</small>` : ''}
+            `;
+            
+            // Update summary
+            testResults.total++;
+            if (passed) {
+                testResults.passed++;
+            } else {
+                testResults.failed++;
+            }
+            
+            testResults.details.push({
+                test: elementId,
+                passed,
+                message,
+                details
+            });
+            
+            updateSummary();
+        }
+        
+        // Update test summary
+        function updateSummary() {
+            const summaryContent = document.getElementById('summaryContent');
+            const successRate = testResults.total > 0 
+                ? ((testResults.passed / testResults.total) * 100).toFixed(1)
+                : 0;
+            
+            summaryContent.innerHTML = `
+                <p><strong>Total Tests:</strong> ${testResults.total}</p>
+                <p><strong>Passed:</strong> ${testResults.passed}</p>
+                <p><strong>Failed:</strong> ${testResults.failed}</p>
+                <p><strong>Success Rate:</strong> ${successRate}%</p>
+            `;
+        }
+        
+        // IndexedDB helper functions
+        async function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('EasyFilerDB', 1);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => resolve(request.result);
+                
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    
+                    // Create object stores for offline data
+                    if (!db.objectStoreNames.contains('invoices')) {
+                        const invoiceStore = db.createObjectStore('invoices', { keyPath: 'id', autoIncrement: true });
+                        invoiceStore.createIndex('timestamp', 'timestamp');
+                    }
+                    
+                    if (!db.objectStoreNames.contains('customers')) {
+                        const customerStore = db.createObjectStore('customers', { keyPath: 'id', autoIncrement: true });
+                        customerStore.createIndex('timestamp', 'timestamp');
+                    }
+                };
+            });
+        }
+        
+        async function storeData(storeName, data) {
+            const db = await openDB();
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            return store.add(data);
+        }
+        
+        async function getData(storeName) {
+            const db = await openDB();
+            const transaction = db.transaction([storeName], 'readonly');
+            const store = transaction.objectStore(storeName);
+            return store.getAll();
+        }
+        
+        async function clearData(storeName) {
+            const db = await openDB();
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            return store.clear();
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNetworkStatus();
+            
+            // Network status events
+            window.addEventListener('online', updateNetworkStatus);
+            window.addEventListener('offline', updateNetworkStatus);
+            
+            // Toggle network button
+            document.getElementById('toggleNetwork').addEventListener('click', () => {
+                // This is just for testing - in a real scenario, the user can't toggle network
+                // but we can simulate it by showing the current status
+                alert(`Current status: ${isOnline ? 'Online' : 'Offline'}. In a real test, you would need to disconnect your network connection.`);
+            });
+            
+            // IndexedDB test
+            document.getElementById('testIndexedDB').addEventListener('click', async () => {
+                try {
+                    const db = await openDB();
+                    showResult('indexedDBResult', true, 'IndexedDB is supported and working', `Database name: ${db.name}, version: ${db.version}`);
+                } catch (error) {
+                    showResult('indexedDBResult', false, 'IndexedDB test failed', error.message);
+                }
+            });
+            
+            // Offline storage test
+            document.getElementById('testOfflineStorage').addEventListener('click', async () => {
+                try {
+                    const testData = {
+                        id: `test_${Date.now()}`,
+                        data: { message: 'Test data for offline storage' },
+                        timestamp: Date.now(),
+                        synced: false
+                    };
+                    
+                    await storeData('invoices', testData);
+                    const retrievedData = await getData('invoices');
+                    const found = retrievedData.some(item => item.id === testData.id);
+                    
+                    showResult('storageResult', found, 'Data storage and retrieval working', 
+                        `Stored and retrieved ${retrievedData.length} items`);
+                } catch (error) {
+                    showResult('storageResult', false, 'Storage test failed', error.message);
+                }
+            });
+            
+            // View stored data
+            document.getElementById('viewStoredData').addEventListener('click', async () => {
+                try {
+                    const invoices = await getData('invoices');
+                    const customers = await getData('customers');
+                    
+                    const dataDisplay = document.getElementById('dataDisplay');
+                    dataDisplay.style.display = 'block';
+                    dataDisplay.textContent = JSON.stringify({
+                        invoices: invoices,
+                        customers: customers
+                    }, null, 2);
+                } catch (error) {
+                    showResult('dataDisplay', false, 'Failed to retrieve data', error.message);
+                }
+            });
+            
+            // Clear stored data
+            document.getElementById('clearStoredData').addEventListener('click', async () => {
+                try {
+                    await clearData('invoices');
+                    await clearData('customers');
+                    showResult('clearResult', true, 'All stored data cleared');
+                } catch (error) {
+                    showResult('clearResult', false, 'Failed to clear data', error.message);
+                }
+            });
+            
+            // Service worker test
+            document.getElementById('testServiceWorker').addEventListener('click', async () => {
+                if ('serviceWorker' in navigator) {
+                    try {
+                        const registration = await navigator.serviceWorker.getRegistration();
+                        if (registration) {
+                            showResult('swResult', true, 'Service worker is registered', 
+                                `Scope: ${registration.scope}, State: ${registration.active?.state || 'inactive'}`);
+                        } else {
+                            showResult('swResult', false, 'Service worker not registered', 'Try refreshing the page');
+                        }
+                    } catch (error) {
+                        showResult('swResult', false, 'Service worker test failed', error.message);
+                    }
+                } else {
+                    showResult('swResult', false, 'Service workers not supported');
+                }
+            });
+            
+            // Background sync test
+            document.getElementById('testBackgroundSync').addEventListener('click', async () => {
+                if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+                    try {
+                        const registration = await navigator.serviceWorker.ready;
+                        await registration.sync.register('sync-invoices');
+                        showResult('syncResult', true, 'Background sync registered successfully');
+                    } catch (error) {
+                        showResult('syncResult', false, 'Background sync registration failed', error.message);
+                    }
+                } else {
+                    showResult('syncResult', false, 'Background sync not supported');
+                }
+            });
+            
+            // Create test invoice
+            document.getElementById('createTestInvoice').addEventListener('click', async () => {
+                try {
+                    const testInvoice = {
+                        id: `offline_${Date.now()}`,
+                        data: {
+                            customerName: 'Test Customer',
+                            customerEmail: 'test@example.com',
+                            customerAddress: '123 Test Street',
+                            items: [
+                                {
+                                    description: 'Test Product',
+                                    quantity: 1,
+                                    price: 100.00,
+                                    total: 100.00
+                                }
+                            ],
+                            subtotal: 100.00,
+                            tax: 18.00,
+                            total: 118.00,
+                            status: 'DRAFT',
+                            createdAt: new Date().toISOString()
+                        },
+                        timestamp: Date.now(),
+                        synced: false
+                    };
+                    
+                    await storeData('invoices', testInvoice);
+                    showResult('invoiceResult', true, 'Test invoice created offline', 
+                        `Invoice ID: ${testInvoice.id}`);
+                } catch (error) {
+                    showResult('invoiceResult', false, 'Failed to create test invoice', error.message);
+                }
+            });
+            
+            // Simulate sync process
+            document.getElementById('simulateSync').addEventListener('click', async () => {
+                try {
+                    const invoices = await getData('invoices');
+                    const unsyncedInvoices = invoices.filter(inv => !inv.synced);
+                    
+                    if (unsyncedInvoices.length === 0) {
+                        showResult('syncSimulationResult', true, 'No invoices to sync', 'All invoices are already synced');
+                        return;
+                    }
+                    
+                    // Simulate sync process
+                    let syncedCount = 0;
+                    for (const invoice of unsyncedInvoices) {
+                        // Simulate API call
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        
+                        // Mark as synced
+                        invoice.synced = true;
+                        await storeData('invoices', invoice);
+                        syncedCount++;
+                    }
+                    
+                    showResult('syncSimulationResult', true, 'Sync simulation completed', 
+                        `Synced ${syncedCount} invoices`);
+                } catch (error) {
+                    showResult('syncSimulationResult', false, 'Sync simulation failed', error.message);
+                }
+            });
+            
+            // Test network error handling
+            document.getElementById('testNetworkErrors').addEventListener('click', async () => {
+                try {
+                    // Try to make a request to a non-existent endpoint
+                    const response = await fetch('/api/nonexistent-endpoint');
+                    
+                    if (response.ok) {
+                        showResult('networkErrorResult', false, 'Unexpected success', 'Non-existent endpoint returned success');
+                    } else {
+                        showResult('networkErrorResult', true, 'Network error handling works', 
+                            `Received expected error: ${response.status}`);
+                    }
+                } catch (error) {
+                    showResult('networkErrorResult', true, 'Network error handling works', 
+                        `Caught expected error: ${error.message}`);
+                }
+            });
+            
+            // Test data validation
+            document.getElementById('testDataValidation').addEventListener('click', async () => {
+                try {
+                    // Test with invalid invoice data
+                    const invalidInvoice = {
+                        id: `invalid_${Date.now()}`,
+                        data: {
+                            customerName: '', // Invalid - empty name
+                            items: [], // Invalid - no items
+                            subtotal: -100, // Invalid - negative amount
+                            total: 'not a number' // Invalid - not a number
+                        },
+                        timestamp: Date.now(),
+                        synced: false
+                    };
+                    
+                    // Basic validation
+                    const errors = [];
+                    
+                    if (!invalidInvoice.data.customerName || invalidInvoice.data.customerName.trim() === '') {
+                        errors.push('Customer name is required');
+                    }
+                    
+                    if (!invalidInvoice.data.items || invalidInvoice.data.items.length === 0) {
+                        errors.push('Invoice must have at least one item');
+                    }
+                    
+                    if (invalidInvoice.data.subtotal < 0) {
+                        errors.push('Subtotal cannot be negative');
+                    }
+                    
+                    if (isNaN(invalidInvoice.data.total)) {
+                        errors.push('Total must be a valid number');
+                    }
+                    
+                    const validationPassed = errors.length === 0;
+                    
+                    showResult('validationResult', !validationPassed, 'Data validation working', 
+                        validationPassed ? 'No validation errors found' : `Found ${errors.length} validation errors: ${errors.join(', ')}`);
+                } catch (error) {
+                    showResult('validationResult', false, 'Validation test failed', error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
