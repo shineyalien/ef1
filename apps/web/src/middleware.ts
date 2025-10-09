@@ -20,6 +20,7 @@ export default auth((req: NextRequest & { auth: any }) => {
     '/api/products',
     '/api/invoices',
     '/api/customers',
+    '/api/settings',
   ]
 
   // Check if the current path is a protected route

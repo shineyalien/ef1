@@ -519,7 +519,7 @@ async function processSyncQueue() {
 // Helper functions for managing sync status
 async function markInvoiceAsSynced(id) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => reject(request.error)
     
@@ -559,7 +559,7 @@ async function markInvoiceAsSynced(id) {
 
 async function markCustomerAsSynced(id) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => reject(request.error)
     
@@ -637,7 +637,7 @@ function shouldRetryNow(lastRetry, retryCount) {
 // Helper functions for IndexedDB operations
 async function getOfflineInvoices() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => {
       console.log('[SW] Failed to open IndexedDB:', request.error)
@@ -692,9 +692,20 @@ async function getOfflineInvoices() {
       }
       
       if (!db.objectStoreNames.contains('syncQueue')) {
-        const syncQueueStore = db.createObjectStore('syncQueue', { keyPath: 'id', autoIncrement: true })
+        // Fix: Use keyPath: 'id' without autoIncrement to match sync service
+        const syncQueueStore = db.createObjectStore('syncQueue', { keyPath: 'id' })
         syncQueueStore.createIndex('timestamp', 'timestamp')
         syncQueueStore.createIndex('retryCount', 'retryCount')
+        syncQueueStore.createIndex('status', 'status')
+      } else {
+        // Ensure all indexes exist on existing store
+        const transaction = event.target.transaction
+        if (transaction) {
+          const syncQueueStore = transaction.objectStore('syncQueue')
+          if (!syncQueueStore.indexNames.contains('status')) {
+            syncQueueStore.createIndex('status', 'status')
+          }
+        }
       }
     }
   })
@@ -702,7 +713,7 @@ async function getOfflineInvoices() {
 
 async function removeOfflineInvoice(id) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => {
       console.log('[SW] Failed to open IndexedDB:', request.error)
@@ -737,7 +748,7 @@ async function removeOfflineInvoice(id) {
 
 async function getOfflineCustomers() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => {
       console.log('[SW] Failed to open IndexedDB:', request.error)
@@ -775,7 +786,7 @@ async function getOfflineCustomers() {
 
 async function removeOfflineCustomer(id) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => {
       console.log('[SW] Failed to open IndexedDB:', request.error)
@@ -810,7 +821,7 @@ async function removeOfflineCustomer(id) {
 
 async function getSyncQueue() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => {
       console.log('[SW] Failed to open IndexedDB:', request.error)
@@ -852,7 +863,7 @@ async function getSyncQueue() {
 
 async function addToSyncQueue(item) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => {
       console.log('[SW] Failed to open IndexedDB:', request.error)
@@ -893,7 +904,7 @@ async function addToSyncQueue(item) {
 
 async function updateSyncQueueItem(id, updates) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => {
       console.log('[SW] Failed to open IndexedDB:', request.error)
@@ -947,7 +958,7 @@ async function updateSyncQueueItem(id, updates) {
 
 async function removeFromSyncQueue(id) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
+    const request = indexedDB.open('EasyFilerDB', 2)
     
     request.onerror = () => {
       console.log('[SW] Failed to open IndexedDB:', request.error)

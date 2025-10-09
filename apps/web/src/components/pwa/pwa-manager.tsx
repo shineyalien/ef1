@@ -123,8 +123,9 @@ export const PWAUtils = {
     }
 
     try {
-      const db = await openDB()
-      const transaction = db.transaction([storeName], 'readwrite')
+      const { openDatabase, createTransaction, DB_NAME, DB_VERSION } = await import('../../lib/indexeddb-init')
+      const db = await openDatabase(DB_NAME, DB_VERSION)
+      const transaction = await createTransaction(db, [storeName], 'readwrite')
       const store = transaction.objectStore(storeName)
       await store.add(data)
       console.log(`PWA: Data stored offline in ${storeName}`)
@@ -142,8 +143,9 @@ export const PWAUtils = {
     }
 
     try {
-      const db = await openDB()
-      const transaction = db.transaction([storeName], 'readonly')
+      const { openDatabase, createTransaction, DB_NAME, DB_VERSION } = await import('../../lib/indexeddb-init')
+      const db = await openDatabase(DB_NAME, DB_VERSION)
+      const transaction = await createTransaction(db, [storeName], 'readonly')
       const store = transaction.objectStore(storeName)
       const data = await store.getAll()
       return Array.isArray(data) ? data : []
@@ -154,32 +156,8 @@ export const PWAUtils = {
   }
 }
 
-// Helper function to open IndexedDB
+// Helper function to open IndexedDB - now using the centralized database initialization
 async function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('EasyFilerDB', 1)
-    
-    request.onerror = () => reject(request.error)
-    request.onsuccess = () => resolve(request.result)
-    
-    request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result
-      
-      // Create object stores for offline data
-      if (!db.objectStoreNames.contains('invoices')) {
-        const invoiceStore = db.createObjectStore('invoices', { keyPath: 'id', autoIncrement: true })
-        invoiceStore.createIndex('timestamp', 'timestamp')
-      }
-      
-      if (!db.objectStoreNames.contains('customers')) {
-        const customerStore = db.createObjectStore('customers', { keyPath: 'id', autoIncrement: true })
-        customerStore.createIndex('timestamp', 'timestamp')
-      }
-      
-      if (!db.objectStoreNames.contains('bulkOperations')) {
-        const bulkStore = db.createObjectStore('bulkOperations', { keyPath: 'id', autoIncrement: true })
-        bulkStore.createIndex('timestamp', 'timestamp')
-      }
-    }
-  })
+  const { openDatabase, DB_NAME, DB_VERSION } = await import('../../lib/indexeddb-init')
+  return await openDatabase(DB_NAME, DB_VERSION)
 }

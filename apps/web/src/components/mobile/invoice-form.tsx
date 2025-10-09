@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -44,6 +44,7 @@ import { getApplicableScenarios, FBRScenario } from '@/lib/fbr-scenarios'
 
 export default function MobileInvoiceForm() {
   const { data: session, status } = useSession()
+  const router = useRouter()
   const { isOnline } = useNetworkStatus()
   const { saveOfflineInvoice, hasUnsyncedInvoices, syncStatus } = useOfflineInvoices()
   const {
@@ -309,6 +310,11 @@ export default function MobileInvoiceForm() {
     
     setInvoice(prev => ({ ...prev, items: newItems }))
     
+    // Recalculate totals after updating the item
+    setTimeout(() => {
+      calculateTotals()
+    }, 50)
+    
     // Clear validation error for this field
     if (validationErrors[`items.${index}.${field}`]) {
       setValidationErrors(prev => {
@@ -321,15 +327,27 @@ export default function MobileInvoiceForm() {
 
   // Handle product selection from enhanced search
   const handleProductSelect = useCallback((product: any, itemIndex: number) => {
+    // DEBUG: Log the entire product object to understand its structure
+    console.log('🔍 MOBILE DEBUG: Product object received:', product)
+    console.log('🔍 MOBILE DEBUG: Product unitPrice field:', product.unitPrice)
+    console.log('🔍 MOBILE DEBUG: Product price field:', product.price)
+    
     updateItem(itemIndex, 'description', product.name)
     updateItem(itemIndex, 'price', product.unitPrice)
     updateItem(itemIndex, 'hsCode', product.hsCode)
     updateItem(itemIndex, 'taxRate', product.taxRate)
     updateItem(itemIndex, 'productId', product.id)
     
+    console.log('🔍 MOBILE DEBUG: Price set to:', product.unitPrice)
+    
+    // Recalculate totals after updating the item
+    setTimeout(() => {
+      calculateTotals()
+    }, 100)
+    
     // Update auto-save
     updateData({ items: invoice.items })
-  }, [invoice.items, updateData])
+  }, [invoice.items, updateData, calculateTotals])
 
   // Auto-save when form data changes
   useEffect(() => {
@@ -389,16 +407,19 @@ export default function MobileInvoiceForm() {
 
   // Generate QR code for FBR compliance
   const generateQRCode = useCallback(async () => {
-    if (!invoice.invoiceNumber || !session?.user?.businessNTN) {
+    if (!invoice.invoiceNumber) {
       return ''
     }
     
     try {
+      // Get business NTN from session user or use a default
+      const businessNTN = (session?.user as any)?.businessNTN || 'DEFAULT_NTN'
+      
       const qrData = await QRCodeGenerator.generateQRCodeAsDataURL(
         invoice.invoiceNumber,
         {
-          sellerNTN: session.user.businessNTN,
-          invoiceDate: invoice.invoiceDate,
+          sellerNTN: businessNTN,
+          invoiceDate: invoice.invoiceDate || new Date().toISOString().split('T')[0] as string,
           totalAmount: invoice.total,
           buyerNTN: invoice.customerNTN || undefined
         }
@@ -411,7 +432,7 @@ export default function MobileInvoiceForm() {
       showErrorToast('QR Code Error', 'Failed to generate QR code for FBR compliance')
       return ''
     }
-  }, [invoice.invoiceNumber, invoice.invoiceDate, invoice.total, invoice.customerNTN, session?.user?.businessNTN, showErrorToast])
+  }, [invoice.invoiceNumber, invoice.invoiceDate, invoice.total, invoice.customerNTN, session?.user, showErrorToast])
 
   const saveInvoice = async (isDraft: boolean = false) => {
     // Validate form first
@@ -440,7 +461,7 @@ export default function MobileInvoiceForm() {
         invoiceNumber,
         isDraft,
         userId: session?.user?.id,
-        businessId: session?.user?.businessId,
+        businessId: (session?.user as any)?.businessId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         fbrScenarioCode: invoice.fbrScenario,
@@ -494,6 +515,11 @@ export default function MobileInvoiceForm() {
         if (!isDraft) {
           resetForm()
           setActiveTab('customer')
+          
+          // Redirect to invoices list after 1.5 seconds
+          setTimeout(() => {
+            router.push('/invoices')
+          }, 1500)
         }
         
         // Mark as not dirty
@@ -720,10 +746,11 @@ export default function MobileInvoiceForm() {
           </TabsContent>
           
           {/* Items Tab */}
-          <TabsContent value="items" className="space-y-4 mt-4"
+          <div
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
+            <TabsContent value="items" className="space-y-4 mt-4">
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -836,7 +863,7 @@ export default function MobileInvoiceForm() {
                     
                     {/* Enhanced Product Search */}
                     <EnhancedProductSearch
-                      onProductSelect={(product) => handleProductSelect(product, index)}
+                      onSelect={(product) => handleProductSelect(product, index)}
                       placeholder="Search for products..."
                     />
                   </div>
@@ -859,13 +886,15 @@ export default function MobileInvoiceForm() {
                 Next <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
-          </TabsContent>
+            </TabsContent>
+          </div>
           
           {/* FBR Tab */}
-          <TabsContent value="fbr" className="space-y-4 mt-4"
+          <div
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
+            <TabsContent value="fbr" className="space-y-4 mt-4">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg">FBR Compliance</CardTitle>
@@ -979,13 +1008,15 @@ export default function MobileInvoiceForm() {
                 Next <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
-          </TabsContent>
+            </TabsContent>
+          </div>
           
           {/* Preview Tab */}
-          <TabsContent value="preview" className="space-y-4 mt-4"
+          <div
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
+            <TabsContent value="preview" className="space-y-4 mt-4">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg">Invoice Preview</CardTitle>
@@ -1068,7 +1099,8 @@ export default function MobileInvoiceForm() {
                 <RefreshCw className="h-4 w-4 mr-1" /> Save Now
               </Button>
             </div>
-          </TabsContent>
+            </TabsContent>
+          </div>
         </Tabs>
 
         {/* Actions */}

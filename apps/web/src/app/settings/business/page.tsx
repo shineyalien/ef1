@@ -25,8 +25,6 @@ import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
 import { SharedLoading } from "@/components/shared-loading"
 import { SharedNavigation } from "@/components/shared-navigation"
-import { useError } from '@/contexts/error-context'
-import ErrorBoundary from '@/components/error-boundary'
 
 interface BusinessProfile {
   companyName: string
@@ -100,22 +98,59 @@ import {
   type FBRScenario
 } from '@/lib/fbr-scenarios'
 
+// Import error context directly to avoid dynamic loading issues
+// import { useError } from '@/contexts/error-context'
+
 export default function BusinessSettingsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const {
-    showErrorToast,
-    showSuccessToast,
-    handleNetworkError,
-    handleValidationError,
-    handleApiError,
-    handleGenericError
-  } = useError()
+  
+  // Use error hooks directly
+  // const {
+  //   showErrorToast,
+  //   showSuccessToast,
+  //   handleNetworkError,
+  //   handleValidationError,
+  //   handleApiError,
+  //   handleGenericError
+  // } = useError()
+  
+  // Fallback error handlers
+  const showErrorToast = (title: string, message: string) => {
+    console.error(`${title}: ${message}`);
+    alert(`${title}: ${message}`);
+  };
+  
+  const showSuccessToast = (title: string, message: string) => {
+    console.log(`${title}: ${message}`);
+    // Could use a toast library here
+  };
+  
+  const handleNetworkError = (error: Error, context: string) => {
+    console.error(`Network error in ${context}:`, error);
+    showErrorToast('Network Error', `${context}. Please check your connection.`);
+  };
+  
+  const handleValidationError = (message: string, field?: string) => {
+    console.error(`Validation error: ${message}`, field);
+    showErrorToast('Validation Error', message);
+  };
+  
+  const handleApiError = (error: Error, context: string) => {
+    console.error(`API error in ${context}:`, error);
+    showErrorToast('API Error', `${context}. Please try again.`);
+  };
+  
+  const handleGenericError = (error: Error, context: string) => {
+    console.error(`Error in ${context}:`, error);
+    showErrorToast('Error', `${context}. Please try again.`);
+  };
   
   const [business, setBusiness] = useState<BusinessProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [uploadingLogo, setUploadingLogo] = useState(false)
+  const [availableScenarios, setAvailableScenarios] = useState<FBRScenario[]>([])
   const [formData, setFormData] = useState<BusinessProfile>({
     companyName: '',
     ntnNumber: '',
@@ -151,6 +186,53 @@ export default function BusinessSettingsPage() {
 
     loadBusiness()
   }, [session, status])
+  // Update available scenarios when business type or sector changes
+  useEffect(() => {
+    if (formData.businessType && formData.sector) {
+      fetchScenarios(formData.businessType, formData.sector)
+    } else {
+      setAvailableScenarios([])
+    }
+  }, [formData.businessType, formData.sector])
+
+  // Function to fetch scenarios from API
+  const fetchScenarios = async (businessType: string, sector: string) => {
+    try {
+      const response = await fetch(
+        `/api/fbr/scenarios?businessType=${encodeURIComponent(businessType)}&sector=${encodeURIComponent(sector)}`
+      )
+      
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success) {
+          setAvailableScenarios(data.data)
+          
+          // Set default scenario if none is selected
+          if (!formData.defaultScenario && data.data.length > 0) {
+            // Use SN001 as default if available, otherwise use the first scenario
+            const defaultScenario = data.data.find((s: FBRScenario) => s.code === 'SN001') || data.data[0]
+            setFormData(prev => ({
+              ...prev,
+              defaultScenario: defaultScenario.code
+            }))
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch scenarios:', error)
+      // Fallback to in-memory scenarios
+      const scenarios = getApplicableScenarios(businessType, sector)
+      setAvailableScenarios(scenarios.scenarios)
+      
+      // Set default scenario if none is selected
+      if (!formData.defaultScenario && scenarios.scenarios.length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          defaultScenario: scenarios.defaultScenario
+        }))
+      }
+    }
+  }
 
   const loadBusiness = async () => {
     try {
@@ -296,14 +378,55 @@ export default function BusinessSettingsPage() {
       return
     }
     
+    if (!formData.businessType || formData.businessType.trim() === '') {
+      handleValidationError('Business type is required', 'businessType')
+      showErrorToast('Validation Error', 'Business type is required')
+      return
+    }
+    
+    if (!formData.sector || formData.sector.trim() === '') {
+      handleValidationError('Industry sector is required', 'sector')
+      showErrorToast('Validation Error', 'Industry sector is required')
+      return
+    }
+    
     setSaving(true)
     try {
+      // Prepare the payload with all business settings
+      const payload = {
+        companyName: formData.companyName,
+        ntnNumber: formData.ntnNumber,
+        address: formData.address,
+        province: formData.province,
+        businessType: formData.businessType,
+        sector: formData.sector,
+        sellerCity: formData.sellerCity,
+        sellerContact: formData.sellerContact,
+        sellerEmail: formData.sellerEmail,
+        posId: formData.posId,
+        electronicSoftwareRegNo: formData.electronicSoftwareRegNo,
+        fbrIntegratorLicenseNo: formData.fbrIntegratorLicenseNo,
+        logoUrl: formData.logoUrl,
+        invoiceTemplate: formData.invoiceTemplate,
+        invoicePrefix: formData.invoicePrefix,
+        invoiceFooter: formData.invoiceFooter,
+        taxIdLabel: formData.taxIdLabel,
+        defaultTerms: formData.defaultTerms,
+        primaryColor: formData.primaryColor,
+        secondaryColor: formData.secondaryColor,
+        defaultCurrency: formData.defaultCurrency,
+        pdfTheme: formData.pdfTheme,
+        defaultScenario: formData.defaultScenario
+      }
+      
+      console.log('💾 Saving business settings:', payload)
+      
       const response = await fetch('/api/settings/business', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       })
 
       if (!response.ok) {
@@ -315,6 +438,7 @@ export default function BusinessSettingsPage() {
       if (result.success) {
         await loadBusiness()
         showSuccessToast('Settings Saved', 'Your business settings have been updated successfully!')
+        console.log('✅ Business settings saved successfully')
       } else {
         throw new Error(result.error?.message || 'Failed to update business settings')
       }
@@ -332,8 +456,7 @@ export default function BusinessSettingsPage() {
   }
 
   return (
-    <ErrorBoundary>
-      <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <main className="p-6 max-w-4xl mx-auto">
         {/* Navigation */}
         <SharedNavigation
@@ -505,35 +628,21 @@ export default function BusinessSettingsPage() {
                 <Label htmlFor="defaultScenario">Default FBR Scenario</Label>
                 <Select
                   value={formData.defaultScenario || ''}
-                  onValueChange={(value) => {
-                    setFormData({ ...formData, defaultScenario: value })
-                    // Update available scenarios when business type or sector changes
-                    const scenarios = getApplicableScenarios(formData.businessType, formData.sector)
-                    if (scenarios.scenarios.length > 0 && !value) {
-                      setFormData(prev => ({
-                        ...prev,
-                        defaultScenario: scenarios.defaultScenario
-                      }))
-                    }
-                  }}
-                  disabled={!formData.businessType || !formData.sector}
+                  onValueChange={(value) => setFormData({ ...formData, defaultScenario: value })}
+                  disabled={!formData.businessType || !formData.sector || availableScenarios.length === 0}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select business type and sector first" />
                   </SelectTrigger>
                   <SelectContent>
-                    {(() => {
-                      if (!formData.businessType || !formData.sector) return []
-                      const scenarios = getApplicableScenarios(formData.businessType, formData.sector)
-                      return scenarios.scenarios.map((scenario: FBRScenario) => (
-                        <SelectItem key={scenario.code} value={scenario.code}>
-                          <div className="flex flex-col items-start">
-                            <span className="font-medium text-sm">{scenario.code}</span>
-                            <span className="text-xs text-gray-600 mt-1 leading-tight">{scenario.description}</span>
-                          </div>
-                        </SelectItem>
-                      ))
-                    })()}
+                    {availableScenarios.map((scenario: FBRScenario) => (
+                      <SelectItem key={scenario.code} value={scenario.code}>
+                        <div className="flex flex-col items-start">
+                          <span className="font-medium text-sm">{scenario.code}</span>
+                          <span className="text-xs text-gray-600 mt-1 leading-tight">{scenario.description}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-gray-500 mt-1">
@@ -547,7 +656,7 @@ export default function BusinessSettingsPage() {
                   <h4 className="font-medium text-blue-900 mb-2">Selected Scenario Information</h4>
                   <div className="text-sm text-blue-800">
                     <p><strong>Scenario:</strong> {formData.defaultScenario}</p>
-                    <p><strong>Description:</strong> {getScenarioDescription(formData.defaultScenario)}</p>
+                    <p><strong>Description:</strong> {formData.defaultScenario ? getScenarioDescription(formData.defaultScenario) : ''}</p>
                     <p className="text-xs text-blue-600 mt-2">
                       This scenario is applicable for your business type and sector according to FBR guidelines.
                     </p>
@@ -617,7 +726,7 @@ export default function BusinessSettingsPage() {
                 <div className="flex items-center space-x-4">
                   <div className="relative w-32 h-32 border-2 border-gray-200 rounded-lg overflow-hidden">
                     <Image
-                      src={formData.logoUrl}
+                      src={formData.logoUrl || ''}
                       alt="Company Logo"
                       fill
                       className="object-contain p-2"
@@ -846,13 +955,13 @@ export default function BusinessSettingsPage() {
                   <span>Preview</span>
                 </p>
                 <div className="space-y-2">
-                  <div 
+                  <div
                     className="p-3 rounded text-white font-medium"
                     style={{ backgroundColor: formData.primaryColor || '#3B82F6' }}
                   >
                     Primary Color - Invoice Header
                   </div>
-                  <div 
+                  <div
                     className="p-3 rounded text-white font-medium"
                     style={{ backgroundColor: formData.secondaryColor || '#10B981' }}
                   >
@@ -885,7 +994,6 @@ export default function BusinessSettingsPage() {
           </div>
         </div>
       </main>
-      </div>
-    </ErrorBoundary>
+    </div>
   )
 }

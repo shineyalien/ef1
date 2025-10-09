@@ -127,7 +127,7 @@ model Invoice {
   customerId String?
   
   // Invoice Numbers
-  localInvoiceNumber String // Our internal number
+  localInvoiceNumber String? // Our internal number
   invoiceSequence    Int    // Sequential number for business
   
   // Invoice Details
@@ -166,7 +166,7 @@ model Invoice {
   pdfStoragePath  String?
   
   // Audit & Compliance
-  encryptedData String // 6-year retention requirement
+  encryptedData String? // 6-year retention requirement
   
   // Timestamps
   createdAt DateTime @default(now())
@@ -372,4 +372,39 @@ enum ValidationStatus {
   PENDING
   VALIDATED
   FAILED
+}
+
+// FBR Scenario Management
+model FBRScenario {
+  code                String   @id
+  description         String
+  businessType        String?
+  sector              String?
+  isActive            Boolean  @default(true)
+  registrationType    String?
+  transactionType     String?
+  taxRateApplicable   Float?
+  specialConditions   String[]
+  provinceRestrictions String[]
+  effectiveFrom       DateTime?
+  effectiveTo         DateTime?
+  priority            Int?
+  saleType            String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("fbr_scenarios")
+}
+
+model FBRBusinessScenarioMapping {
+  id              String   @id @default(cuid())
+  businessType    String
+  industrySector  String
+  scenarioIds     String[]
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([businessType, industrySector])
+  @@map("fbr_business_scenario_mappings")
 }

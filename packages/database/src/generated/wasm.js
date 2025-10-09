@@ -305,6 +305,35 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.FBRScenarioScalarFieldEnum = {
+  code: 'code',
+  description: 'description',
+  businessType: 'businessType',
+  sector: 'sector',
+  isActive: 'isActive',
+  registrationType: 'registrationType',
+  transactionType: 'transactionType',
+  taxRateApplicable: 'taxRateApplicable',
+  specialConditions: 'specialConditions',
+  provinceRestrictions: 'provinceRestrictions',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  priority: 'priority',
+  saleType: 'saleType',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FBRBusinessScenarioMappingScalarFieldEnum = {
+  id: 'id',
+  businessType: 'businessType',
+  industrySector: 'industrySector',
+  scenarioIds: 'scenarioIds',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -385,7 +414,9 @@ exports.Prisma.ModelName = {
   BulkInvoiceBatch: 'BulkInvoiceBatch',
   BulkInvoiceItem: 'BulkInvoiceItem',
   SystemConfig: 'SystemConfig',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  FBRScenario: 'FBRScenario',
+  FBRBusinessScenarioMapping: 'FBRBusinessScenarioMapping'
 };
 
 /**

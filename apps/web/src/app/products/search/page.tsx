@@ -11,8 +11,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { EnhancedProductSearch } from '@/components/enhanced-product-search'
 import { VirtualProductList } from '@/components/virtual-product-list'
 import { useProductSearch } from '@/hooks/use-product-search'
-import { useError } from '@/contexts/error-context'
 import Link from 'next/link'
+// Import error context directly to avoid dynamic loading issues
+import { useError } from '@/contexts/error-context'
 
 interface Product {
   id: string
@@ -35,6 +36,16 @@ export default function ProductSearchPage() {
   const [selectedPriceRange, setSelectedPriceRange] = useState<string>('')
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set())
+  
+  // Use error hooks directly
+  const {
+    showErrorToast,
+    showSuccessToast,
+    handleNetworkError,
+    handleValidationError,
+    handleApiError,
+    handleGenericError
+  } = useError()
   
   const {
     products,
@@ -60,8 +71,6 @@ export default function ProductSearchPage() {
     minSearchLength: 2,
     autoSearch: true
   })
-
-  const { showErrorToast, showSuccessToast } = useError()
 
   // Get unique categories from products
   const categories = Array.from(

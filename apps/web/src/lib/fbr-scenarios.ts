@@ -18,6 +18,7 @@ export interface FBRScenario {
   effectiveFrom?: string
   effectiveTo?: string
   priority?: number
+  saleType?: string
 }
 
 export interface ScenarioMapping {
@@ -41,14 +42,12 @@ export function getApplicableScenarios(
     effectiveDate?: string
   }
 ): ScenarioMapping {
-  // Mock scenarios data - in production this would come from FBR API
+  // Official FBR Scenarios from Technical Documentation (SN001-SN028)
   const allScenarios: FBRScenario[] = [
-    // Manufacturing scenarios
     {
-      code: 'MFG-001',
-      description: 'Manufacturing - Registered to Registered',
-      businessType: 'Manufacturer',
-      sector: 'Steel',
+      code: 'SN001',
+      description: 'Goods at standard rate to registered buyers',
+      saleType: 'Goods at Standard Rate (default)',
       isActive: true,
       registrationType: 'Registered',
       transactionType: 'Sale',
@@ -56,197 +55,277 @@ export function getApplicableScenarios(
       priority: 1
     },
     {
-      code: 'MFG-002',
-      description: 'Manufacturing - Registered to Unregistered',
-      businessType: 'Manufacturer',
-      sector: 'Steel',
+      code: 'SN002',
+      description: 'Goods at standard rate to unregistered buyers',
+      saleType: 'Goods at Standard Rate (default)',
       isActive: true,
-      registrationType: 'Both',
+      registrationType: 'Unregistered',
       transactionType: 'Sale',
       taxRateApplicable: 18,
       priority: 2
     },
     {
-      code: 'MFG-003',
-      description: 'Manufacturing - Export Sales',
-      businessType: 'Manufacturer',
-      sector: 'Steel',
-      isActive: true,
-      registrationType: 'Both',
-      transactionType: 'Export',
-      taxRateApplicable: 0,
-      specialConditions: ['Export Certificate Required'],
-      priority: 3
-    },
-    {
-      code: 'MFG-004',
-      description: 'Manufacturing - Tax Exempt Items',
-      businessType: 'Manufacturer',
-      sector: 'Steel',
+      code: 'SN003',
+      description: 'Sale of Steel (Melted and Re-Rolled)',
+      saleType: 'Steel Melting and re-rolling',
       isActive: true,
       registrationType: 'Both',
       transactionType: 'Sale',
-      taxRateApplicable: 0,
-      specialConditions: ['SRO Certificate Required'],
+      taxRateApplicable: 18,
+      priority: 3
+    },
+    {
+      code: 'SN004',
+      description: 'Sale by Ship Breakers',
+      saleType: 'Ship breaking',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
       priority: 4
     },
-    
-    // Service Provider scenarios
     {
-      code: 'SRV-001',
-      description: 'Services - Registered to Registered',
-      businessType: 'Service Provider',
-      sector: 'IT Services',
-      isActive: true,
-      registrationType: 'Registered',
-      transactionType: 'Sale',
-      taxRateApplicable: 18,
-      priority: 1
-    },
-    {
-      code: 'SRV-002',
-      description: 'Services - Registered to Unregistered',
-      businessType: 'Service Provider',
-      sector: 'IT Services',
-      isActive: true,
-      registrationType: 'Both',
-      transactionType: 'Sale',
-      taxRateApplicable: 18,
-      priority: 2
-    },
-    {
-      code: 'SRV-003',
-      description: 'Services - Export of Services',
-      businessType: 'Service Provider',
-      sector: 'IT Services',
-      isActive: true,
-      registrationType: 'Both',
-      transactionType: 'Export',
-      taxRateApplicable: 0,
-      specialConditions: ['Export Certificate Required'],
-      priority: 3
-    },
-    {
-      code: 'SRV-004',
-      description: 'Services - Reduced Rate IT Equipment',
-      businessType: 'Service Provider',
-      sector: 'IT Services',
+      code: 'SN005',
+      description: 'Reduced rate sale',
+      saleType: 'Goods at Reduced Rate',
       isActive: true,
       registrationType: 'Both',
       transactionType: 'Sale',
       taxRateApplicable: 5,
-      specialConditions: ['SRO 1125(I)/2011'],
-      priority: 4
-    },
-    
-    // Trading scenarios
-    {
-      code: 'TRD-001',
-      description: 'Trading - Registered to Registered',
-      businessType: 'Distributor',
-      sector: 'Wholesale / Retails',
-      isActive: true,
-      registrationType: 'Registered',
-      transactionType: 'Sale',
-      taxRateApplicable: 18,
-      priority: 1
+      priority: 5
     },
     {
-      code: 'TRD-002',
-      description: 'Trading - Registered to Unregistered',
-      businessType: 'Distributor',
-      sector: 'Wholesale / Retails',
+      code: 'SN006',
+      description: 'Exempt goods sale',
+      saleType: 'Exempt Goods',
       isActive: true,
       registrationType: 'Both',
       transactionType: 'Sale',
-      taxRateApplicable: 18,
-      priority: 2
-    },
-    {
-      code: 'TRD-003',
-      description: 'Trading - Import Goods',
-      businessType: 'Distributor',
-      sector: 'Wholesale / Retails',
-      isActive: true,
-      registrationType: 'Both',
-      transactionType: 'Import',
-      taxRateApplicable: 18,
-      specialConditions: ['Import Documentation Required'],
-      priority: 3
-    },
-    
-    // General scenarios (available to all)
-    {
-      code: 'GEN-001',
-      description: 'General - Registered to Registered',
-      isActive: true,
-      registrationType: 'Registered',
-      transactionType: 'Sale',
-      taxRateApplicable: 18,
-      priority: 1
-    },
-    {
-      code: 'GEN-002',
-      description: 'General - Registered to Unregistered',
-      isActive: true,
-      registrationType: 'Both',
-      transactionType: 'Sale',
-      taxRateApplicable: 18,
-      priority: 2
-    },
-    {
-      code: 'GEN-003',
-      description: 'General - Export Sales',
-      isActive: true,
-      registrationType: 'Both',
-      transactionType: 'Export',
       taxRateApplicable: 0,
-      specialConditions: ['Export Certificate Required'],
-      priority: 3
+      priority: 6
     },
-    
-    // Provincial scenarios
     {
-      code: 'PUN-001',
-      description: 'Punjab - Local Sales',
+      code: 'SN007',
+      description: 'Zero rated sale',
+      saleType: 'Goods at zero-rate',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 0,
+      priority: 7
+    },
+    {
+      code: 'SN008',
+      description: 'Sale of 3rd schedule goods',
+      saleType: '3rd Schedule Goods',
       isActive: true,
       registrationType: 'Both',
       transactionType: 'Sale',
       taxRateApplicable: 18,
-      provinceRestrictions: ['Punjab'],
-      priority: 1
+      priority: 8
     },
     {
-      code: 'SND-001',
-      description: 'Sindh - Local Sales',
+      code: 'SN009',
+      description: 'Cotton Spinners purchase from Cotton Ginners (Textile Sector)',
+      saleType: 'Cotton Ginners',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Purchase',
+      taxRateApplicable: 0,
+      priority: 9
+    },
+    {
+      code: 'SN010',
+      description: 'Telecom services rendered or provided',
+      saleType: 'Telecommunication services',
       isActive: true,
       registrationType: 'Both',
       transactionType: 'Sale',
       taxRateApplicable: 18,
-      provinceRestrictions: ['Sindh'],
-      priority: 1
+      priority: 10
     },
     {
-      code: 'KPK-001',
-      description: 'KPK - Local Sales',
+      code: 'SN011',
+      description: 'Toll Manufacturing sale by Steel sector',
+      saleType: 'Toll Manufacturing',
       isActive: true,
       registrationType: 'Both',
       transactionType: 'Sale',
       taxRateApplicable: 18,
-      provinceRestrictions: ['KPK'],
-      priority: 1
+      priority: 11
     },
-    
-    // Inactive scenarios (for reference)
     {
-      code: 'OLD-001',
-      description: 'Old Tax Rate Scenario',
-      isActive: false,
+      code: 'SN012',
+      description: 'Sale of Petroleum products',
+      saleType: 'Petroleum Products',
+      isActive: true,
       registrationType: 'Both',
       transactionType: 'Sale',
-      taxRateApplicable: 16,
-      effectiveTo: '2023-06-30',
-      priority: 99
+      taxRateApplicable: 18,
+      priority: 12
+    },
+    {
+      code: 'SN013',
+      description: 'Electricity Supply to Retailers',
+      saleType: 'Electricity Supply to Retailers',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 13
+    },
+    {
+      code: 'SN014',
+      description: 'Sale of Gas to CNG stations',
+      saleType: 'Gas to CNG stations',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 14
+    },
+    {
+      code: 'SN015',
+      description: 'Sale of mobile phones',
+      saleType: 'Mobile Phones',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 15
+    },
+    {
+      code: 'SN016',
+      description: 'Processing / Conversion of Goods',
+      saleType: 'Processing/ Conversion of Goods',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 16
+    },
+    {
+      code: 'SN017',
+      description: 'Sale of Goods where FED is charged in ST mode',
+      saleType: 'Goods (FED in ST Mode)',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 17
+    },
+    {
+      code: 'SN018',
+      description: 'Services rendered or provided where FED is charged in ST mode',
+      saleType: 'Services (FED in ST Mode)',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 18
+    },
+    {
+      code: 'SN019',
+      description: 'Services rendered or provided',
+      saleType: 'Services',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 19
+    },
+    {
+      code: 'SN020',
+      description: 'Sale of Electric Vehicles',
+      saleType: 'Electric Vehicle',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 20
+    },
+    {
+      code: 'SN021',
+      description: 'Sale of Cement /Concrete Block',
+      saleType: 'Cement /Concrete Block',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 21
+    },
+    {
+      code: 'SN022',
+      description: 'Sale of Potassium Chlorate',
+      saleType: 'Potassium Chlorate',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 22
+    },
+    {
+      code: 'SN023',
+      description: 'Sale of CNG',
+      saleType: 'CNG Sales',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 23
+    },
+    {
+      code: 'SN024',
+      description: 'Goods sold that are listed in SRO 297(1)/2023',
+      saleType: 'Goods as per SRO.297(|)/2023',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 24
+    },
+    {
+      code: 'SN025',
+      description: 'Drugs sold at fixed ST rate under serial 81 of Eighth Schedule Table 1',
+      saleType: 'Non-Adjustable Supplies',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 25
+    },
+    {
+      code: 'SN026',
+      description: 'Sale to End Consumer by retailers',
+      saleType: 'Goods at Standard Rate (default)',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 26,
+      specialConditions: ['Applicable only if registered as retailer in sales tax profile']
+    },
+    {
+      code: 'SN027',
+      description: 'Sale to End Consumer by retailers',
+      saleType: '3rd Schedule Goods',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 18,
+      priority: 27,
+      specialConditions: ['Applicable only if registered as retailer in sales tax profile']
+    },
+    {
+      code: 'SN028',
+      description: 'Sale to End Consumer by retailers',
+      saleType: 'Goods at Reduced Rate',
+      isActive: true,
+      registrationType: 'Both',
+      transactionType: 'Sale',
+      taxRateApplicable: 5,
+      priority: 28,
+      specialConditions: ['Applicable only if registered as retailer in sales tax profile']
     }
   ]
 
@@ -314,7 +393,7 @@ export function getApplicableScenarios(
   applicableScenarios.sort((a, b) => (a.priority || 99) - (b.priority || 99))
 
   // Determine default scenario
-  let defaultScenario = 'GEN-001' // Fallback to general
+  let defaultScenario = 'SN001' // Fallback to standard rate scenario
   
   // Try to find a specific scenario for this business type
   const specificScenario = applicableScenarios.find(s => s.businessType === businessType)
@@ -549,4 +628,144 @@ export function searchScenarios(
     return scenario.code.toLowerCase().includes(lowerQuery) ||
            scenario.description.toLowerCase().includes(lowerQuery)
   })
+}
+
+/**
+ * Get scenarios by business type and sector using the official FBR mapping
+ * This function implements the scenario filtering logic based on the FBR technical documentation
+ */
+export async function getScenariosByBusinessTypeAndSector(
+  businessType: string,
+  sector: string,
+  options?: {
+    transactionType?: 'Sale' | 'Purchase' | 'Export' | 'Import'
+    registrationType?: 'Registered' | 'Unregistered'
+    province?: string
+    includeInactive?: boolean
+    effectiveDate?: string
+  }
+): Promise<ScenarioMapping> {
+  // Import PrismaClient dynamically to avoid server-side import issues
+  const { prisma } = await import('@/lib/database')
+  
+  
+  try {
+    // First try to get scenarios using the business type to scenario mapping
+    const mapping = await (prisma as any).fBRBusinessScenarioMapping.findFirst({
+      where: {
+        businessType,
+        industrySector: sector,
+        isActive: true
+      }
+    })
+    
+    let scenarios: FBRScenario[] = []
+    
+    if (mapping && mapping.scenarioIds.length > 0) {
+      // Get scenarios from the mapping
+      scenarios = await prisma.fBRScenario.findMany({
+        where: {
+          code: { in: mapping.scenarioIds },
+          isActive: options?.includeInactive ? undefined : true
+        },
+        orderBy: { code: 'asc' }
+      }) as FBRScenario[]
+    } else {
+      // If no mapping found, fall back to the in-memory scenarios
+      const inMemoryScenarios = getApplicableScenarios(businessType, sector, options)
+      scenarios = inMemoryScenarios.scenarios
+    }
+    
+    // Apply additional filtering based on options
+    if (options?.transactionType) {
+      scenarios = scenarios.filter(scenario =>
+        !scenario.transactionType ||
+        scenario.transactionType === 'Both' ||
+        scenario.transactionType === options.transactionType
+      )
+    }
+    
+    if (options?.registrationType) {
+      scenarios = scenarios.filter(scenario =>
+        !scenario.registrationType ||
+        scenario.registrationType === 'Both' ||
+        scenario.registrationType === options.registrationType
+      )
+    }
+    
+    if (options?.province && scenarios.length > 0) {
+      scenarios = scenarios.filter(scenario =>
+        !scenario.provinceRestrictions ||
+        scenario.provinceRestrictions.includes(options.province!)
+      )
+    }
+    
+    // Sort by priority (lower number = higher priority)
+    scenarios.sort((a, b) => (a.priority || 99) - (b.priority || 99))
+    
+    // Determine default scenario
+    let defaultScenario = 'SN001' // Fallback to standard rate scenario
+    
+    // Try to find a specific scenario for this business type
+    const specificScenario = scenarios.find(s =>
+      s.businessType === businessType ||
+      s.code === 'SN001' // Always fall back to SN001 if possible
+    )
+    
+    if (specificScenario) {
+      defaultScenario = specificScenario.code
+    }
+    
+    return {
+      scenarios,
+      defaultScenario,
+      businessType,
+      sector
+    }
+  } finally {
+    // No need to disconnect as we're using the shared instance
+  }
+}
+
+/**
+ * Get all available business types
+ */
+export async function getAllBusinessTypes(): Promise<string[]> {
+  const { prisma } = await import('@/lib/database')
+  
+  
+  try {
+    const mappings = await (prisma as any).fBRBusinessScenarioMapping.findMany({
+      where: { isActive: true },
+      select: { businessType: true },
+      distinct: ['businessType']
+    })
+    
+    return mappings.map((m: any) => m.businessType).sort()
+  } finally {
+    // No need to disconnect as we're using the shared instance
+  }
+}
+
+/**
+ * Get all available sectors for a business type
+ */
+export async function getSectorsByBusinessType(businessType: string): Promise<string[]> {
+  const { prisma } = await import('@/lib/database')
+  
+  
+  try {
+    const mappings = await (prisma as any).fBRBusinessScenarioMapping.findMany({
+      where: {
+        businessType,
+        isActive: true
+      },
+      select: { industrySector: true },
+      distinct: ['industrySector']
+    })
+    
+    return mappings.map((m: any) => m.industrySector).sort()
+  } finally {
+    // No need to disconnect as we're using the shared instance
+  }
 }

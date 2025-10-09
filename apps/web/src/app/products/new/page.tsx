@@ -185,16 +185,26 @@ export default function NewProductPage() {
       }
 
       const payload = {
-        ...productData,
+        name: productData.name,
+        description: productData.description,
+        hsCode: productData.hsCode,
+        hsCodeDescription: productData.hsCodeDescription,
+        unitOfMeasurement: productData.unitOfMeasurement,
         unitPrice: parseFloat(productData.unitPrice),
         taxRate: parseFloat(productData.taxRate),
-        stock: productData.stock ? parseInt(productData.stock) : 0
+        category: productData.category,
+        serialNumber: productData.serialNumber,
+        transactionType: productData.transactionType,
+        rateId: productData.rateId,
+        rateDescription: productData.rateDescription,
+        sroScheduleNo: productData.sroScheduleNo,
+        sroItemSerialNo: productData.sroItemSerialNo
       }
 
-      console.log('Creating product:', payload)
+      console.log('Creating product payload:', JSON.stringify(payload, null, 2))
       
-      // Call the API
-      const response = await fetch('/api/products', {
+      // Call the API - use relative URL to work with any port
+      const response = await fetch(`${window.location.origin}/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -204,7 +214,9 @@ export default function NewProductPage() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to create product')
+        console.error('Product creation error response:', errorData)
+        const errorMessage = errorData?.error?.message || errorData.error || 'Failed to create product'
+        throw new Error(errorMessage)
       }
 
       const result = await response.json()

@@ -177,6 +177,7 @@ export function handleCORS(req: NextRequest) {
   const origin = req.headers.get('origin')
   const allowedOrigins = [
     'http://localhost:3000',
+    'http://localhost:3001',
     'https://easyfiler.com',
     // Add your production domains here
   ]

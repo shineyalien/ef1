@@ -288,12 +288,18 @@ export class PRALAPIClient {
       const flexibleNtnMatch = fbrInvoiceNumber.match(/^(\d{7}|\d{13})/)
       if (flexibleNtnMatch) {
         const ntnPart = flexibleNtnMatch[1]
+        if (!ntnPart) {
+          throw new Error(`Unable to parse invoice number: ${fbrInvoiceNumber}. Invalid format.`)
+        }
         const remaining = fbrInvoiceNumber.substring(ntnPart.length)
         
         // Try to extract 4 digits from the end as sequence
         const flexibleSequenceMatch = remaining.match(/(\d{4})$/)
         if (flexibleSequenceMatch) {
           const sequence = flexibleSequenceMatch[1]
+          if (!sequence) {
+            throw new Error(`Unable to parse invoice number: ${fbrInvoiceNumber}. Invalid format.`)
+          }
           const timestamp = remaining.substring(0, remaining.length - sequence.length)
           
           return {

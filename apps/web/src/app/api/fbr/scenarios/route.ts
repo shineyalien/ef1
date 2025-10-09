@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/database'
 import { auth } from '@/auth'
 import {
   getApplicableScenarios,
@@ -10,7 +10,7 @@ import {
   searchScenarios
 } from '@/lib/fbr-scenarios'
 
-const prisma = new PrismaClient()
+// Using shared prisma instance from database.ts
 
 // Error response helper
 function createErrorResponse(
@@ -192,17 +192,129 @@ export async function GET(request: NextRequest) {
       else if (sector && !businessType) {
         scenarios = getScenariosBySector(sector, functionOptions)
       }
-      // Handle combined filtering
+      // Handle combined filtering - prioritize database mapping over in-memory scenarios
       else {
-        scenarios = getApplicableScenarios(businessType || '', sector || '', functionOptions).scenarios
+        // First try to get scenarios from the database mapping
+        if (businessType && sector) {
+          try {
+            console.log(`🔍 Looking up mapping for businessType="${businessType}", sector="${sector}"`)
+            console.log(`📋 Query options:`, { includeInactive, transactionType, registrationType })
+            
+            // Use raw query to access the mapping table
+            const mappingQuery = `
+              SELECT "scenarioIds"
+              FROM "fbr_business_scenario_mappings"
+              WHERE "businessType" = $1
+              AND "industrySector" = $2
+              AND "isActive" = true
+              LIMIT 1
+            `
+            
+            const mappingResult = await prisma.$queryRawUnsafe(mappingQuery, businessType, sector) as any[]
+            
+            if (mappingResult.length > 0 && mappingResult[0].scenarioIds.length > 0) {
+              const scenarioIds = mappingResult[0].scenarioIds
+              console.log(`✅ Found mapping with ${scenarioIds.length} scenarios:`, scenarioIds)
+              
+              // Verify specific scenarios based on business type and sector
+              if (businessType === 'Manufacturer' && sector === 'All Other Sectors') {
+                const expectedScenarios = ['SN001', 'SN002', 'SN005', 'SN006', 'SN007', 'SN015', 'SN016', 'SN017', 'SN021', 'SN022', 'SN024']
+                const hasAllExpected = expectedScenarios.every(code => scenarioIds.includes(code))
+                console.log(`🔍 Manufacturer + All Other Sectors verification:`, hasAllExpected ? '✅ PASS' : '❌ FAIL')
+                if (!hasAllExpected) {
+                  const missing = expectedScenarios.filter(code => !scenarioIds.includes(code))
+                  console.log(`⚠️ Missing scenarios: ${missing.join(', ')}`)
+                }
+              } else if (businessType === 'Manufacturer' && sector === 'Steel') {
+                const expectedScenarios = ['SN003', 'SN004', 'SN011']
+                const hasAllExpected = expectedScenarios.every(code => scenarioIds.includes(code))
+                console.log(`🔍 Manufacturer + Steel verification:`, hasAllExpected ? '✅ PASS' : '❌ FAIL')
+                if (!hasAllExpected) {
+                  const missing = expectedScenarios.filter(code => !scenarioIds.includes(code))
+                  console.log(`⚠️ Missing scenarios: ${missing.join(', ')}`)
+                }
+              }
+              
+              const scenarioQuery = `
+                SELECT *
+                FROM "fbr_scenarios"
+                WHERE "code" = ANY($1)
+                ${includeInactive ? '' : 'AND "isActive" = true'}
+                ORDER BY "code" ASC
+              `
+              
+              const dbScenarios = await prisma.$queryRawUnsafe(scenarioQuery, scenarioIds) as any[]
+              console.log(`✅ Retrieved ${dbScenarios.length} scenarios from database`)
+              
+              // Log scenario details for debugging
+              if (process.env.NODE_ENV === 'development') {
+                console.log(`📋 Scenario details:`)
+                dbScenarios.slice(0, 3).forEach(scenario => {
+                  console.log(`   - ${scenario.code}: ${scenario.description} (Priority: ${scenario.priority || 'N/A'})`)
+                })
+                if (dbScenarios.length > 3) {
+                  console.log(`   ... and ${dbScenarios.length - 3} more`)
+                }
+              }
+              
+              if (dbScenarios.length > 0) {
+                scenarios = dbScenarios
+              } else {
+                console.log(`⚠️ No scenarios found in database for mapping, falling back to in-memory scenarios`)
+                scenarios = getApplicableScenarios(businessType || '', sector || '', functionOptions).scenarios
+              }
+            } else {
+              console.log(`⚠️ No mapping found for businessType="${businessType}", sector="${sector}"`)
+              console.log(`🔍 Checking if this is a valid combination...`)
+              
+              // Check if the business type exists in any mapping
+              const businessTypeCheck = await prisma.$queryRawUnsafe(`
+                SELECT DISTINCT "businessType", "industrySector"
+                FROM "fbr_business_scenario_mappings"
+                WHERE "businessType" = $1
+                LIMIT 5
+              `, businessType) as any[]
+              
+              if (businessTypeCheck.length > 0) {
+                console.log(`✅ Business type "${businessType}" exists in mappings for sectors:`, businessTypeCheck.map(m => m.industrySector).join(', '))
+              } else {
+                console.log(`❌ Business type "${businessType}" not found in any mapping`)
+              }
+              
+              // Check if the sector exists in any mapping
+              const sectorCheck = await prisma.$queryRawUnsafe(`
+                SELECT DISTINCT "businessType", "industrySector"
+                FROM "fbr_business_scenario_mappings"
+                WHERE "industrySector" = $1
+                LIMIT 5
+              `, sector) as any[]
+              
+              if (sectorCheck.length > 0) {
+                console.log(`✅ Sector "${sector}" exists in mappings for business types:`, sectorCheck.map(m => m.businessType).join(', '))
+              } else {
+                console.log(`❌ Sector "${sector}" not found in any mapping`)
+              }
+              
+              // Fall back to direct scenario lookup
+              scenarios = getApplicableScenarios(businessType || '', sector || '', functionOptions).scenarios
+            }
+          } catch (mappingError) {
+            console.error('❌ Failed to query scenario mapping:', mappingError)
+            scenarios = getApplicableScenarios(businessType || '', sector || '', functionOptions).scenarios
+          }
+        } else {
+          console.log(`🔍 No business type or sector specified, returning general scenarios`)
+          scenarios = getApplicableScenarios(businessType || '', sector || '', functionOptions).scenarios
+        }
       }
 
       // If no scenarios found and includeGeneral is true, add general scenarios
       if (scenarios.length === 0 && includeGeneral) {
+        console.log(`⚠️ No scenarios found, loading general scenarios`)
         scenarios = getApplicableScenarios('', '', functionOptions).scenarios
       }
 
-      console.log(`✅ Found ${scenarios.length} scenarios`)
+      console.log(`✅ Returning ${scenarios.length} scenarios for ${businessType || 'General'} (${sector || 'All Sectors'})`)
     } catch (scenarioError) {
       console.error('Error fetching scenarios:', scenarioError)
       return createErrorResponse(
@@ -213,36 +325,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Try to get scenarios from database as fallback
-    let dbScenarios: any[] = []
-    try {
-      dbScenarios = await prisma.fBRScenario.findMany({
-        where: {
-          isActive: includeInactive ? undefined : true,
-          OR: [
-            // Specific business type and sector
-            ...(businessType && sector ? [{ businessType, sector }] : []),
-            // Specific business type, any sector
-            ...(businessType ? [{ businessType, sector: null }] : []),
-            // General scenarios (no business type or sector specified)
-            ...(includeGeneral ? [{ businessType: null, sector: null }] : [])
-          ]
-        },
-        orderBy: [
-          { businessType: 'asc' },
-          { sector: 'asc' },
-          { code: 'asc' }
-        ]
-      })
-    } catch (dbError) {
-      console.warn('Database query failed, using in-memory scenarios:', dbError)
-      // Continue with in-memory scenarios, don't fail the request
-    }
-
-    // Use database scenarios if available and in-memory scenarios are empty
-    if (scenarios.length === 0 && dbScenarios.length > 0) {
-      scenarios = dbScenarios
-    }
+    // Database scenarios are now handled in the main logic above
+    // No need for duplicate database query here
 
     return NextResponse.json({
       success: true,
@@ -258,7 +342,7 @@ export async function GET(request: NextRequest) {
         includeInactive: includeInactive,
         searchQuery: searchQuery,
         recordCount: scenarios.length,
-        dbRecordCount: dbScenarios.length,
+        dbRecordCount: 0, // Database scenarios are now integrated into main scenarios array
         processingTime: Date.now() - startTime,
         timestamp: new Date().toISOString()
       }
@@ -290,7 +374,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { code, description, businessType, sector, isActive } = body
+    const { code, description, businessType, sector, saleType, isActive } = body
 
     // Validate required fields
     if (!code || !description) {
@@ -305,23 +389,28 @@ export async function POST(request: NextRequest) {
 
     // Try to update existing scenario or create new one
     try {
-      const scenario = await prisma.fBRScenario.upsert({
-        where: { code },
-        update: {
-          description,
-          businessType,
-          sector,
-          isActive: isActive !== undefined ? isActive : true,
-          updatedAt: new Date()
-        },
-        create: {
-          code,
-          description,
-          businessType,
-          sector,
-          isActive: isActive !== undefined ? isActive : true
-        }
-      })
+      // Use raw query to upsert scenario since Prisma might not recognize the new fields
+      const upsertQuery = `
+        INSERT INTO "fbr_scenarios" ("code", "description", "businessType", "sector", "isActive", "updatedAt", "createdAt")
+        VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+        ON CONFLICT ("code")
+        DO UPDATE SET
+          "description" = $2,
+          "businessType" = $3,
+          "sector" = $4,
+          "isActive" = $5,
+          "updatedAt" = NOW()
+        RETURNING *
+      `
+      
+      const scenario = await prisma.$queryRawUnsafe(
+        upsertQuery,
+        code,
+        description,
+        businessType || null,
+        sector || null,
+        isActive !== undefined ? isActive : true
+      ) as any[]
 
       console.log(`✅ Scenario ${code} saved successfully`)
 
@@ -389,10 +478,9 @@ export async function DELETE(request: NextRequest) {
     console.log('🗑️ Deleting scenario:', { code })
 
     try {
-      // Try to delete from database
-      await prisma.fBRScenario.delete({
-        where: { code }
-      })
+      // Use raw query to delete scenario since Prisma might not recognize the table
+      const deleteQuery = `DELETE FROM "fbr_scenarios" WHERE "code" = $1`
+      await prisma.$executeRawUnsafe(deleteQuery, code)
 
       console.log(`✅ Scenario ${code} deleted successfully`)
 

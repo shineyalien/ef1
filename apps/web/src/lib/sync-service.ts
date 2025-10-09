@@ -1,4 +1,6 @@
 import { PWAUtils } from '../components/pwa/pwa-manager'
+import { openDatabase, createTransaction, DB_NAME, DB_VERSION } from './indexeddb-init'
+import { checkAndRunMigrations } from './indexeddb-migration'
 
 export interface SyncQueueItem {
   id: string
@@ -103,7 +105,7 @@ class SyncService {
 
     try {
       const db = await this.openDB()
-      const transaction = db.transaction(['syncQueue'], 'readwrite')
+      const transaction = await createTransaction(db, ['syncQueue'], 'readwrite')
       const store = transaction.objectStore('syncQueue')
       
       const syncItem: SyncQueueItem = {
@@ -139,7 +141,7 @@ class SyncService {
 
     try {
       const db = await this.openDB()
-      const transaction = db.transaction(['syncQueue'], 'readonly')
+      const transaction = await createTransaction(db, ['syncQueue'], 'readonly')
       const store = transaction.objectStore('syncQueue')
       
       return new Promise<SyncQueueItem[]>((resolve, reject) => {
@@ -170,7 +172,7 @@ class SyncService {
 
     try {
       const db = await this.openDB()
-      const transaction = db.transaction(['syncQueue'], 'readwrite')
+      const transaction = await createTransaction(db, ['syncQueue'], 'readwrite')
       const store = transaction.objectStore('syncQueue')
       
       // Get existing item
@@ -203,7 +205,7 @@ class SyncService {
 
     try {
       const db = await this.openDB()
-      const transaction = db.transaction(['syncQueue'], 'readwrite')
+      const transaction = await createTransaction(db, ['syncQueue'], 'readwrite')
       const store = transaction.objectStore('syncQueue')
       await store.delete(id)
       
@@ -428,10 +430,20 @@ class SyncService {
       const stores = ['invoices', 'customers', 'bulkOperations']
       
       for (const storeName of stores) {
-        if (!db.objectStoreNames.contains(storeName)) continue
+        if (!db.objectStoreNames.contains(storeName)) {
+          console.log(`[SyncService] Store ${storeName} not found, skipping cleanup`)
+          continue
+        }
         
         const transaction = db.transaction([storeName], 'readwrite')
         const store = transaction.objectStore(storeName)
+        
+        // Check if timestamp index exists
+        if (!store.indexNames.contains('timestamp')) {
+          console.log(`[SyncService] timestamp index not found in ${storeName}, skipping cleanup`)
+          continue
+        }
+        
         const index = store.index('timestamp')
         
         // Get all items older than 30 days that are synced
@@ -451,8 +463,20 @@ class SyncService {
       }
       
       // Clean up old sync queue items (older than 7 days and failed)
+      if (!db.objectStoreNames.contains('syncQueue')) {
+        console.log('[SyncService] syncQueue store not found, skipping cleanup')
+        return
+      }
+      
       const syncTransaction = db.transaction(['syncQueue'], 'readwrite')
       const syncStore = syncTransaction.objectStore('syncQueue')
+      
+      // Check if timestamp index exists
+      if (!syncStore.indexNames.contains('timestamp')) {
+        console.log('[SyncService] timestamp index not found in syncQueue, skipping cleanup')
+        return
+      }
+      
       const syncIndex = syncStore.index('timestamp')
       const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000)
       const syncRange = IDBKeyRange.upperBound(sevenDaysAgo)
@@ -506,24 +530,14 @@ class SyncService {
 
   // Helper methods
   private async openDB(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open('EasyFilerDB', 1)
-      
-      request.onerror = () => reject(request.error)
-      request.onsuccess = () => resolve(request.result)
-      
-      request.onupgradeneeded = (event) => {
-        const db = (event.target as IDBOpenDBRequest).result
-        
-        // Create object stores if they don't exist
-        if (!db.objectStoreNames.contains('syncQueue')) {
-          const syncQueueStore = db.createObjectStore('syncQueue', { keyPath: 'id' })
-          syncQueueStore.createIndex('timestamp', 'timestamp')
-          syncQueueStore.createIndex('retryCount', 'retryCount')
-          syncQueueStore.createIndex('status', 'status')
-        }
-      }
-    })
+    try {
+      // Check and run migrations before opening database
+      await checkAndRunMigrations()
+      return await openDatabase(DB_NAME, DB_VERSION)
+    } catch (error) {
+      console.error('[SyncService] Failed to open database:', error)
+      throw error
+    }
   }
 
   private shouldRetryNow(lastRetry: number, retryCount: number): boolean {

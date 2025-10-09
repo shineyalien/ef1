@@ -267,22 +267,8 @@ model Invoice {
   @@index([fbrInvoiceNumber])
   @@index([invoiceNumber])
   
-  // Performance indexes for retry mechanism
-  @@index([status, retryEnabled, fbrSubmitted, fbrValidated, nextRetryAt],
-          name: "invoices_retry_ready_idx",
-          where: { status: "FAILED", retryEnabled: true })
-  @@index([retryProcessing, retryProcessingSince],
-          name: "invoices_retry_processing_idx",
-          where: { retryProcessing: true })
-  @@index([retryCount, maxRetries, status],
-          name: "invoices_retry_count_status_idx",
-          where: { status: "FAILED" })
-  @@index([lastRetryAt],
-          name: "invoices_last_retry_at_idx",
-          where: { lastRetryAt: { not: null } })
-  @@index([fbrErrorCode, fbrErrorMessage, status],
-          name: "invoices_error_analysis_idx",
-          where: { fbrErrorCode: { not: null } })
+  // Performance indexes for retry mechanism are already created by migration 20251007195700_add_retry_indexes
+  // No need to define them here as they already exist in the database
   
   @@map("invoices")
 }
@@ -428,11 +414,29 @@ model FBRScenario {
   businessType String?  // e.g., "Manufacturer", "Trader", "Service Provider", "Distributor"
   sector       String?  // e.g., "Steel", "Textile", "Electronics", "Food & Beverage"
   
+  // FBR Sale Type (from technical documentation)
+  saleType     String?  // e.g., "Goods at Standard Rate (default)", "Steel Melting and re-rolling"
+  
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   @@index([businessType, sector])
   @@map("fbr_scenarios")
+}
+
+// Business type to scenario mapping based on FBR technical documentation
+model FBRBusinessScenarioMapping {
+  id             String   @id @default(cuid())
+  businessType   String   // e.g., "Manufacturer", "Importer", "Distributor"
+  industrySector String   // e.g., "Steel", "Textile", "FMCG"
+  scenarioIds    String[] // Array of scenario codes (e.g., ["SN001", "SN002"])
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([businessType, industrySector])
+  @@index([isActive])
+  @@map("fbr_business_scenario_mappings")
 }
 
 model FBRPaymentMode {

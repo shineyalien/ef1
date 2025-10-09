@@ -7,10 +7,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { 
-  User, 
-  Mail, 
-  Phone, 
+import {
+  User,
+  Mail,
+  Phone,
   Shield,
   ArrowLeft,
   Home,
@@ -20,6 +20,7 @@ import {
   CheckCircle2
 } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
+import { ProfileSkeleton } from "@/components/ui/profile-skeleton"
 
 interface UserProfile {
   email: string
@@ -41,6 +42,7 @@ export default function UserProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -60,11 +62,27 @@ export default function UserProfilePage() {
     }
 
     loadProfile()
+    
+    // Add timeout to prevent indefinite loading
+    const timeoutId = setTimeout(() => {
+      if (loading) {
+        setLoading(false)
+        setError('Loading timed out. Please refresh the page.')
+      }
+    }, 10000) // 10 seconds timeout
+
+    return () => clearTimeout(timeoutId)
   }, [session, status])
 
   const loadProfile = async () => {
     try {
+      setError(null)
       const response = await fetch('/api/settings/profile')
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       
       if (data.success) {
@@ -79,16 +97,23 @@ export default function UserProfilePage() {
           fbrSubmissionNotifications: data.profile.fbrSubmissionNotifications ?? true,
           marketingEmails: data.profile.marketingEmails ?? false
         })
+      } else {
+        throw new Error(data.error || 'Failed to load profile')
       }
     } catch (error) {
       console.error('Failed to load profile:', error)
+      setError(error instanceof Error ? error.message : 'Failed to load profile')
     } finally {
-      setLoading(false)
+      // Add a small delay to ensure the skeleton loader is visible
+      setTimeout(() => {
+        setLoading(false)
+      }, 300)
     }
   }
 
   const saveProfile = async () => {
     setSaving(true)
+    setError(null)
     try {
       const response = await fetch('/api/settings/profile', {
         method: 'POST',
@@ -97,6 +122,10 @@ export default function UserProfilePage() {
         },
         body: JSON.stringify(formData)
       })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
       const result = await response.json()
       
@@ -108,25 +137,70 @@ export default function UserProfilePage() {
       }
     } catch (error) {
       console.error('Save error:', error)
-      alert('Failed to update profile. Please try again.')
+      setError(error instanceof Error ? error.message : 'Failed to update profile. Please try again.')
     } finally {
       setSaving(false)
     }
   }
 
-  if (status === 'loading' || loading) {
+  // Show skeleton loader for initial load, but show centered loader for session loading
+  if (status === 'loading') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="animate-spin h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading profile...</p>
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="relative">
+            <Loader2 className="animate-spin h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+            <div className="absolute inset-0 h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4 animate-ping opacity-20"></div>
+          </div>
+          <p className="text-gray-600 mb-2">Checking authentication...</p>
+          <p className="text-sm text-gray-500">This should only take a moment</p>
         </div>
       </div>
     )
   }
 
+  // Show skeleton loader for profile data loading
+  if (loading) {
+    return <ProfileSkeleton />
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Error Display */}
+      {error && (
+        <div className="bg-red-50 border-b border-red-200">
+          <div className="max-w-4xl mx-auto p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-800">{error}</p>
+                </div>
+              </div>
+              <div className="ml-auto pl-3">
+                <div className="-mx-1.5 -my-1.5">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setError(null)}
+                    className="inline-flex rounded-md p-1.5 text-red-500 hover:bg-red-100"
+                  >
+                    <span className="sr-only">Dismiss</span>
+                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <main className="p-6 max-w-4xl mx-auto">
         {/* Navigation */}
         <div className="flex items-center space-x-4 mb-6">

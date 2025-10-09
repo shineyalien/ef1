@@ -31,10 +31,10 @@ function validateProductData(data: any): { isValid: boolean; errors: string[] } 
   if (!data.hsCode || data.hsCode.trim() === '') {
     errors.push('HS Code is required')
   } else {
-    // Validate HS Code format (basic validation)
-    const hsCodeRegex = /^\d{4}(\.\d{2}(\.\d{2})?)?$/
+    // Validate HS Code format (basic validation) - updated to support FBR format
+    const hsCodeRegex = /^\d{4}(\.\d{2,4})?$/
     if (!hsCodeRegex.test(data.hsCode.trim())) {
-      errors.push('Invalid HS Code format. Expected format: 1234 or 1234.56 or 1234.56.78')
+      errors.push('Invalid HS Code format. Expected format: 1234 or 1234.56 or 1234.5678')
     }
   }
   
@@ -187,9 +187,13 @@ export async function POST(request: NextRequest) {
       )
     }
     
+    // Log the received body for debugging
+    console.log('📦 Product creation request body:', JSON.stringify(body, null, 2))
+    
     // Validate product data
     const validation = validateProductData(body)
     if (!validation.isValid) {
+      console.log('❌ Product validation failed:', validation.errors)
       return createErrorResponse(
         'Validation failed',
         'VALIDATION_ERROR',
@@ -256,10 +260,18 @@ export async function POST(request: NextRequest) {
           name: body.name.trim(),
           description: body.description?.trim() || null,
           hsCode: body.hsCode.trim(),
+          hsCodeDescription: body.hsCodeDescription?.trim() || null,
           unitOfMeasurement: body.unitOfMeasurement.trim(),
           unitPrice: parseFloat(body.unitPrice),
           taxRate: parseFloat(body.taxRate) || 18,
           category: body.category?.trim() || null,
+          serialNumber: body.serialNumber?.trim() || null,
+          transactionType: body.transactionType?.toString() || null,
+          transactionTypeDesc: body.transactionTypeDesc?.trim() || null,
+          rateId: body.rateId?.trim() || null,
+          rateDescription: body.rateDescription?.trim() || null,
+          sroNo: body.sroScheduleNo?.trim() || null,
+          sroItemSerialNo: body.sroItemSerialNo?.trim() || null,
           isActive: body.isActive !== undefined ? body.isActive : true
         }
       })

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react'
 import { AppError, ErrorSeverity, ErrorCategory } from '@/components/error-boundary'
+import { generateUUID } from '@/lib/uuid'
 
 // Toast notification types
 export type ToastType = 'error' | 'warning' | 'info' | 'success'
@@ -108,7 +109,9 @@ export function ErrorProvider({
 
   // Show toast notification
   const showToast = useCallback((toast: Omit<ToastNotification, 'id'>) => {
-    const id = crypto.randomUUID()
+    // Generate a unique ID with fallback for older browsers
+    const id = generateUUID()
+    
     const newToast: ToastNotification = {
       ...toast,
       id,

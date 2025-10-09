@@ -68,6 +68,16 @@ export type SystemConfig = $Result.DefaultSelection<Prisma.$SystemConfigPayload>
  * 
  */
 export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
+/**
+ * Model FBRScenario
+ * 
+ */
+export type FBRScenario = $Result.DefaultSelection<Prisma.$FBRScenarioPayload>
+/**
+ * Model FBRBusinessScenarioMapping
+ * 
+ */
+export type FBRBusinessScenarioMapping = $Result.DefaultSelection<Prisma.$FBRBusinessScenarioMappingPayload>
 
 /**
  * Enums
@@ -388,6 +398,26 @@ export class PrismaClient<
     * ```
     */
   get auditLog(): Prisma.AuditLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.fBRScenario`: Exposes CRUD operations for the **FBRScenario** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FBRScenarios
+    * const fBRScenarios = await prisma.fBRScenario.findMany()
+    * ```
+    */
+  get fBRScenario(): Prisma.FBRScenarioDelegate<ExtArgs>;
+
+  /**
+   * `prisma.fBRBusinessScenarioMapping`: Exposes CRUD operations for the **FBRBusinessScenarioMapping** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FBRBusinessScenarioMappings
+    * const fBRBusinessScenarioMappings = await prisma.fBRBusinessScenarioMapping.findMany()
+    * ```
+    */
+  get fBRBusinessScenarioMapping(): Prisma.FBRBusinessScenarioMappingDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -839,7 +869,9 @@ export namespace Prisma {
     BulkInvoiceBatch: 'BulkInvoiceBatch',
     BulkInvoiceItem: 'BulkInvoiceItem',
     SystemConfig: 'SystemConfig',
-    AuditLog: 'AuditLog'
+    AuditLog: 'AuditLog',
+    FBRScenario: 'FBRScenario',
+    FBRBusinessScenarioMapping: 'FBRBusinessScenarioMapping'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -855,7 +887,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "userSession" | "business" | "customer" | "invoice" | "invoiceItem" | "product" | "bulkInvoiceBatch" | "bulkInvoiceItem" | "systemConfig" | "auditLog"
+      modelProps: "user" | "userSession" | "business" | "customer" | "invoice" | "invoiceItem" | "product" | "bulkInvoiceBatch" | "bulkInvoiceItem" | "systemConfig" | "auditLog" | "fBRScenario" | "fBRBusinessScenarioMapping"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1626,6 +1658,146 @@ export namespace Prisma {
           count: {
             args: Prisma.AuditLogCountArgs<ExtArgs>
             result: $Utils.Optional<AuditLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      FBRScenario: {
+        payload: Prisma.$FBRScenarioPayload<ExtArgs>
+        fields: Prisma.FBRScenarioFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FBRScenarioFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FBRScenarioFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload>
+          }
+          findFirst: {
+            args: Prisma.FBRScenarioFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FBRScenarioFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload>
+          }
+          findMany: {
+            args: Prisma.FBRScenarioFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload>[]
+          }
+          create: {
+            args: Prisma.FBRScenarioCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload>
+          }
+          createMany: {
+            args: Prisma.FBRScenarioCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FBRScenarioCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload>[]
+          }
+          delete: {
+            args: Prisma.FBRScenarioDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload>
+          }
+          update: {
+            args: Prisma.FBRScenarioUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload>
+          }
+          deleteMany: {
+            args: Prisma.FBRScenarioDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FBRScenarioUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FBRScenarioUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRScenarioPayload>
+          }
+          aggregate: {
+            args: Prisma.FBRScenarioAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFBRScenario>
+          }
+          groupBy: {
+            args: Prisma.FBRScenarioGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FBRScenarioGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FBRScenarioCountArgs<ExtArgs>
+            result: $Utils.Optional<FBRScenarioCountAggregateOutputType> | number
+          }
+        }
+      }
+      FBRBusinessScenarioMapping: {
+        payload: Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>
+        fields: Prisma.FBRBusinessScenarioMappingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FBRBusinessScenarioMappingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FBRBusinessScenarioMappingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload>
+          }
+          findFirst: {
+            args: Prisma.FBRBusinessScenarioMappingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FBRBusinessScenarioMappingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload>
+          }
+          findMany: {
+            args: Prisma.FBRBusinessScenarioMappingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload>[]
+          }
+          create: {
+            args: Prisma.FBRBusinessScenarioMappingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload>
+          }
+          createMany: {
+            args: Prisma.FBRBusinessScenarioMappingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FBRBusinessScenarioMappingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload>[]
+          }
+          delete: {
+            args: Prisma.FBRBusinessScenarioMappingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload>
+          }
+          update: {
+            args: Prisma.FBRBusinessScenarioMappingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload>
+          }
+          deleteMany: {
+            args: Prisma.FBRBusinessScenarioMappingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FBRBusinessScenarioMappingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FBRBusinessScenarioMappingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FBRBusinessScenarioMappingPayload>
+          }
+          aggregate: {
+            args: Prisma.FBRBusinessScenarioMappingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFBRBusinessScenarioMapping>
+          }
+          groupBy: {
+            args: Prisma.FBRBusinessScenarioMappingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FBRBusinessScenarioMappingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FBRBusinessScenarioMappingCountArgs<ExtArgs>
+            result: $Utils.Optional<FBRBusinessScenarioMappingCountAggregateOutputType> | number
           }
         }
       }
@@ -6539,7 +6711,7 @@ export namespace Prisma {
     id: string
     businessId: string
     customerId: string | null
-    localInvoiceNumber: string
+    localInvoiceNumber: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate: string | null
@@ -6562,7 +6734,7 @@ export namespace Prisma {
     fbrResponse: JsonValue | null
     pdfGenerated: boolean
     pdfStoragePath: string | null
-    encryptedData: string
+    encryptedData: string | null
     createdAt: Date
     updatedAt: Date
     _count: InvoiceCountAggregateOutputType | null
@@ -6710,7 +6882,7 @@ export namespace Prisma {
       id: string
       businessId: string
       customerId: string | null
-      localInvoiceNumber: string
+      localInvoiceNumber: string | null
       invoiceSequence: number
       invoiceDate: string
       dueDate: string | null
@@ -6733,7 +6905,7 @@ export namespace Prisma {
       fbrResponse: Prisma.JsonValue | null
       pdfGenerated: boolean
       pdfStoragePath: string | null
-      encryptedData: string
+      encryptedData: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["invoice"]>
@@ -13652,6 +13824,1944 @@ export namespace Prisma {
 
 
   /**
+   * Model FBRScenario
+   */
+
+  export type AggregateFBRScenario = {
+    _count: FBRScenarioCountAggregateOutputType | null
+    _avg: FBRScenarioAvgAggregateOutputType | null
+    _sum: FBRScenarioSumAggregateOutputType | null
+    _min: FBRScenarioMinAggregateOutputType | null
+    _max: FBRScenarioMaxAggregateOutputType | null
+  }
+
+  export type FBRScenarioAvgAggregateOutputType = {
+    taxRateApplicable: number | null
+    priority: number | null
+  }
+
+  export type FBRScenarioSumAggregateOutputType = {
+    taxRateApplicable: number | null
+    priority: number | null
+  }
+
+  export type FBRScenarioMinAggregateOutputType = {
+    code: string | null
+    description: string | null
+    businessType: string | null
+    sector: string | null
+    isActive: boolean | null
+    registrationType: string | null
+    transactionType: string | null
+    taxRateApplicable: number | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    priority: number | null
+    saleType: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FBRScenarioMaxAggregateOutputType = {
+    code: string | null
+    description: string | null
+    businessType: string | null
+    sector: string | null
+    isActive: boolean | null
+    registrationType: string | null
+    transactionType: string | null
+    taxRateApplicable: number | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    priority: number | null
+    saleType: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FBRScenarioCountAggregateOutputType = {
+    code: number
+    description: number
+    businessType: number
+    sector: number
+    isActive: number
+    registrationType: number
+    transactionType: number
+    taxRateApplicable: number
+    specialConditions: number
+    provinceRestrictions: number
+    effectiveFrom: number
+    effectiveTo: number
+    priority: number
+    saleType: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FBRScenarioAvgAggregateInputType = {
+    taxRateApplicable?: true
+    priority?: true
+  }
+
+  export type FBRScenarioSumAggregateInputType = {
+    taxRateApplicable?: true
+    priority?: true
+  }
+
+  export type FBRScenarioMinAggregateInputType = {
+    code?: true
+    description?: true
+    businessType?: true
+    sector?: true
+    isActive?: true
+    registrationType?: true
+    transactionType?: true
+    taxRateApplicable?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    priority?: true
+    saleType?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FBRScenarioMaxAggregateInputType = {
+    code?: true
+    description?: true
+    businessType?: true
+    sector?: true
+    isActive?: true
+    registrationType?: true
+    transactionType?: true
+    taxRateApplicable?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    priority?: true
+    saleType?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FBRScenarioCountAggregateInputType = {
+    code?: true
+    description?: true
+    businessType?: true
+    sector?: true
+    isActive?: true
+    registrationType?: true
+    transactionType?: true
+    taxRateApplicable?: true
+    specialConditions?: true
+    provinceRestrictions?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    priority?: true
+    saleType?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FBRScenarioAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FBRScenario to aggregate.
+     */
+    where?: FBRScenarioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FBRScenarios to fetch.
+     */
+    orderBy?: FBRScenarioOrderByWithRelationInput | FBRScenarioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FBRScenarioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FBRScenarios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FBRScenarios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FBRScenarios
+    **/
+    _count?: true | FBRScenarioCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FBRScenarioAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FBRScenarioSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FBRScenarioMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FBRScenarioMaxAggregateInputType
+  }
+
+  export type GetFBRScenarioAggregateType<T extends FBRScenarioAggregateArgs> = {
+        [P in keyof T & keyof AggregateFBRScenario]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFBRScenario[P]>
+      : GetScalarType<T[P], AggregateFBRScenario[P]>
+  }
+
+
+
+
+  export type FBRScenarioGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FBRScenarioWhereInput
+    orderBy?: FBRScenarioOrderByWithAggregationInput | FBRScenarioOrderByWithAggregationInput[]
+    by: FBRScenarioScalarFieldEnum[] | FBRScenarioScalarFieldEnum
+    having?: FBRScenarioScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FBRScenarioCountAggregateInputType | true
+    _avg?: FBRScenarioAvgAggregateInputType
+    _sum?: FBRScenarioSumAggregateInputType
+    _min?: FBRScenarioMinAggregateInputType
+    _max?: FBRScenarioMaxAggregateInputType
+  }
+
+  export type FBRScenarioGroupByOutputType = {
+    code: string
+    description: string
+    businessType: string | null
+    sector: string | null
+    isActive: boolean
+    registrationType: string | null
+    transactionType: string | null
+    taxRateApplicable: number | null
+    specialConditions: string[]
+    provinceRestrictions: string[]
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    priority: number | null
+    saleType: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FBRScenarioCountAggregateOutputType | null
+    _avg: FBRScenarioAvgAggregateOutputType | null
+    _sum: FBRScenarioSumAggregateOutputType | null
+    _min: FBRScenarioMinAggregateOutputType | null
+    _max: FBRScenarioMaxAggregateOutputType | null
+  }
+
+  type GetFBRScenarioGroupByPayload<T extends FBRScenarioGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FBRScenarioGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FBRScenarioGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FBRScenarioGroupByOutputType[P]>
+            : GetScalarType<T[P], FBRScenarioGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FBRScenarioSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    code?: boolean
+    description?: boolean
+    businessType?: boolean
+    sector?: boolean
+    isActive?: boolean
+    registrationType?: boolean
+    transactionType?: boolean
+    taxRateApplicable?: boolean
+    specialConditions?: boolean
+    provinceRestrictions?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    priority?: boolean
+    saleType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["fBRScenario"]>
+
+  export type FBRScenarioSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    code?: boolean
+    description?: boolean
+    businessType?: boolean
+    sector?: boolean
+    isActive?: boolean
+    registrationType?: boolean
+    transactionType?: boolean
+    taxRateApplicable?: boolean
+    specialConditions?: boolean
+    provinceRestrictions?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    priority?: boolean
+    saleType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["fBRScenario"]>
+
+  export type FBRScenarioSelectScalar = {
+    code?: boolean
+    description?: boolean
+    businessType?: boolean
+    sector?: boolean
+    isActive?: boolean
+    registrationType?: boolean
+    transactionType?: boolean
+    taxRateApplicable?: boolean
+    specialConditions?: boolean
+    provinceRestrictions?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    priority?: boolean
+    saleType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $FBRScenarioPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FBRScenario"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      code: string
+      description: string
+      businessType: string | null
+      sector: string | null
+      isActive: boolean
+      registrationType: string | null
+      transactionType: string | null
+      taxRateApplicable: number | null
+      specialConditions: string[]
+      provinceRestrictions: string[]
+      effectiveFrom: Date | null
+      effectiveTo: Date | null
+      priority: number | null
+      saleType: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fBRScenario"]>
+    composites: {}
+  }
+
+  type FBRScenarioGetPayload<S extends boolean | null | undefined | FBRScenarioDefaultArgs> = $Result.GetResult<Prisma.$FBRScenarioPayload, S>
+
+  type FBRScenarioCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FBRScenarioFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FBRScenarioCountAggregateInputType | true
+    }
+
+  export interface FBRScenarioDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FBRScenario'], meta: { name: 'FBRScenario' } }
+    /**
+     * Find zero or one FBRScenario that matches the filter.
+     * @param {FBRScenarioFindUniqueArgs} args - Arguments to find a FBRScenario
+     * @example
+     * // Get one FBRScenario
+     * const fBRScenario = await prisma.fBRScenario.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FBRScenarioFindUniqueArgs>(args: SelectSubset<T, FBRScenarioFindUniqueArgs<ExtArgs>>): Prisma__FBRScenarioClient<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FBRScenario that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FBRScenarioFindUniqueOrThrowArgs} args - Arguments to find a FBRScenario
+     * @example
+     * // Get one FBRScenario
+     * const fBRScenario = await prisma.fBRScenario.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FBRScenarioFindUniqueOrThrowArgs>(args: SelectSubset<T, FBRScenarioFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FBRScenarioClient<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FBRScenario that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRScenarioFindFirstArgs} args - Arguments to find a FBRScenario
+     * @example
+     * // Get one FBRScenario
+     * const fBRScenario = await prisma.fBRScenario.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FBRScenarioFindFirstArgs>(args?: SelectSubset<T, FBRScenarioFindFirstArgs<ExtArgs>>): Prisma__FBRScenarioClient<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FBRScenario that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRScenarioFindFirstOrThrowArgs} args - Arguments to find a FBRScenario
+     * @example
+     * // Get one FBRScenario
+     * const fBRScenario = await prisma.fBRScenario.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FBRScenarioFindFirstOrThrowArgs>(args?: SelectSubset<T, FBRScenarioFindFirstOrThrowArgs<ExtArgs>>): Prisma__FBRScenarioClient<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FBRScenarios that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRScenarioFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FBRScenarios
+     * const fBRScenarios = await prisma.fBRScenario.findMany()
+     * 
+     * // Get first 10 FBRScenarios
+     * const fBRScenarios = await prisma.fBRScenario.findMany({ take: 10 })
+     * 
+     * // Only select the `code`
+     * const fBRScenarioWithCodeOnly = await prisma.fBRScenario.findMany({ select: { code: true } })
+     * 
+     */
+    findMany<T extends FBRScenarioFindManyArgs>(args?: SelectSubset<T, FBRScenarioFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FBRScenario.
+     * @param {FBRScenarioCreateArgs} args - Arguments to create a FBRScenario.
+     * @example
+     * // Create one FBRScenario
+     * const FBRScenario = await prisma.fBRScenario.create({
+     *   data: {
+     *     // ... data to create a FBRScenario
+     *   }
+     * })
+     * 
+     */
+    create<T extends FBRScenarioCreateArgs>(args: SelectSubset<T, FBRScenarioCreateArgs<ExtArgs>>): Prisma__FBRScenarioClient<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FBRScenarios.
+     * @param {FBRScenarioCreateManyArgs} args - Arguments to create many FBRScenarios.
+     * @example
+     * // Create many FBRScenarios
+     * const fBRScenario = await prisma.fBRScenario.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FBRScenarioCreateManyArgs>(args?: SelectSubset<T, FBRScenarioCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FBRScenarios and returns the data saved in the database.
+     * @param {FBRScenarioCreateManyAndReturnArgs} args - Arguments to create many FBRScenarios.
+     * @example
+     * // Create many FBRScenarios
+     * const fBRScenario = await prisma.fBRScenario.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FBRScenarios and only return the `code`
+     * const fBRScenarioWithCodeOnly = await prisma.fBRScenario.createManyAndReturn({ 
+     *   select: { code: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FBRScenarioCreateManyAndReturnArgs>(args?: SelectSubset<T, FBRScenarioCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FBRScenario.
+     * @param {FBRScenarioDeleteArgs} args - Arguments to delete one FBRScenario.
+     * @example
+     * // Delete one FBRScenario
+     * const FBRScenario = await prisma.fBRScenario.delete({
+     *   where: {
+     *     // ... filter to delete one FBRScenario
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FBRScenarioDeleteArgs>(args: SelectSubset<T, FBRScenarioDeleteArgs<ExtArgs>>): Prisma__FBRScenarioClient<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FBRScenario.
+     * @param {FBRScenarioUpdateArgs} args - Arguments to update one FBRScenario.
+     * @example
+     * // Update one FBRScenario
+     * const fBRScenario = await prisma.fBRScenario.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FBRScenarioUpdateArgs>(args: SelectSubset<T, FBRScenarioUpdateArgs<ExtArgs>>): Prisma__FBRScenarioClient<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FBRScenarios.
+     * @param {FBRScenarioDeleteManyArgs} args - Arguments to filter FBRScenarios to delete.
+     * @example
+     * // Delete a few FBRScenarios
+     * const { count } = await prisma.fBRScenario.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FBRScenarioDeleteManyArgs>(args?: SelectSubset<T, FBRScenarioDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FBRScenarios.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRScenarioUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FBRScenarios
+     * const fBRScenario = await prisma.fBRScenario.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FBRScenarioUpdateManyArgs>(args: SelectSubset<T, FBRScenarioUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FBRScenario.
+     * @param {FBRScenarioUpsertArgs} args - Arguments to update or create a FBRScenario.
+     * @example
+     * // Update or create a FBRScenario
+     * const fBRScenario = await prisma.fBRScenario.upsert({
+     *   create: {
+     *     // ... data to create a FBRScenario
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FBRScenario we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FBRScenarioUpsertArgs>(args: SelectSubset<T, FBRScenarioUpsertArgs<ExtArgs>>): Prisma__FBRScenarioClient<$Result.GetResult<Prisma.$FBRScenarioPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FBRScenarios.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRScenarioCountArgs} args - Arguments to filter FBRScenarios to count.
+     * @example
+     * // Count the number of FBRScenarios
+     * const count = await prisma.fBRScenario.count({
+     *   where: {
+     *     // ... the filter for the FBRScenarios we want to count
+     *   }
+     * })
+    **/
+    count<T extends FBRScenarioCountArgs>(
+      args?: Subset<T, FBRScenarioCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FBRScenarioCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FBRScenario.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRScenarioAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FBRScenarioAggregateArgs>(args: Subset<T, FBRScenarioAggregateArgs>): Prisma.PrismaPromise<GetFBRScenarioAggregateType<T>>
+
+    /**
+     * Group by FBRScenario.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRScenarioGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FBRScenarioGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FBRScenarioGroupByArgs['orderBy'] }
+        : { orderBy?: FBRScenarioGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FBRScenarioGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFBRScenarioGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FBRScenario model
+   */
+  readonly fields: FBRScenarioFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FBRScenario.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FBRScenarioClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FBRScenario model
+   */ 
+  interface FBRScenarioFieldRefs {
+    readonly code: FieldRef<"FBRScenario", 'String'>
+    readonly description: FieldRef<"FBRScenario", 'String'>
+    readonly businessType: FieldRef<"FBRScenario", 'String'>
+    readonly sector: FieldRef<"FBRScenario", 'String'>
+    readonly isActive: FieldRef<"FBRScenario", 'Boolean'>
+    readonly registrationType: FieldRef<"FBRScenario", 'String'>
+    readonly transactionType: FieldRef<"FBRScenario", 'String'>
+    readonly taxRateApplicable: FieldRef<"FBRScenario", 'Float'>
+    readonly specialConditions: FieldRef<"FBRScenario", 'String[]'>
+    readonly provinceRestrictions: FieldRef<"FBRScenario", 'String[]'>
+    readonly effectiveFrom: FieldRef<"FBRScenario", 'DateTime'>
+    readonly effectiveTo: FieldRef<"FBRScenario", 'DateTime'>
+    readonly priority: FieldRef<"FBRScenario", 'Int'>
+    readonly saleType: FieldRef<"FBRScenario", 'String'>
+    readonly createdAt: FieldRef<"FBRScenario", 'DateTime'>
+    readonly updatedAt: FieldRef<"FBRScenario", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FBRScenario findUnique
+   */
+  export type FBRScenarioFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRScenario to fetch.
+     */
+    where: FBRScenarioWhereUniqueInput
+  }
+
+  /**
+   * FBRScenario findUniqueOrThrow
+   */
+  export type FBRScenarioFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRScenario to fetch.
+     */
+    where: FBRScenarioWhereUniqueInput
+  }
+
+  /**
+   * FBRScenario findFirst
+   */
+  export type FBRScenarioFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRScenario to fetch.
+     */
+    where?: FBRScenarioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FBRScenarios to fetch.
+     */
+    orderBy?: FBRScenarioOrderByWithRelationInput | FBRScenarioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FBRScenarios.
+     */
+    cursor?: FBRScenarioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FBRScenarios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FBRScenarios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FBRScenarios.
+     */
+    distinct?: FBRScenarioScalarFieldEnum | FBRScenarioScalarFieldEnum[]
+  }
+
+  /**
+   * FBRScenario findFirstOrThrow
+   */
+  export type FBRScenarioFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRScenario to fetch.
+     */
+    where?: FBRScenarioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FBRScenarios to fetch.
+     */
+    orderBy?: FBRScenarioOrderByWithRelationInput | FBRScenarioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FBRScenarios.
+     */
+    cursor?: FBRScenarioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FBRScenarios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FBRScenarios.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FBRScenarios.
+     */
+    distinct?: FBRScenarioScalarFieldEnum | FBRScenarioScalarFieldEnum[]
+  }
+
+  /**
+   * FBRScenario findMany
+   */
+  export type FBRScenarioFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRScenarios to fetch.
+     */
+    where?: FBRScenarioWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FBRScenarios to fetch.
+     */
+    orderBy?: FBRScenarioOrderByWithRelationInput | FBRScenarioOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FBRScenarios.
+     */
+    cursor?: FBRScenarioWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FBRScenarios from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FBRScenarios.
+     */
+    skip?: number
+    distinct?: FBRScenarioScalarFieldEnum | FBRScenarioScalarFieldEnum[]
+  }
+
+  /**
+   * FBRScenario create
+   */
+  export type FBRScenarioCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * The data needed to create a FBRScenario.
+     */
+    data: XOR<FBRScenarioCreateInput, FBRScenarioUncheckedCreateInput>
+  }
+
+  /**
+   * FBRScenario createMany
+   */
+  export type FBRScenarioCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FBRScenarios.
+     */
+    data: FBRScenarioCreateManyInput | FBRScenarioCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FBRScenario createManyAndReturn
+   */
+  export type FBRScenarioCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FBRScenarios.
+     */
+    data: FBRScenarioCreateManyInput | FBRScenarioCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FBRScenario update
+   */
+  export type FBRScenarioUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * The data needed to update a FBRScenario.
+     */
+    data: XOR<FBRScenarioUpdateInput, FBRScenarioUncheckedUpdateInput>
+    /**
+     * Choose, which FBRScenario to update.
+     */
+    where: FBRScenarioWhereUniqueInput
+  }
+
+  /**
+   * FBRScenario updateMany
+   */
+  export type FBRScenarioUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FBRScenarios.
+     */
+    data: XOR<FBRScenarioUpdateManyMutationInput, FBRScenarioUncheckedUpdateManyInput>
+    /**
+     * Filter which FBRScenarios to update
+     */
+    where?: FBRScenarioWhereInput
+  }
+
+  /**
+   * FBRScenario upsert
+   */
+  export type FBRScenarioUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * The filter to search for the FBRScenario to update in case it exists.
+     */
+    where: FBRScenarioWhereUniqueInput
+    /**
+     * In case the FBRScenario found by the `where` argument doesn't exist, create a new FBRScenario with this data.
+     */
+    create: XOR<FBRScenarioCreateInput, FBRScenarioUncheckedCreateInput>
+    /**
+     * In case the FBRScenario was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FBRScenarioUpdateInput, FBRScenarioUncheckedUpdateInput>
+  }
+
+  /**
+   * FBRScenario delete
+   */
+  export type FBRScenarioDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+    /**
+     * Filter which FBRScenario to delete.
+     */
+    where: FBRScenarioWhereUniqueInput
+  }
+
+  /**
+   * FBRScenario deleteMany
+   */
+  export type FBRScenarioDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FBRScenarios to delete
+     */
+    where?: FBRScenarioWhereInput
+  }
+
+  /**
+   * FBRScenario without action
+   */
+  export type FBRScenarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRScenario
+     */
+    select?: FBRScenarioSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FBRBusinessScenarioMapping
+   */
+
+  export type AggregateFBRBusinessScenarioMapping = {
+    _count: FBRBusinessScenarioMappingCountAggregateOutputType | null
+    _min: FBRBusinessScenarioMappingMinAggregateOutputType | null
+    _max: FBRBusinessScenarioMappingMaxAggregateOutputType | null
+  }
+
+  export type FBRBusinessScenarioMappingMinAggregateOutputType = {
+    id: string | null
+    businessType: string | null
+    industrySector: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FBRBusinessScenarioMappingMaxAggregateOutputType = {
+    id: string | null
+    businessType: string | null
+    industrySector: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FBRBusinessScenarioMappingCountAggregateOutputType = {
+    id: number
+    businessType: number
+    industrySector: number
+    scenarioIds: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FBRBusinessScenarioMappingMinAggregateInputType = {
+    id?: true
+    businessType?: true
+    industrySector?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FBRBusinessScenarioMappingMaxAggregateInputType = {
+    id?: true
+    businessType?: true
+    industrySector?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FBRBusinessScenarioMappingCountAggregateInputType = {
+    id?: true
+    businessType?: true
+    industrySector?: true
+    scenarioIds?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FBRBusinessScenarioMappingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FBRBusinessScenarioMapping to aggregate.
+     */
+    where?: FBRBusinessScenarioMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FBRBusinessScenarioMappings to fetch.
+     */
+    orderBy?: FBRBusinessScenarioMappingOrderByWithRelationInput | FBRBusinessScenarioMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FBRBusinessScenarioMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FBRBusinessScenarioMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FBRBusinessScenarioMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FBRBusinessScenarioMappings
+    **/
+    _count?: true | FBRBusinessScenarioMappingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FBRBusinessScenarioMappingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FBRBusinessScenarioMappingMaxAggregateInputType
+  }
+
+  export type GetFBRBusinessScenarioMappingAggregateType<T extends FBRBusinessScenarioMappingAggregateArgs> = {
+        [P in keyof T & keyof AggregateFBRBusinessScenarioMapping]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFBRBusinessScenarioMapping[P]>
+      : GetScalarType<T[P], AggregateFBRBusinessScenarioMapping[P]>
+  }
+
+
+
+
+  export type FBRBusinessScenarioMappingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FBRBusinessScenarioMappingWhereInput
+    orderBy?: FBRBusinessScenarioMappingOrderByWithAggregationInput | FBRBusinessScenarioMappingOrderByWithAggregationInput[]
+    by: FBRBusinessScenarioMappingScalarFieldEnum[] | FBRBusinessScenarioMappingScalarFieldEnum
+    having?: FBRBusinessScenarioMappingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FBRBusinessScenarioMappingCountAggregateInputType | true
+    _min?: FBRBusinessScenarioMappingMinAggregateInputType
+    _max?: FBRBusinessScenarioMappingMaxAggregateInputType
+  }
+
+  export type FBRBusinessScenarioMappingGroupByOutputType = {
+    id: string
+    businessType: string
+    industrySector: string
+    scenarioIds: string[]
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: FBRBusinessScenarioMappingCountAggregateOutputType | null
+    _min: FBRBusinessScenarioMappingMinAggregateOutputType | null
+    _max: FBRBusinessScenarioMappingMaxAggregateOutputType | null
+  }
+
+  type GetFBRBusinessScenarioMappingGroupByPayload<T extends FBRBusinessScenarioMappingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FBRBusinessScenarioMappingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FBRBusinessScenarioMappingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FBRBusinessScenarioMappingGroupByOutputType[P]>
+            : GetScalarType<T[P], FBRBusinessScenarioMappingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FBRBusinessScenarioMappingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    businessType?: boolean
+    industrySector?: boolean
+    scenarioIds?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["fBRBusinessScenarioMapping"]>
+
+  export type FBRBusinessScenarioMappingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    businessType?: boolean
+    industrySector?: boolean
+    scenarioIds?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["fBRBusinessScenarioMapping"]>
+
+  export type FBRBusinessScenarioMappingSelectScalar = {
+    id?: boolean
+    businessType?: boolean
+    industrySector?: boolean
+    scenarioIds?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $FBRBusinessScenarioMappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FBRBusinessScenarioMapping"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      businessType: string
+      industrySector: string
+      scenarioIds: string[]
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fBRBusinessScenarioMapping"]>
+    composites: {}
+  }
+
+  type FBRBusinessScenarioMappingGetPayload<S extends boolean | null | undefined | FBRBusinessScenarioMappingDefaultArgs> = $Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload, S>
+
+  type FBRBusinessScenarioMappingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FBRBusinessScenarioMappingFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FBRBusinessScenarioMappingCountAggregateInputType | true
+    }
+
+  export interface FBRBusinessScenarioMappingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FBRBusinessScenarioMapping'], meta: { name: 'FBRBusinessScenarioMapping' } }
+    /**
+     * Find zero or one FBRBusinessScenarioMapping that matches the filter.
+     * @param {FBRBusinessScenarioMappingFindUniqueArgs} args - Arguments to find a FBRBusinessScenarioMapping
+     * @example
+     * // Get one FBRBusinessScenarioMapping
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FBRBusinessScenarioMappingFindUniqueArgs>(args: SelectSubset<T, FBRBusinessScenarioMappingFindUniqueArgs<ExtArgs>>): Prisma__FBRBusinessScenarioMappingClient<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FBRBusinessScenarioMapping that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FBRBusinessScenarioMappingFindUniqueOrThrowArgs} args - Arguments to find a FBRBusinessScenarioMapping
+     * @example
+     * // Get one FBRBusinessScenarioMapping
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FBRBusinessScenarioMappingFindUniqueOrThrowArgs>(args: SelectSubset<T, FBRBusinessScenarioMappingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FBRBusinessScenarioMappingClient<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FBRBusinessScenarioMapping that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRBusinessScenarioMappingFindFirstArgs} args - Arguments to find a FBRBusinessScenarioMapping
+     * @example
+     * // Get one FBRBusinessScenarioMapping
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FBRBusinessScenarioMappingFindFirstArgs>(args?: SelectSubset<T, FBRBusinessScenarioMappingFindFirstArgs<ExtArgs>>): Prisma__FBRBusinessScenarioMappingClient<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FBRBusinessScenarioMapping that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRBusinessScenarioMappingFindFirstOrThrowArgs} args - Arguments to find a FBRBusinessScenarioMapping
+     * @example
+     * // Get one FBRBusinessScenarioMapping
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FBRBusinessScenarioMappingFindFirstOrThrowArgs>(args?: SelectSubset<T, FBRBusinessScenarioMappingFindFirstOrThrowArgs<ExtArgs>>): Prisma__FBRBusinessScenarioMappingClient<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FBRBusinessScenarioMappings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRBusinessScenarioMappingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FBRBusinessScenarioMappings
+     * const fBRBusinessScenarioMappings = await prisma.fBRBusinessScenarioMapping.findMany()
+     * 
+     * // Get first 10 FBRBusinessScenarioMappings
+     * const fBRBusinessScenarioMappings = await prisma.fBRBusinessScenarioMapping.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fBRBusinessScenarioMappingWithIdOnly = await prisma.fBRBusinessScenarioMapping.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FBRBusinessScenarioMappingFindManyArgs>(args?: SelectSubset<T, FBRBusinessScenarioMappingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FBRBusinessScenarioMapping.
+     * @param {FBRBusinessScenarioMappingCreateArgs} args - Arguments to create a FBRBusinessScenarioMapping.
+     * @example
+     * // Create one FBRBusinessScenarioMapping
+     * const FBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.create({
+     *   data: {
+     *     // ... data to create a FBRBusinessScenarioMapping
+     *   }
+     * })
+     * 
+     */
+    create<T extends FBRBusinessScenarioMappingCreateArgs>(args: SelectSubset<T, FBRBusinessScenarioMappingCreateArgs<ExtArgs>>): Prisma__FBRBusinessScenarioMappingClient<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FBRBusinessScenarioMappings.
+     * @param {FBRBusinessScenarioMappingCreateManyArgs} args - Arguments to create many FBRBusinessScenarioMappings.
+     * @example
+     * // Create many FBRBusinessScenarioMappings
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FBRBusinessScenarioMappingCreateManyArgs>(args?: SelectSubset<T, FBRBusinessScenarioMappingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FBRBusinessScenarioMappings and returns the data saved in the database.
+     * @param {FBRBusinessScenarioMappingCreateManyAndReturnArgs} args - Arguments to create many FBRBusinessScenarioMappings.
+     * @example
+     * // Create many FBRBusinessScenarioMappings
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FBRBusinessScenarioMappings and only return the `id`
+     * const fBRBusinessScenarioMappingWithIdOnly = await prisma.fBRBusinessScenarioMapping.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FBRBusinessScenarioMappingCreateManyAndReturnArgs>(args?: SelectSubset<T, FBRBusinessScenarioMappingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FBRBusinessScenarioMapping.
+     * @param {FBRBusinessScenarioMappingDeleteArgs} args - Arguments to delete one FBRBusinessScenarioMapping.
+     * @example
+     * // Delete one FBRBusinessScenarioMapping
+     * const FBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.delete({
+     *   where: {
+     *     // ... filter to delete one FBRBusinessScenarioMapping
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FBRBusinessScenarioMappingDeleteArgs>(args: SelectSubset<T, FBRBusinessScenarioMappingDeleteArgs<ExtArgs>>): Prisma__FBRBusinessScenarioMappingClient<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FBRBusinessScenarioMapping.
+     * @param {FBRBusinessScenarioMappingUpdateArgs} args - Arguments to update one FBRBusinessScenarioMapping.
+     * @example
+     * // Update one FBRBusinessScenarioMapping
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FBRBusinessScenarioMappingUpdateArgs>(args: SelectSubset<T, FBRBusinessScenarioMappingUpdateArgs<ExtArgs>>): Prisma__FBRBusinessScenarioMappingClient<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FBRBusinessScenarioMappings.
+     * @param {FBRBusinessScenarioMappingDeleteManyArgs} args - Arguments to filter FBRBusinessScenarioMappings to delete.
+     * @example
+     * // Delete a few FBRBusinessScenarioMappings
+     * const { count } = await prisma.fBRBusinessScenarioMapping.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FBRBusinessScenarioMappingDeleteManyArgs>(args?: SelectSubset<T, FBRBusinessScenarioMappingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FBRBusinessScenarioMappings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRBusinessScenarioMappingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FBRBusinessScenarioMappings
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FBRBusinessScenarioMappingUpdateManyArgs>(args: SelectSubset<T, FBRBusinessScenarioMappingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FBRBusinessScenarioMapping.
+     * @param {FBRBusinessScenarioMappingUpsertArgs} args - Arguments to update or create a FBRBusinessScenarioMapping.
+     * @example
+     * // Update or create a FBRBusinessScenarioMapping
+     * const fBRBusinessScenarioMapping = await prisma.fBRBusinessScenarioMapping.upsert({
+     *   create: {
+     *     // ... data to create a FBRBusinessScenarioMapping
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FBRBusinessScenarioMapping we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FBRBusinessScenarioMappingUpsertArgs>(args: SelectSubset<T, FBRBusinessScenarioMappingUpsertArgs<ExtArgs>>): Prisma__FBRBusinessScenarioMappingClient<$Result.GetResult<Prisma.$FBRBusinessScenarioMappingPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FBRBusinessScenarioMappings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRBusinessScenarioMappingCountArgs} args - Arguments to filter FBRBusinessScenarioMappings to count.
+     * @example
+     * // Count the number of FBRBusinessScenarioMappings
+     * const count = await prisma.fBRBusinessScenarioMapping.count({
+     *   where: {
+     *     // ... the filter for the FBRBusinessScenarioMappings we want to count
+     *   }
+     * })
+    **/
+    count<T extends FBRBusinessScenarioMappingCountArgs>(
+      args?: Subset<T, FBRBusinessScenarioMappingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FBRBusinessScenarioMappingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FBRBusinessScenarioMapping.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRBusinessScenarioMappingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FBRBusinessScenarioMappingAggregateArgs>(args: Subset<T, FBRBusinessScenarioMappingAggregateArgs>): Prisma.PrismaPromise<GetFBRBusinessScenarioMappingAggregateType<T>>
+
+    /**
+     * Group by FBRBusinessScenarioMapping.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FBRBusinessScenarioMappingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FBRBusinessScenarioMappingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FBRBusinessScenarioMappingGroupByArgs['orderBy'] }
+        : { orderBy?: FBRBusinessScenarioMappingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FBRBusinessScenarioMappingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFBRBusinessScenarioMappingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FBRBusinessScenarioMapping model
+   */
+  readonly fields: FBRBusinessScenarioMappingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FBRBusinessScenarioMapping.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FBRBusinessScenarioMappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FBRBusinessScenarioMapping model
+   */ 
+  interface FBRBusinessScenarioMappingFieldRefs {
+    readonly id: FieldRef<"FBRBusinessScenarioMapping", 'String'>
+    readonly businessType: FieldRef<"FBRBusinessScenarioMapping", 'String'>
+    readonly industrySector: FieldRef<"FBRBusinessScenarioMapping", 'String'>
+    readonly scenarioIds: FieldRef<"FBRBusinessScenarioMapping", 'String[]'>
+    readonly isActive: FieldRef<"FBRBusinessScenarioMapping", 'Boolean'>
+    readonly createdAt: FieldRef<"FBRBusinessScenarioMapping", 'DateTime'>
+    readonly updatedAt: FieldRef<"FBRBusinessScenarioMapping", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FBRBusinessScenarioMapping findUnique
+   */
+  export type FBRBusinessScenarioMappingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRBusinessScenarioMapping to fetch.
+     */
+    where: FBRBusinessScenarioMappingWhereUniqueInput
+  }
+
+  /**
+   * FBRBusinessScenarioMapping findUniqueOrThrow
+   */
+  export type FBRBusinessScenarioMappingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRBusinessScenarioMapping to fetch.
+     */
+    where: FBRBusinessScenarioMappingWhereUniqueInput
+  }
+
+  /**
+   * FBRBusinessScenarioMapping findFirst
+   */
+  export type FBRBusinessScenarioMappingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRBusinessScenarioMapping to fetch.
+     */
+    where?: FBRBusinessScenarioMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FBRBusinessScenarioMappings to fetch.
+     */
+    orderBy?: FBRBusinessScenarioMappingOrderByWithRelationInput | FBRBusinessScenarioMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FBRBusinessScenarioMappings.
+     */
+    cursor?: FBRBusinessScenarioMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FBRBusinessScenarioMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FBRBusinessScenarioMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FBRBusinessScenarioMappings.
+     */
+    distinct?: FBRBusinessScenarioMappingScalarFieldEnum | FBRBusinessScenarioMappingScalarFieldEnum[]
+  }
+
+  /**
+   * FBRBusinessScenarioMapping findFirstOrThrow
+   */
+  export type FBRBusinessScenarioMappingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRBusinessScenarioMapping to fetch.
+     */
+    where?: FBRBusinessScenarioMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FBRBusinessScenarioMappings to fetch.
+     */
+    orderBy?: FBRBusinessScenarioMappingOrderByWithRelationInput | FBRBusinessScenarioMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FBRBusinessScenarioMappings.
+     */
+    cursor?: FBRBusinessScenarioMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FBRBusinessScenarioMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FBRBusinessScenarioMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FBRBusinessScenarioMappings.
+     */
+    distinct?: FBRBusinessScenarioMappingScalarFieldEnum | FBRBusinessScenarioMappingScalarFieldEnum[]
+  }
+
+  /**
+   * FBRBusinessScenarioMapping findMany
+   */
+  export type FBRBusinessScenarioMappingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * Filter, which FBRBusinessScenarioMappings to fetch.
+     */
+    where?: FBRBusinessScenarioMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FBRBusinessScenarioMappings to fetch.
+     */
+    orderBy?: FBRBusinessScenarioMappingOrderByWithRelationInput | FBRBusinessScenarioMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FBRBusinessScenarioMappings.
+     */
+    cursor?: FBRBusinessScenarioMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FBRBusinessScenarioMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FBRBusinessScenarioMappings.
+     */
+    skip?: number
+    distinct?: FBRBusinessScenarioMappingScalarFieldEnum | FBRBusinessScenarioMappingScalarFieldEnum[]
+  }
+
+  /**
+   * FBRBusinessScenarioMapping create
+   */
+  export type FBRBusinessScenarioMappingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * The data needed to create a FBRBusinessScenarioMapping.
+     */
+    data: XOR<FBRBusinessScenarioMappingCreateInput, FBRBusinessScenarioMappingUncheckedCreateInput>
+  }
+
+  /**
+   * FBRBusinessScenarioMapping createMany
+   */
+  export type FBRBusinessScenarioMappingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FBRBusinessScenarioMappings.
+     */
+    data: FBRBusinessScenarioMappingCreateManyInput | FBRBusinessScenarioMappingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FBRBusinessScenarioMapping createManyAndReturn
+   */
+  export type FBRBusinessScenarioMappingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FBRBusinessScenarioMappings.
+     */
+    data: FBRBusinessScenarioMappingCreateManyInput | FBRBusinessScenarioMappingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FBRBusinessScenarioMapping update
+   */
+  export type FBRBusinessScenarioMappingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * The data needed to update a FBRBusinessScenarioMapping.
+     */
+    data: XOR<FBRBusinessScenarioMappingUpdateInput, FBRBusinessScenarioMappingUncheckedUpdateInput>
+    /**
+     * Choose, which FBRBusinessScenarioMapping to update.
+     */
+    where: FBRBusinessScenarioMappingWhereUniqueInput
+  }
+
+  /**
+   * FBRBusinessScenarioMapping updateMany
+   */
+  export type FBRBusinessScenarioMappingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FBRBusinessScenarioMappings.
+     */
+    data: XOR<FBRBusinessScenarioMappingUpdateManyMutationInput, FBRBusinessScenarioMappingUncheckedUpdateManyInput>
+    /**
+     * Filter which FBRBusinessScenarioMappings to update
+     */
+    where?: FBRBusinessScenarioMappingWhereInput
+  }
+
+  /**
+   * FBRBusinessScenarioMapping upsert
+   */
+  export type FBRBusinessScenarioMappingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * The filter to search for the FBRBusinessScenarioMapping to update in case it exists.
+     */
+    where: FBRBusinessScenarioMappingWhereUniqueInput
+    /**
+     * In case the FBRBusinessScenarioMapping found by the `where` argument doesn't exist, create a new FBRBusinessScenarioMapping with this data.
+     */
+    create: XOR<FBRBusinessScenarioMappingCreateInput, FBRBusinessScenarioMappingUncheckedCreateInput>
+    /**
+     * In case the FBRBusinessScenarioMapping was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FBRBusinessScenarioMappingUpdateInput, FBRBusinessScenarioMappingUncheckedUpdateInput>
+  }
+
+  /**
+   * FBRBusinessScenarioMapping delete
+   */
+  export type FBRBusinessScenarioMappingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+    /**
+     * Filter which FBRBusinessScenarioMapping to delete.
+     */
+    where: FBRBusinessScenarioMappingWhereUniqueInput
+  }
+
+  /**
+   * FBRBusinessScenarioMapping deleteMany
+   */
+  export type FBRBusinessScenarioMappingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FBRBusinessScenarioMappings to delete
+     */
+    where?: FBRBusinessScenarioMappingWhereInput
+  }
+
+  /**
+   * FBRBusinessScenarioMapping without action
+   */
+  export type FBRBusinessScenarioMappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FBRBusinessScenarioMapping
+     */
+    select?: FBRBusinessScenarioMappingSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -13879,6 +15989,41 @@ export namespace Prisma {
   };
 
   export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+  export const FBRScenarioScalarFieldEnum: {
+    code: 'code',
+    description: 'description',
+    businessType: 'businessType',
+    sector: 'sector',
+    isActive: 'isActive',
+    registrationType: 'registrationType',
+    transactionType: 'transactionType',
+    taxRateApplicable: 'taxRateApplicable',
+    specialConditions: 'specialConditions',
+    provinceRestrictions: 'provinceRestrictions',
+    effectiveFrom: 'effectiveFrom',
+    effectiveTo: 'effectiveTo',
+    priority: 'priority',
+    saleType: 'saleType',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FBRScenarioScalarFieldEnum = (typeof FBRScenarioScalarFieldEnum)[keyof typeof FBRScenarioScalarFieldEnum]
+
+
+  export const FBRBusinessScenarioMappingScalarFieldEnum: {
+    id: 'id',
+    businessType: 'businessType',
+    industrySector: 'industrySector',
+    scenarioIds: 'scenarioIds',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FBRBusinessScenarioMappingScalarFieldEnum = (typeof FBRBusinessScenarioMappingScalarFieldEnum)[keyof typeof FBRBusinessScenarioMappingScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -14502,7 +16647,7 @@ export namespace Prisma {
     id?: StringFilter<"Invoice"> | string
     businessId?: StringFilter<"Invoice"> | string
     customerId?: StringNullableFilter<"Invoice"> | string | null
-    localInvoiceNumber?: StringFilter<"Invoice"> | string
+    localInvoiceNumber?: StringNullableFilter<"Invoice"> | string | null
     invoiceSequence?: IntFilter<"Invoice"> | number
     invoiceDate?: StringFilter<"Invoice"> | string
     dueDate?: StringNullableFilter<"Invoice"> | string | null
@@ -14525,7 +16670,7 @@ export namespace Prisma {
     fbrResponse?: JsonNullableFilter<"Invoice">
     pdfGenerated?: BoolFilter<"Invoice"> | boolean
     pdfStoragePath?: StringNullableFilter<"Invoice"> | string | null
-    encryptedData?: StringFilter<"Invoice"> | string
+    encryptedData?: StringNullableFilter<"Invoice"> | string | null
     createdAt?: DateTimeFilter<"Invoice"> | Date | string
     updatedAt?: DateTimeFilter<"Invoice"> | Date | string
     business?: XOR<BusinessRelationFilter, BusinessWhereInput>
@@ -14537,7 +16682,7 @@ export namespace Prisma {
     id?: SortOrder
     businessId?: SortOrder
     customerId?: SortOrderInput | SortOrder
-    localInvoiceNumber?: SortOrder
+    localInvoiceNumber?: SortOrderInput | SortOrder
     invoiceSequence?: SortOrder
     invoiceDate?: SortOrder
     dueDate?: SortOrderInput | SortOrder
@@ -14560,7 +16705,7 @@ export namespace Prisma {
     fbrResponse?: SortOrderInput | SortOrder
     pdfGenerated?: SortOrder
     pdfStoragePath?: SortOrderInput | SortOrder
-    encryptedData?: SortOrder
+    encryptedData?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     business?: BusinessOrderByWithRelationInput
@@ -14576,7 +16721,7 @@ export namespace Prisma {
     NOT?: InvoiceWhereInput | InvoiceWhereInput[]
     businessId?: StringFilter<"Invoice"> | string
     customerId?: StringNullableFilter<"Invoice"> | string | null
-    localInvoiceNumber?: StringFilter<"Invoice"> | string
+    localInvoiceNumber?: StringNullableFilter<"Invoice"> | string | null
     invoiceSequence?: IntFilter<"Invoice"> | number
     invoiceDate?: StringFilter<"Invoice"> | string
     dueDate?: StringNullableFilter<"Invoice"> | string | null
@@ -14599,7 +16744,7 @@ export namespace Prisma {
     fbrResponse?: JsonNullableFilter<"Invoice">
     pdfGenerated?: BoolFilter<"Invoice"> | boolean
     pdfStoragePath?: StringNullableFilter<"Invoice"> | string | null
-    encryptedData?: StringFilter<"Invoice"> | string
+    encryptedData?: StringNullableFilter<"Invoice"> | string | null
     createdAt?: DateTimeFilter<"Invoice"> | Date | string
     updatedAt?: DateTimeFilter<"Invoice"> | Date | string
     business?: XOR<BusinessRelationFilter, BusinessWhereInput>
@@ -14611,7 +16756,7 @@ export namespace Prisma {
     id?: SortOrder
     businessId?: SortOrder
     customerId?: SortOrderInput | SortOrder
-    localInvoiceNumber?: SortOrder
+    localInvoiceNumber?: SortOrderInput | SortOrder
     invoiceSequence?: SortOrder
     invoiceDate?: SortOrder
     dueDate?: SortOrderInput | SortOrder
@@ -14634,7 +16779,7 @@ export namespace Prisma {
     fbrResponse?: SortOrderInput | SortOrder
     pdfGenerated?: SortOrder
     pdfStoragePath?: SortOrderInput | SortOrder
-    encryptedData?: SortOrder
+    encryptedData?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InvoiceCountOrderByAggregateInput
@@ -14651,7 +16796,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Invoice"> | string
     businessId?: StringWithAggregatesFilter<"Invoice"> | string
     customerId?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
-    localInvoiceNumber?: StringWithAggregatesFilter<"Invoice"> | string
+    localInvoiceNumber?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
     invoiceSequence?: IntWithAggregatesFilter<"Invoice"> | number
     invoiceDate?: StringWithAggregatesFilter<"Invoice"> | string
     dueDate?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
@@ -14674,7 +16819,7 @@ export namespace Prisma {
     fbrResponse?: JsonNullableWithAggregatesFilter<"Invoice">
     pdfGenerated?: BoolWithAggregatesFilter<"Invoice"> | boolean
     pdfStoragePath?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
-    encryptedData?: StringWithAggregatesFilter<"Invoice"> | string
+    encryptedData?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Invoice"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Invoice"> | Date | string
   }
@@ -15211,6 +17356,178 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
   }
 
+  export type FBRScenarioWhereInput = {
+    AND?: FBRScenarioWhereInput | FBRScenarioWhereInput[]
+    OR?: FBRScenarioWhereInput[]
+    NOT?: FBRScenarioWhereInput | FBRScenarioWhereInput[]
+    code?: StringFilter<"FBRScenario"> | string
+    description?: StringFilter<"FBRScenario"> | string
+    businessType?: StringNullableFilter<"FBRScenario"> | string | null
+    sector?: StringNullableFilter<"FBRScenario"> | string | null
+    isActive?: BoolFilter<"FBRScenario"> | boolean
+    registrationType?: StringNullableFilter<"FBRScenario"> | string | null
+    transactionType?: StringNullableFilter<"FBRScenario"> | string | null
+    taxRateApplicable?: FloatNullableFilter<"FBRScenario"> | number | null
+    specialConditions?: StringNullableListFilter<"FBRScenario">
+    provinceRestrictions?: StringNullableListFilter<"FBRScenario">
+    effectiveFrom?: DateTimeNullableFilter<"FBRScenario"> | Date | string | null
+    effectiveTo?: DateTimeNullableFilter<"FBRScenario"> | Date | string | null
+    priority?: IntNullableFilter<"FBRScenario"> | number | null
+    saleType?: StringNullableFilter<"FBRScenario"> | string | null
+    createdAt?: DateTimeFilter<"FBRScenario"> | Date | string
+    updatedAt?: DateTimeFilter<"FBRScenario"> | Date | string
+  }
+
+  export type FBRScenarioOrderByWithRelationInput = {
+    code?: SortOrder
+    description?: SortOrder
+    businessType?: SortOrderInput | SortOrder
+    sector?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    registrationType?: SortOrderInput | SortOrder
+    transactionType?: SortOrderInput | SortOrder
+    taxRateApplicable?: SortOrderInput | SortOrder
+    specialConditions?: SortOrder
+    provinceRestrictions?: SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    priority?: SortOrderInput | SortOrder
+    saleType?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FBRScenarioWhereUniqueInput = Prisma.AtLeast<{
+    code?: string
+    AND?: FBRScenarioWhereInput | FBRScenarioWhereInput[]
+    OR?: FBRScenarioWhereInput[]
+    NOT?: FBRScenarioWhereInput | FBRScenarioWhereInput[]
+    description?: StringFilter<"FBRScenario"> | string
+    businessType?: StringNullableFilter<"FBRScenario"> | string | null
+    sector?: StringNullableFilter<"FBRScenario"> | string | null
+    isActive?: BoolFilter<"FBRScenario"> | boolean
+    registrationType?: StringNullableFilter<"FBRScenario"> | string | null
+    transactionType?: StringNullableFilter<"FBRScenario"> | string | null
+    taxRateApplicable?: FloatNullableFilter<"FBRScenario"> | number | null
+    specialConditions?: StringNullableListFilter<"FBRScenario">
+    provinceRestrictions?: StringNullableListFilter<"FBRScenario">
+    effectiveFrom?: DateTimeNullableFilter<"FBRScenario"> | Date | string | null
+    effectiveTo?: DateTimeNullableFilter<"FBRScenario"> | Date | string | null
+    priority?: IntNullableFilter<"FBRScenario"> | number | null
+    saleType?: StringNullableFilter<"FBRScenario"> | string | null
+    createdAt?: DateTimeFilter<"FBRScenario"> | Date | string
+    updatedAt?: DateTimeFilter<"FBRScenario"> | Date | string
+  }, "code">
+
+  export type FBRScenarioOrderByWithAggregationInput = {
+    code?: SortOrder
+    description?: SortOrder
+    businessType?: SortOrderInput | SortOrder
+    sector?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    registrationType?: SortOrderInput | SortOrder
+    transactionType?: SortOrderInput | SortOrder
+    taxRateApplicable?: SortOrderInput | SortOrder
+    specialConditions?: SortOrder
+    provinceRestrictions?: SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    priority?: SortOrderInput | SortOrder
+    saleType?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FBRScenarioCountOrderByAggregateInput
+    _avg?: FBRScenarioAvgOrderByAggregateInput
+    _max?: FBRScenarioMaxOrderByAggregateInput
+    _min?: FBRScenarioMinOrderByAggregateInput
+    _sum?: FBRScenarioSumOrderByAggregateInput
+  }
+
+  export type FBRScenarioScalarWhereWithAggregatesInput = {
+    AND?: FBRScenarioScalarWhereWithAggregatesInput | FBRScenarioScalarWhereWithAggregatesInput[]
+    OR?: FBRScenarioScalarWhereWithAggregatesInput[]
+    NOT?: FBRScenarioScalarWhereWithAggregatesInput | FBRScenarioScalarWhereWithAggregatesInput[]
+    code?: StringWithAggregatesFilter<"FBRScenario"> | string
+    description?: StringWithAggregatesFilter<"FBRScenario"> | string
+    businessType?: StringNullableWithAggregatesFilter<"FBRScenario"> | string | null
+    sector?: StringNullableWithAggregatesFilter<"FBRScenario"> | string | null
+    isActive?: BoolWithAggregatesFilter<"FBRScenario"> | boolean
+    registrationType?: StringNullableWithAggregatesFilter<"FBRScenario"> | string | null
+    transactionType?: StringNullableWithAggregatesFilter<"FBRScenario"> | string | null
+    taxRateApplicable?: FloatNullableWithAggregatesFilter<"FBRScenario"> | number | null
+    specialConditions?: StringNullableListFilter<"FBRScenario">
+    provinceRestrictions?: StringNullableListFilter<"FBRScenario">
+    effectiveFrom?: DateTimeNullableWithAggregatesFilter<"FBRScenario"> | Date | string | null
+    effectiveTo?: DateTimeNullableWithAggregatesFilter<"FBRScenario"> | Date | string | null
+    priority?: IntNullableWithAggregatesFilter<"FBRScenario"> | number | null
+    saleType?: StringNullableWithAggregatesFilter<"FBRScenario"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FBRScenario"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FBRScenario"> | Date | string
+  }
+
+  export type FBRBusinessScenarioMappingWhereInput = {
+    AND?: FBRBusinessScenarioMappingWhereInput | FBRBusinessScenarioMappingWhereInput[]
+    OR?: FBRBusinessScenarioMappingWhereInput[]
+    NOT?: FBRBusinessScenarioMappingWhereInput | FBRBusinessScenarioMappingWhereInput[]
+    id?: StringFilter<"FBRBusinessScenarioMapping"> | string
+    businessType?: StringFilter<"FBRBusinessScenarioMapping"> | string
+    industrySector?: StringFilter<"FBRBusinessScenarioMapping"> | string
+    scenarioIds?: StringNullableListFilter<"FBRBusinessScenarioMapping">
+    isActive?: BoolFilter<"FBRBusinessScenarioMapping"> | boolean
+    createdAt?: DateTimeFilter<"FBRBusinessScenarioMapping"> | Date | string
+    updatedAt?: DateTimeFilter<"FBRBusinessScenarioMapping"> | Date | string
+  }
+
+  export type FBRBusinessScenarioMappingOrderByWithRelationInput = {
+    id?: SortOrder
+    businessType?: SortOrder
+    industrySector?: SortOrder
+    scenarioIds?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FBRBusinessScenarioMappingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    businessType_industrySector?: FBRBusinessScenarioMappingBusinessTypeIndustrySectorCompoundUniqueInput
+    AND?: FBRBusinessScenarioMappingWhereInput | FBRBusinessScenarioMappingWhereInput[]
+    OR?: FBRBusinessScenarioMappingWhereInput[]
+    NOT?: FBRBusinessScenarioMappingWhereInput | FBRBusinessScenarioMappingWhereInput[]
+    businessType?: StringFilter<"FBRBusinessScenarioMapping"> | string
+    industrySector?: StringFilter<"FBRBusinessScenarioMapping"> | string
+    scenarioIds?: StringNullableListFilter<"FBRBusinessScenarioMapping">
+    isActive?: BoolFilter<"FBRBusinessScenarioMapping"> | boolean
+    createdAt?: DateTimeFilter<"FBRBusinessScenarioMapping"> | Date | string
+    updatedAt?: DateTimeFilter<"FBRBusinessScenarioMapping"> | Date | string
+  }, "id" | "businessType_industrySector">
+
+  export type FBRBusinessScenarioMappingOrderByWithAggregationInput = {
+    id?: SortOrder
+    businessType?: SortOrder
+    industrySector?: SortOrder
+    scenarioIds?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FBRBusinessScenarioMappingCountOrderByAggregateInput
+    _max?: FBRBusinessScenarioMappingMaxOrderByAggregateInput
+    _min?: FBRBusinessScenarioMappingMinOrderByAggregateInput
+  }
+
+  export type FBRBusinessScenarioMappingScalarWhereWithAggregatesInput = {
+    AND?: FBRBusinessScenarioMappingScalarWhereWithAggregatesInput | FBRBusinessScenarioMappingScalarWhereWithAggregatesInput[]
+    OR?: FBRBusinessScenarioMappingScalarWhereWithAggregatesInput[]
+    NOT?: FBRBusinessScenarioMappingScalarWhereWithAggregatesInput | FBRBusinessScenarioMappingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FBRBusinessScenarioMapping"> | string
+    businessType?: StringWithAggregatesFilter<"FBRBusinessScenarioMapping"> | string
+    industrySector?: StringWithAggregatesFilter<"FBRBusinessScenarioMapping"> | string
+    scenarioIds?: StringNullableListFilter<"FBRBusinessScenarioMapping">
+    isActive?: BoolWithAggregatesFilter<"FBRBusinessScenarioMapping"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"FBRBusinessScenarioMapping"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FBRBusinessScenarioMapping"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -15675,7 +17992,7 @@ export namespace Prisma {
 
   export type InvoiceCreateInput = {
     id?: string
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -15698,7 +18015,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     business: BusinessCreateNestedOneWithoutInvoicesInput
@@ -15710,7 +18027,7 @@ export namespace Prisma {
     id?: string
     businessId: string
     customerId?: string | null
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -15733,7 +18050,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
@@ -15741,7 +18058,7 @@ export namespace Prisma {
 
   export type InvoiceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15764,7 +18081,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     business?: BusinessUpdateOneRequiredWithoutInvoicesNestedInput
@@ -15776,7 +18093,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     businessId?: StringFieldUpdateOperationsInput | string
     customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15799,7 +18116,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
@@ -15809,7 +18126,7 @@ export namespace Prisma {
     id?: string
     businessId: string
     customerId?: string | null
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -15832,14 +18149,14 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type InvoiceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15862,7 +18179,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15871,7 +18188,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     businessId?: StringFieldUpdateOperationsInput | string
     customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15894,7 +18211,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16514,6 +18831,209 @@ export namespace Prisma {
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FBRScenarioCreateInput = {
+    code: string
+    description: string
+    businessType?: string | null
+    sector?: string | null
+    isActive?: boolean
+    registrationType?: string | null
+    transactionType?: string | null
+    taxRateApplicable?: number | null
+    specialConditions?: FBRScenarioCreatespecialConditionsInput | string[]
+    provinceRestrictions?: FBRScenarioCreateprovinceRestrictionsInput | string[]
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    priority?: number | null
+    saleType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FBRScenarioUncheckedCreateInput = {
+    code: string
+    description: string
+    businessType?: string | null
+    sector?: string | null
+    isActive?: boolean
+    registrationType?: string | null
+    transactionType?: string | null
+    taxRateApplicable?: number | null
+    specialConditions?: FBRScenarioCreatespecialConditionsInput | string[]
+    provinceRestrictions?: FBRScenarioCreateprovinceRestrictionsInput | string[]
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    priority?: number | null
+    saleType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FBRScenarioUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    sector?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    registrationType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    taxRateApplicable?: NullableFloatFieldUpdateOperationsInput | number | null
+    specialConditions?: FBRScenarioUpdatespecialConditionsInput | string[]
+    provinceRestrictions?: FBRScenarioUpdateprovinceRestrictionsInput | string[]
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: NullableIntFieldUpdateOperationsInput | number | null
+    saleType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FBRScenarioUncheckedUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    sector?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    registrationType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    taxRateApplicable?: NullableFloatFieldUpdateOperationsInput | number | null
+    specialConditions?: FBRScenarioUpdatespecialConditionsInput | string[]
+    provinceRestrictions?: FBRScenarioUpdateprovinceRestrictionsInput | string[]
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: NullableIntFieldUpdateOperationsInput | number | null
+    saleType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FBRScenarioCreateManyInput = {
+    code: string
+    description: string
+    businessType?: string | null
+    sector?: string | null
+    isActive?: boolean
+    registrationType?: string | null
+    transactionType?: string | null
+    taxRateApplicable?: number | null
+    specialConditions?: FBRScenarioCreatespecialConditionsInput | string[]
+    provinceRestrictions?: FBRScenarioCreateprovinceRestrictionsInput | string[]
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    priority?: number | null
+    saleType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FBRScenarioUpdateManyMutationInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    sector?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    registrationType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    taxRateApplicable?: NullableFloatFieldUpdateOperationsInput | number | null
+    specialConditions?: FBRScenarioUpdatespecialConditionsInput | string[]
+    provinceRestrictions?: FBRScenarioUpdateprovinceRestrictionsInput | string[]
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: NullableIntFieldUpdateOperationsInput | number | null
+    saleType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FBRScenarioUncheckedUpdateManyInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    sector?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    registrationType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    taxRateApplicable?: NullableFloatFieldUpdateOperationsInput | number | null
+    specialConditions?: FBRScenarioUpdatespecialConditionsInput | string[]
+    provinceRestrictions?: FBRScenarioUpdateprovinceRestrictionsInput | string[]
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    priority?: NullableIntFieldUpdateOperationsInput | number | null
+    saleType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FBRBusinessScenarioMappingCreateInput = {
+    id?: string
+    businessType: string
+    industrySector: string
+    scenarioIds?: FBRBusinessScenarioMappingCreatescenarioIdsInput | string[]
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FBRBusinessScenarioMappingUncheckedCreateInput = {
+    id?: string
+    businessType: string
+    industrySector: string
+    scenarioIds?: FBRBusinessScenarioMappingCreatescenarioIdsInput | string[]
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FBRBusinessScenarioMappingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
+    industrySector?: StringFieldUpdateOperationsInput | string
+    scenarioIds?: FBRBusinessScenarioMappingUpdatescenarioIdsInput | string[]
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FBRBusinessScenarioMappingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
+    industrySector?: StringFieldUpdateOperationsInput | string
+    scenarioIds?: FBRBusinessScenarioMappingUpdatescenarioIdsInput | string[]
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FBRBusinessScenarioMappingCreateManyInput = {
+    id?: string
+    businessType: string
+    industrySector: string
+    scenarioIds?: FBRBusinessScenarioMappingCreatescenarioIdsInput | string[]
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FBRBusinessScenarioMappingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
+    industrySector?: StringFieldUpdateOperationsInput | string
+    scenarioIds?: FBRBusinessScenarioMappingUpdatescenarioIdsInput | string[]
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FBRBusinessScenarioMappingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
+    industrySector?: StringFieldUpdateOperationsInput | string
+    scenarioIds?: FBRBusinessScenarioMappingUpdatescenarioIdsInput | string[]
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -17651,6 +20171,137 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type FBRScenarioCountOrderByAggregateInput = {
+    code?: SortOrder
+    description?: SortOrder
+    businessType?: SortOrder
+    sector?: SortOrder
+    isActive?: SortOrder
+    registrationType?: SortOrder
+    transactionType?: SortOrder
+    taxRateApplicable?: SortOrder
+    specialConditions?: SortOrder
+    provinceRestrictions?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    priority?: SortOrder
+    saleType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FBRScenarioAvgOrderByAggregateInput = {
+    taxRateApplicable?: SortOrder
+    priority?: SortOrder
+  }
+
+  export type FBRScenarioMaxOrderByAggregateInput = {
+    code?: SortOrder
+    description?: SortOrder
+    businessType?: SortOrder
+    sector?: SortOrder
+    isActive?: SortOrder
+    registrationType?: SortOrder
+    transactionType?: SortOrder
+    taxRateApplicable?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    priority?: SortOrder
+    saleType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FBRScenarioMinOrderByAggregateInput = {
+    code?: SortOrder
+    description?: SortOrder
+    businessType?: SortOrder
+    sector?: SortOrder
+    isActive?: SortOrder
+    registrationType?: SortOrder
+    transactionType?: SortOrder
+    taxRateApplicable?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    priority?: SortOrder
+    saleType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FBRScenarioSumOrderByAggregateInput = {
+    taxRateApplicable?: SortOrder
+    priority?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type FBRBusinessScenarioMappingBusinessTypeIndustrySectorCompoundUniqueInput = {
+    businessType: string
+    industrySector: string
+  }
+
+  export type FBRBusinessScenarioMappingCountOrderByAggregateInput = {
+    id?: SortOrder
+    businessType?: SortOrder
+    industrySector?: SortOrder
+    scenarioIds?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FBRBusinessScenarioMappingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    businessType?: SortOrder
+    industrySector?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FBRBusinessScenarioMappingMinOrderByAggregateInput = {
+    id?: SortOrder
+    businessType?: SortOrder
+    industrySector?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type BusinessCreateNestedManyWithoutUserInput = {
     create?: XOR<BusinessCreateWithoutUserInput, BusinessUncheckedCreateWithoutUserInput> | BusinessCreateWithoutUserInput[] | BusinessUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BusinessCreateOrConnectWithoutUserInput | BusinessCreateOrConnectWithoutUserInput[]
@@ -18177,6 +20828,41 @@ export namespace Prisma {
     update?: XOR<XOR<BulkInvoiceBatchUpdateToOneWithWhereWithoutItemsInput, BulkInvoiceBatchUpdateWithoutItemsInput>, BulkInvoiceBatchUncheckedUpdateWithoutItemsInput>
   }
 
+  export type FBRScenarioCreatespecialConditionsInput = {
+    set: string[]
+  }
+
+  export type FBRScenarioCreateprovinceRestrictionsInput = {
+    set: string[]
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type FBRScenarioUpdatespecialConditionsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type FBRScenarioUpdateprovinceRestrictionsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type FBRBusinessScenarioMappingCreatescenarioIdsInput = {
+    set: string[]
+  }
+
+  export type FBRBusinessScenarioMappingUpdatescenarioIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -18567,6 +21253,22 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
   export type BusinessCreateWithoutUserInput = {
     id?: string
     companyName: string
@@ -18842,7 +21544,7 @@ export namespace Prisma {
 
   export type InvoiceCreateWithoutBusinessInput = {
     id?: string
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -18865,7 +21567,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customer?: CustomerCreateNestedOneWithoutInvoicesInput
@@ -18875,7 +21577,7 @@ export namespace Prisma {
   export type InvoiceUncheckedCreateWithoutBusinessInput = {
     id?: string
     customerId?: string | null
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -18898,7 +21600,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
@@ -19062,7 +21764,7 @@ export namespace Prisma {
     id?: StringFilter<"Invoice"> | string
     businessId?: StringFilter<"Invoice"> | string
     customerId?: StringNullableFilter<"Invoice"> | string | null
-    localInvoiceNumber?: StringFilter<"Invoice"> | string
+    localInvoiceNumber?: StringNullableFilter<"Invoice"> | string | null
     invoiceSequence?: IntFilter<"Invoice"> | number
     invoiceDate?: StringFilter<"Invoice"> | string
     dueDate?: StringNullableFilter<"Invoice"> | string | null
@@ -19085,7 +21787,7 @@ export namespace Prisma {
     fbrResponse?: JsonNullableFilter<"Invoice">
     pdfGenerated?: BoolFilter<"Invoice"> | boolean
     pdfStoragePath?: StringNullableFilter<"Invoice"> | string | null
-    encryptedData?: StringFilter<"Invoice"> | string
+    encryptedData?: StringNullableFilter<"Invoice"> | string | null
     createdAt?: DateTimeFilter<"Invoice"> | Date | string
     updatedAt?: DateTimeFilter<"Invoice"> | Date | string
   }
@@ -19221,7 +21923,7 @@ export namespace Prisma {
 
   export type InvoiceCreateWithoutCustomerInput = {
     id?: string
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -19244,7 +21946,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     business: BusinessCreateNestedOneWithoutInvoicesInput
@@ -19254,7 +21956,7 @@ export namespace Prisma {
   export type InvoiceUncheckedCreateWithoutCustomerInput = {
     id?: string
     businessId: string
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -19277,7 +21979,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
@@ -19649,7 +22351,7 @@ export namespace Prisma {
 
   export type InvoiceCreateWithoutItemsInput = {
     id?: string
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -19672,7 +22374,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     business: BusinessCreateNestedOneWithoutInvoicesInput
@@ -19683,7 +22385,7 @@ export namespace Prisma {
     id?: string
     businessId: string
     customerId?: string | null
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -19706,7 +22408,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19729,7 +22431,7 @@ export namespace Prisma {
 
   export type InvoiceUpdateWithoutItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19752,7 +22454,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     business?: BusinessUpdateOneRequiredWithoutInvoicesNestedInput
@@ -19763,7 +22465,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     businessId?: StringFieldUpdateOperationsInput | string
     customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19786,7 +22488,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20214,7 +22916,7 @@ export namespace Prisma {
   export type InvoiceCreateManyBusinessInput = {
     id?: string
     customerId?: string | null
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -20237,7 +22939,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20274,7 +22976,7 @@ export namespace Prisma {
 
   export type InvoiceUpdateWithoutBusinessInput = {
     id?: StringFieldUpdateOperationsInput | string
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20297,7 +22999,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneWithoutInvoicesNestedInput
@@ -20307,7 +23009,7 @@ export namespace Prisma {
   export type InvoiceUncheckedUpdateWithoutBusinessInput = {
     id?: StringFieldUpdateOperationsInput | string
     customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20330,7 +23032,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
@@ -20339,7 +23041,7 @@ export namespace Prisma {
   export type InvoiceUncheckedUpdateManyWithoutBusinessInput = {
     id?: StringFieldUpdateOperationsInput | string
     customerId?: NullableStringFieldUpdateOperationsInput | string | null
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20362,7 +23064,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20462,7 +23164,7 @@ export namespace Prisma {
   export type InvoiceCreateManyCustomerInput = {
     id?: string
     businessId: string
-    localInvoiceNumber: string
+    localInvoiceNumber?: string | null
     invoiceSequence: number
     invoiceDate: string
     dueDate?: string | null
@@ -20485,14 +23187,14 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: boolean
     pdfStoragePath?: string | null
-    encryptedData: string
+    encryptedData?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type InvoiceUpdateWithoutCustomerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20515,7 +23217,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     business?: BusinessUpdateOneRequiredWithoutInvoicesNestedInput
@@ -20525,7 +23227,7 @@ export namespace Prisma {
   export type InvoiceUncheckedUpdateWithoutCustomerInput = {
     id?: StringFieldUpdateOperationsInput | string
     businessId?: StringFieldUpdateOperationsInput | string
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20548,7 +23250,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
@@ -20557,7 +23259,7 @@ export namespace Prisma {
   export type InvoiceUncheckedUpdateManyWithoutCustomerInput = {
     id?: StringFieldUpdateOperationsInput | string
     businessId?: StringFieldUpdateOperationsInput | string
-    localInvoiceNumber?: StringFieldUpdateOperationsInput | string
+    localInvoiceNumber?: NullableStringFieldUpdateOperationsInput | string | null
     invoiceSequence?: IntFieldUpdateOperationsInput | number
     invoiceDate?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20580,7 +23282,7 @@ export namespace Prisma {
     fbrResponse?: NullableJsonNullValueInput | InputJsonValue
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
-    encryptedData?: StringFieldUpdateOperationsInput | string
+    encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20770,6 +23472,14 @@ export namespace Prisma {
      * @deprecated Use AuditLogDefaultArgs instead
      */
     export type AuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AuditLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FBRScenarioDefaultArgs instead
+     */
+    export type FBRScenarioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FBRScenarioDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FBRBusinessScenarioMappingDefaultArgs instead
+     */
+    export type FBRBusinessScenarioMappingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FBRBusinessScenarioMappingDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

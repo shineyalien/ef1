@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Work/Vibe Coding Apss/Easy Filer v3/"
+      ],
+      "alwaysAllow": [
+        "edit_file"
+      ]
+    }
+  }
+}

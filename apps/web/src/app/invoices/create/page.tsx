@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -27,8 +28,9 @@ import Link from 'next/link'
 import { SharedLoading } from "@/components/shared-loading"
 import { SharedNavigation } from "@/components/shared-navigation"
 import { EnhancedProductSearch } from "@/components/enhanced-product-search"
-import { useError } from '@/contexts/error-context'
-import ErrorBoundary, { AppError, ErrorSeverity, ErrorCategory } from '@/components/error-boundary'
+
+// Dynamically import the error context and boundary to prevent SSR issues
+// Note: useError is a hook, not a component, so we'll handle it differently
 
 interface InvoiceItem {
   id: string
@@ -70,9 +72,15 @@ interface LookupData {
   documentTypes: Array<{ docTypeId: number; docDescription: string }>
 }
 
+// Import error context directly to avoid dynamic loading issues
+import { useError } from '@/contexts/error-context'
+import { generateUUID } from '@/lib/uuid'
+
 export default function CreateInvoicePage() {
   const router = useRouter()
   const { data: session, status } = useSession()
+  
+  // Use error hooks directly
   const {
     showErrorToast,
     showSuccessToast,
@@ -103,6 +111,7 @@ export default function CreateInvoicePage() {
   // Product search state - using enhanced search
   const [productSearchQueries, setProductSearchQueries] = useState<Record<string, string>>({}) // itemId → search query
   const [selectedProducts, setSelectedProducts] = useState<Record<string, any>>({}) // itemId → selected product
+  const [productDropdownOpen, setProductDropdownOpen] = useState<Record<string, boolean>>({}) // itemId → dropdown open state
   
   // Ref to prevent duplicate selections
   const selectingProductRef = useRef<boolean>(false)
@@ -124,7 +133,7 @@ export default function CreateInvoicePage() {
   
   const [items, setItems] = useState<InvoiceItem[]>([
     {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       description: '',
       hsCode: '',
       quantity: 1,
@@ -223,30 +232,48 @@ export default function CreateInvoicePage() {
           const businessData = await businessRes.json()
           const business = businessData.business
           
-          // Fetch scenarios from API
-          const scenariosRes = await fetch(
-            `/api/fbr/scenarios?businessType=${encodeURIComponent(business.businessType || '')}&sector=${encodeURIComponent(business.sector || '')}&includeGeneral=true`
-          )
+          // Fetch scenarios from API with business type and sector filtering
+          const businessType = business.businessType || ''
+          const sector = business.sector || ''
+          const apiUrl = `/api/fbr/scenarios?businessType=${encodeURIComponent(businessType)}&sector=${encodeURIComponent(sector)}&includeGeneral=true`
+          
+          console.log(`🔍 Fetching scenarios:`, {
+            businessType,
+            sector,
+            apiUrl,
+            businessProfile: business
+          })
+          
+          const scenariosRes = await fetch(apiUrl)
           
           if (scenariosRes.ok) {
             const data = await scenariosRes.json()
+            console.log('📋 API Response:', {
+              success: data.success,
+              recordCount: data.metadata?.recordCount,
+              businessType: data.metadata?.businessType,
+              sector: data.metadata?.sector,
+              scenarios: data.data?.map((s: any) => s.code),
+              metadata: data.metadata
+            })
+            
             if (data.success) {
               setScenarios(data.data || [])
-              console.log(`✅ Loaded scenarios for ${business.businessType} (${business.sector})`)
+              console.log(`✅ Loaded ${data.data?.length || 0} scenarios for ${business.businessType} (${business.sector})`)
+              
+              // Set default scenario if not already set
+              if (!invoiceData.scenarioId && business.defaultScenario) {
+                setInvoiceData(prev => ({
+                  ...prev,
+                  scenarioId: business.defaultScenario
+                }))
+                console.log(`✅ Set default scenario from business settings: ${business.defaultScenario}`)
+              }
             } else {
               throw new Error(data.error?.message || 'Failed to load scenarios')
             }
           } else {
             throw new Error(`Failed to load scenarios: ${scenariosRes.status}`)
-          }
-          
-          // Always set default scenario from business settings if available
-          if (business.defaultScenario) {
-            setInvoiceData(prev => ({
-              ...prev,
-              scenarioId: business.defaultScenario
-            }))
-            console.log(`✅ Set default scenario from business settings: ${business.defaultScenario}`)
           }
         } else {
           throw new Error(`Failed to load business settings: ${businessRes.status}`)
@@ -262,6 +289,7 @@ export default function CreateInvoicePage() {
             const data = await scenariosRes.json()
             if (data.success) {
               setScenarios(data.data || [])
+              console.log(`✅ Loaded ${data.data?.length || 0} general scenarios as fallback`)
             }
           }
         } catch (fallbackError) {
@@ -342,23 +370,6 @@ export default function CreateInvoicePage() {
     }
   }
 
-  // Handle product selection from enhanced search
-  const handleProductSelect = useCallback((product: any, itemIndex: number) => {
-    setSelectedProducts(prev => ({
-      ...prev,
-      [items[itemIndex].id]: product
-    }))
-    
-    // Auto-fill line item from selected product
-    selectProduct(product, itemIndex)
-    
-    // Update search query to show selected product name
-    setProductSearchQueries(prev => ({
-      ...prev,
-      [items[itemIndex].id]: product.name
-    }))
-  }, [items, selectProduct])
-
   // Auto-fill line item from selected product
   const selectProduct = async (product: any, itemIndex: number, event?: React.MouseEvent) => {
     // CRITICAL: Prevent duplicate calls with multiple safeguards
@@ -366,9 +377,9 @@ export default function CreateInvoicePage() {
     const lastSelection = lastSelectedRef.current
     
     // Check if this is a duplicate call (within 500ms of same product/item)
-    if (lastSelection && 
-        lastSelection.productId === product.id && 
-        lastSelection.itemIndex === itemIndex && 
+    if (lastSelection &&
+        lastSelection.productId === product.id &&
+        lastSelection.itemIndex === itemIndex &&
         now - lastSelection.timestamp < 500) {
       console.log('⚠️ DUPLICATE CALL BLOCKED:', { product: product.name, timeSince: now - lastSelection.timestamp })
       return
@@ -392,6 +403,11 @@ export default function CreateInvoicePage() {
     
     console.log('🔵 selectProduct called', { product: product.name, itemIndex })
     
+    // DEBUG: Log the entire product object to understand its structure
+    console.log('🔍 DEBUG: Product object received:', product)
+    console.log('🔍 DEBUG: Product unitPrice field:', product.unitPrice)
+    console.log('🔍 DEBUG: Product price field:', product.price)
+    
     try {
       // Get current item before any state updates
       const currentItem = items[itemIndex]
@@ -403,13 +419,15 @@ export default function CreateInvoicePage() {
         ...currentItem,
         description: product.description || product.name,
         hsCode: product.hsCode || '',
-        unitPrice: product.price || 0,
+        // FIX: Use unitPrice instead of price to match the Product interface
+        unitPrice: product.unitPrice || product.price || 0,
         unitOfMeasurement: product.unitOfMeasurement || 'Each',
         taxRate: product.taxRate || 18,
         saleType: product.saleType || 'Standard'
       }
       
       console.log('🟢 Updated item data', updatedItem)
+      console.log('🔍 DEBUG: Unit price set to:', updatedItem.unitPrice)
       
       // Recalculate totals for this item
       const calculatedItem = calculateItemTotals(updatedItem)
@@ -435,6 +453,11 @@ export default function CreateInvoicePage() {
           console.error('UOM fetch failed:', err)
         })
       }
+      
+      // Recalculate invoice totals after updating the item
+      setTimeout(() => {
+        calculateTotals()
+      }, 100)
     } finally {
       // Always reset the flag after completion
       setTimeout(() => {
@@ -443,6 +466,26 @@ export default function CreateInvoicePage() {
       }, 500)
     }
   }
+
+  // Handle product selection from enhanced search
+  const handleProductSelect = useCallback((product: any, itemIndex: number) => {
+    const itemId = items[itemIndex]?.id
+    if (!itemId) return
+    
+    setSelectedProducts(prev => ({
+      ...prev,
+      [itemId]: product
+    }))
+    
+    // Update search query to show selected product name
+    setProductSearchQueries(prev => ({
+      ...prev,
+      [itemId]: product.name || ''
+    }))
+    
+    // Auto-fill line item from selected product
+    selectProduct(product, itemIndex)
+  }, [items, selectProduct])
 
   // Select product by ID for pre-filling
   const selectProductById = async (productId: string) => {
@@ -509,7 +552,7 @@ export default function CreateInvoicePage() {
     setItems([
       ...items,
       {
-        id: crypto.randomUUID(),
+        id: generateUUID(),
         description: '',
         hsCode: '',
         quantity: 1,
@@ -704,6 +747,11 @@ export default function CreateInvoicePage() {
         setSuccess('Invoice saved successfully!')
         showSuccessToast('Invoice Saved', 'Your invoice has been saved successfully.')
         setTimeout(() => setSuccess(''), 3000)
+        
+        // Redirect to invoices list after 1.5 seconds
+        setTimeout(() => {
+          router.push('/invoices')
+        }, 1500)
       }
       
     } catch (error: any) {
@@ -784,8 +832,7 @@ export default function CreateInvoicePage() {
   }
 
   return (
-    <ErrorBoundary>
-      <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto p-6 max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -1359,7 +1406,6 @@ export default function CreateInvoicePage() {
           </div>
         </div>
       </main>
-      </div>
-    </ErrorBoundary>
+    </div>
   )
 }

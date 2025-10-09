@@ -1,2 +1,410 @@
-// This file is deprecated - use apps/web/prisma/schema.prisma instead
-// Keeping this file for reference during migration
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id        String  @id @default(cuid())
+  email     String  @unique
+  password  String
+  firstName String
+  lastName  String
+  phone     String?
+  isActive  Boolean @default(true)
+
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  lastLogin DateTime?
+
+  // Subscription
+  subscriptionPlan SubscriptionPlan @default(FREE)
+  subscriptionEnd  DateTime?
+
+  // Relations
+  businesses Business[]
+  sessions   UserSession[]
+
+  @@map("users")
+}
+
+model UserSession {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
+}
+
+// Business/Organization Management
+model Business {
+  id          String  @id @default(cuid())
+  userId      String
+  companyName String
+  ntnNumber   String  @unique
+  address     String
+  province    String
+  city        String?
+  postalCode  String?
+
+  // Business Details
+  businessType String
+  sector       String
+  phoneNumber  String?
+  email        String?
+  website      String?
+
+  // FBR Integration Status
+  fbrSetupComplete Boolean @default(false)
+  fbrSetupSkipped  Boolean @default(false)
+
+  // Integration Configuration
+  integrationMode   IntegrationMode @default(LOCAL)
+  sandboxValidated  Boolean         @default(false)
+  productionEnabled Boolean         @default(false)
+
+  // Encrypted tokens (stored securely)
+  sandboxToken    String? // Encrypted
+  productionToken String? // Encrypted
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices  Invoice[]
+  customers Customer[]
+  products  Product[]
+
+  @@map("businesses")
+}
+
+// Customer Management
+model Customer {
+  id         String  @id @default(cuid())
+  businessId String
+  name       String
+  email      String?
+  phone      String?
+  address    String?
+  city       String?
+  province   String?
+  postalCode String?
+
+  // Tax Information
+  ntnNumber        String?
+  registrationType RegistrationType @default(UNREGISTERED)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  business Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  invoices Invoice[]
+
+  @@map("customers")
+}
+
+// Invoice Management
+model Invoice {
+  id         String  @id @default(cuid())
+  businessId String
+  customerId String?
+
+  // Invoice Numbers
+  localInvoiceNumber String? // Our internal number
+  invoiceSequence    Int // Sequential number for business
+
+  // Invoice Details
+  invoiceDate String // YYYY-MM-DD format
+  dueDate     String?
+  description String?
+  notes       String?
+
+  // Amounts
+  subtotal    Float
+  taxAmount   Float
+  totalAmount Float
+  discount    Float @default(0)
+
+  // Status
+  status InvoiceStatus   @default(DRAFT)
+  mode   IntegrationMode @default(LOCAL)
+
+  // FBR Submission Status
+  fbrSubmitted        Boolean   @default(false)
+  fbrValidated        Boolean   @default(false)
+  submissionTimestamp DateTime?
+
+  // FBR Response Data
+  fbrInvoiceNumber        String? // IRN from FBR
+  locallyGeneratedQRCode  String? // QR code generated using IRN
+  fbrTimestamp            String?
+  fbrTransmissionId       String?
+  fbrAcknowledgmentNumber String?
+
+  // Complete FBR Response (JSON)
+  fbrResponse Json?
+
+  // Document Management
+  pdfGenerated   Boolean @default(false)
+  pdfStoragePath String?
+
+  // Audit & Compliance
+  encryptedData String? // 6-year retention requirement
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  business Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  items    InvoiceItem[]
+
+  @@unique([businessId, invoiceSequence])
+  @@map("invoices")
+}
+
+// Invoice Line Items
+model InvoiceItem {
+  id        String @id @default(cuid())
+  invoiceId String
+
+  // Product Details
+  description String
+  hsCode      String
+  quantity    Float
+  unitPrice   Float
+  totalValue  Float
+
+  // Tax Information
+  taxRate      Float
+  taxAmount    Float
+  exemptionSRO String?
+
+  // Unit of Measurement
+  unitOfMeasurement String
+
+  // Relations
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("invoice_items")
+}
+
+// Product Master for common items
+model Product {
+  id                String  @id @default(cuid())
+  businessId        String
+  name              String
+  description       String?
+  hsCode            String
+  unitOfMeasurement String
+  unitPrice         Decimal @db.Decimal(10, 2)
+  taxRate           Int     @default(18)
+  category          String?
+  sku               String?
+  stock             Int?    @default(0)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("products")
+}
+
+// Bulk Operations
+model BulkInvoiceBatch {
+  id         String @id @default(cuid())
+  userId     String
+  businessId String
+
+  // File Details
+  fileName     String
+  originalName String
+  fileSize     Int
+
+  // Processing Status
+  totalRecords   Int
+  validRecords   Int
+  invalidRecords Int
+
+  // Status Tracking
+  processingStatus ProcessingStatus @default(UPLOADING)
+  validationStatus ValidationStatus @default(PENDING)
+
+  // Error Tracking
+  validationErrors Json?
+  processingErrors Json?
+
+  // Timestamps
+  uploadedAt  DateTime  @default(now())
+  processedAt DateTime?
+  completedAt DateTime?
+
+  // Relations
+  items BulkInvoiceItem[]
+
+  @@map("bulk_invoice_batches")
+}
+
+model BulkInvoiceItem {
+  id      String @id @default(cuid())
+  batchId String
+
+  // Processing Details
+  rowNumber Int
+  localId   String
+
+  // Status Tracking
+  dataValid           Boolean @default(false)
+  sandboxValidated    Boolean @default(false)
+  sandboxSubmitted    Boolean @default(false)
+  productionSubmitted Boolean @default(false)
+
+  // Error Information
+  validationErrors Json?
+
+  // FBR Responses
+  sandboxResponse    Json?
+  productionResponse Json?
+  fbrInvoiceNumber   String?
+
+  // Invoice Data (JSON)
+  invoiceData Json
+
+  // Timestamps
+  processedAt DateTime?
+
+  // Relations
+  batch BulkInvoiceBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@map("bulk_invoice_items")
+}
+
+// System Tables
+model SystemConfig {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_config")
+}
+
+model AuditLog {
+  id         String  @id @default(cuid())
+  userId     String?
+  businessId String?
+
+  // Action Details
+  action     String
+  entityType String
+  entityId   String?
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  userAgent  String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+// Enums
+enum SubscriptionPlan {
+  FREE
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum IntegrationMode {
+  LOCAL
+  SANDBOX
+  PRODUCTION
+}
+
+enum RegistrationType {
+  REGISTERED
+  UNREGISTERED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  PENDING
+  SUBMITTED
+  VALIDATED
+  FAILED
+  CANCELLED
+}
+
+enum ProcessingStatus {
+  UPLOADING
+  PARSING
+  VALIDATING
+  COMPLETE
+  FAILED
+}
+
+enum ValidationStatus {
+  PENDING
+  VALIDATED
+  FAILED
+}
+
+// FBR Scenario Management
+model FBRScenario {
+  code                 String    @id
+  description          String
+  businessType         String?
+  sector               String?
+  isActive             Boolean   @default(true)
+  registrationType     String?
+  transactionType      String?
+  taxRateApplicable    Float?
+  specialConditions    String[]
+  provinceRestrictions String[]
+  effectiveFrom        DateTime?
+  effectiveTo          DateTime?
+  priority             Int?
+  saleType             String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@map("fbr_scenarios")
+}
+
+model FBRBusinessScenarioMapping {
+  id             String   @id @default(cuid())
+  businessType   String
+  industrySector String
+  scenarioIds    String[]
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([businessType, industrySector])
+  @@map("fbr_business_scenario_mappings")
+}
