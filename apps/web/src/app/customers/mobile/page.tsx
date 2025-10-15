@@ -1,27 +1,22 @@
 'use client'
 
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import MobileCustomerManager from '@/components/mobile/customer-manager'
 
 export default function MobileCustomersPage() {
-  const { data: session, status } = useSession()
+  const [isClient, setIsClient] = useState(false)
 
-  if (status === 'loading') {
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Prevent SSR issues
+  if (!isClient) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     )
-  }
-
-  if (!session) {
-    redirect('/auth/login')
-    return null
   }
 
   return <MobileCustomerManager />

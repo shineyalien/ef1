@@ -2109,6 +2109,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ProductCountOutputType
+   */
+
+  export type ProductCountOutputType = {
+    items: number
+  }
+
+  export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | ProductCountOutputTypeCountItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductCountOutputType
+     */
+    select?: ProductCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvoiceItemWhereInput
+  }
+
+
+  /**
    * Count Type BulkInvoiceBatchCountOutputType
    */
 
@@ -4144,8 +4175,25 @@ export namespace Prisma {
     phoneNumber: string | null
     email: string | null
     website: string | null
+    sellerCity: string | null
+    sellerContact: string | null
+    sellerEmail: string | null
+    posId: string | null
+    electronicSoftwareRegNo: string | null
+    fbrIntegratorLicenseNo: string | null
+    logoUrl: string | null
+    invoiceTemplate: string | null
+    invoicePrefix: string | null
+    footerText: string | null
+    taxIdLabel: string | null
+    defaultPaymentTerms: string | null
+    primaryColor: string | null
+    secondaryColor: string | null
+    defaultCurrency: string | null
+    pdfTheme: string | null
     fbrSetupComplete: boolean | null
     fbrSetupSkipped: boolean | null
+    defaultScenario: string | null
     integrationMode: $Enums.IntegrationMode | null
     sandboxValidated: boolean | null
     productionEnabled: boolean | null
@@ -4169,8 +4217,25 @@ export namespace Prisma {
     phoneNumber: string | null
     email: string | null
     website: string | null
+    sellerCity: string | null
+    sellerContact: string | null
+    sellerEmail: string | null
+    posId: string | null
+    electronicSoftwareRegNo: string | null
+    fbrIntegratorLicenseNo: string | null
+    logoUrl: string | null
+    invoiceTemplate: string | null
+    invoicePrefix: string | null
+    footerText: string | null
+    taxIdLabel: string | null
+    defaultPaymentTerms: string | null
+    primaryColor: string | null
+    secondaryColor: string | null
+    defaultCurrency: string | null
+    pdfTheme: string | null
     fbrSetupComplete: boolean | null
     fbrSetupSkipped: boolean | null
+    defaultScenario: string | null
     integrationMode: $Enums.IntegrationMode | null
     sandboxValidated: boolean | null
     productionEnabled: boolean | null
@@ -4194,8 +4259,25 @@ export namespace Prisma {
     phoneNumber: number
     email: number
     website: number
+    sellerCity: number
+    sellerContact: number
+    sellerEmail: number
+    posId: number
+    electronicSoftwareRegNo: number
+    fbrIntegratorLicenseNo: number
+    logoUrl: number
+    invoiceTemplate: number
+    invoicePrefix: number
+    footerText: number
+    taxIdLabel: number
+    defaultPaymentTerms: number
+    primaryColor: number
+    secondaryColor: number
+    defaultCurrency: number
+    pdfTheme: number
     fbrSetupComplete: number
     fbrSetupSkipped: number
+    defaultScenario: number
     integrationMode: number
     sandboxValidated: number
     productionEnabled: number
@@ -4221,8 +4303,25 @@ export namespace Prisma {
     phoneNumber?: true
     email?: true
     website?: true
+    sellerCity?: true
+    sellerContact?: true
+    sellerEmail?: true
+    posId?: true
+    electronicSoftwareRegNo?: true
+    fbrIntegratorLicenseNo?: true
+    logoUrl?: true
+    invoiceTemplate?: true
+    invoicePrefix?: true
+    footerText?: true
+    taxIdLabel?: true
+    defaultPaymentTerms?: true
+    primaryColor?: true
+    secondaryColor?: true
+    defaultCurrency?: true
+    pdfTheme?: true
     fbrSetupComplete?: true
     fbrSetupSkipped?: true
+    defaultScenario?: true
     integrationMode?: true
     sandboxValidated?: true
     productionEnabled?: true
@@ -4246,8 +4345,25 @@ export namespace Prisma {
     phoneNumber?: true
     email?: true
     website?: true
+    sellerCity?: true
+    sellerContact?: true
+    sellerEmail?: true
+    posId?: true
+    electronicSoftwareRegNo?: true
+    fbrIntegratorLicenseNo?: true
+    logoUrl?: true
+    invoiceTemplate?: true
+    invoicePrefix?: true
+    footerText?: true
+    taxIdLabel?: true
+    defaultPaymentTerms?: true
+    primaryColor?: true
+    secondaryColor?: true
+    defaultCurrency?: true
+    pdfTheme?: true
     fbrSetupComplete?: true
     fbrSetupSkipped?: true
+    defaultScenario?: true
     integrationMode?: true
     sandboxValidated?: true
     productionEnabled?: true
@@ -4271,8 +4387,25 @@ export namespace Prisma {
     phoneNumber?: true
     email?: true
     website?: true
+    sellerCity?: true
+    sellerContact?: true
+    sellerEmail?: true
+    posId?: true
+    electronicSoftwareRegNo?: true
+    fbrIntegratorLicenseNo?: true
+    logoUrl?: true
+    invoiceTemplate?: true
+    invoicePrefix?: true
+    footerText?: true
+    taxIdLabel?: true
+    defaultPaymentTerms?: true
+    primaryColor?: true
+    secondaryColor?: true
+    defaultCurrency?: true
+    pdfTheme?: true
     fbrSetupComplete?: true
     fbrSetupSkipped?: true
+    defaultScenario?: true
     integrationMode?: true
     sandboxValidated?: true
     productionEnabled?: true
@@ -4369,8 +4502,25 @@ export namespace Prisma {
     phoneNumber: string | null
     email: string | null
     website: string | null
+    sellerCity: string | null
+    sellerContact: string | null
+    sellerEmail: string | null
+    posId: string | null
+    electronicSoftwareRegNo: string | null
+    fbrIntegratorLicenseNo: string | null
+    logoUrl: string | null
+    invoiceTemplate: string | null
+    invoicePrefix: string | null
+    footerText: string | null
+    taxIdLabel: string | null
+    defaultPaymentTerms: string | null
+    primaryColor: string | null
+    secondaryColor: string | null
+    defaultCurrency: string
+    pdfTheme: string | null
     fbrSetupComplete: boolean
     fbrSetupSkipped: boolean
+    defaultScenario: string | null
     integrationMode: $Enums.IntegrationMode
     sandboxValidated: boolean
     productionEnabled: boolean
@@ -4411,8 +4561,25 @@ export namespace Prisma {
     phoneNumber?: boolean
     email?: boolean
     website?: boolean
+    sellerCity?: boolean
+    sellerContact?: boolean
+    sellerEmail?: boolean
+    posId?: boolean
+    electronicSoftwareRegNo?: boolean
+    fbrIntegratorLicenseNo?: boolean
+    logoUrl?: boolean
+    invoiceTemplate?: boolean
+    invoicePrefix?: boolean
+    footerText?: boolean
+    taxIdLabel?: boolean
+    defaultPaymentTerms?: boolean
+    primaryColor?: boolean
+    secondaryColor?: boolean
+    defaultCurrency?: boolean
+    pdfTheme?: boolean
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: boolean
     integrationMode?: boolean
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -4441,8 +4608,25 @@ export namespace Prisma {
     phoneNumber?: boolean
     email?: boolean
     website?: boolean
+    sellerCity?: boolean
+    sellerContact?: boolean
+    sellerEmail?: boolean
+    posId?: boolean
+    electronicSoftwareRegNo?: boolean
+    fbrIntegratorLicenseNo?: boolean
+    logoUrl?: boolean
+    invoiceTemplate?: boolean
+    invoicePrefix?: boolean
+    footerText?: boolean
+    taxIdLabel?: boolean
+    defaultPaymentTerms?: boolean
+    primaryColor?: boolean
+    secondaryColor?: boolean
+    defaultCurrency?: boolean
+    pdfTheme?: boolean
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: boolean
     integrationMode?: boolean
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -4467,8 +4651,25 @@ export namespace Prisma {
     phoneNumber?: boolean
     email?: boolean
     website?: boolean
+    sellerCity?: boolean
+    sellerContact?: boolean
+    sellerEmail?: boolean
+    posId?: boolean
+    electronicSoftwareRegNo?: boolean
+    fbrIntegratorLicenseNo?: boolean
+    logoUrl?: boolean
+    invoiceTemplate?: boolean
+    invoicePrefix?: boolean
+    footerText?: boolean
+    taxIdLabel?: boolean
+    defaultPaymentTerms?: boolean
+    primaryColor?: boolean
+    secondaryColor?: boolean
+    defaultCurrency?: boolean
+    pdfTheme?: boolean
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: boolean
     integrationMode?: boolean
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -4511,8 +4712,25 @@ export namespace Prisma {
       phoneNumber: string | null
       email: string | null
       website: string | null
+      sellerCity: string | null
+      sellerContact: string | null
+      sellerEmail: string | null
+      posId: string | null
+      electronicSoftwareRegNo: string | null
+      fbrIntegratorLicenseNo: string | null
+      logoUrl: string | null
+      invoiceTemplate: string | null
+      invoicePrefix: string | null
+      footerText: string | null
+      taxIdLabel: string | null
+      defaultPaymentTerms: string | null
+      primaryColor: string | null
+      secondaryColor: string | null
+      defaultCurrency: string
+      pdfTheme: string | null
       fbrSetupComplete: boolean
       fbrSetupSkipped: boolean
+      defaultScenario: string | null
       integrationMode: $Enums.IntegrationMode
       sandboxValidated: boolean
       productionEnabled: boolean
@@ -4930,8 +5148,25 @@ export namespace Prisma {
     readonly phoneNumber: FieldRef<"Business", 'String'>
     readonly email: FieldRef<"Business", 'String'>
     readonly website: FieldRef<"Business", 'String'>
+    readonly sellerCity: FieldRef<"Business", 'String'>
+    readonly sellerContact: FieldRef<"Business", 'String'>
+    readonly sellerEmail: FieldRef<"Business", 'String'>
+    readonly posId: FieldRef<"Business", 'String'>
+    readonly electronicSoftwareRegNo: FieldRef<"Business", 'String'>
+    readonly fbrIntegratorLicenseNo: FieldRef<"Business", 'String'>
+    readonly logoUrl: FieldRef<"Business", 'String'>
+    readonly invoiceTemplate: FieldRef<"Business", 'String'>
+    readonly invoicePrefix: FieldRef<"Business", 'String'>
+    readonly footerText: FieldRef<"Business", 'String'>
+    readonly taxIdLabel: FieldRef<"Business", 'String'>
+    readonly defaultPaymentTerms: FieldRef<"Business", 'String'>
+    readonly primaryColor: FieldRef<"Business", 'String'>
+    readonly secondaryColor: FieldRef<"Business", 'String'>
+    readonly defaultCurrency: FieldRef<"Business", 'String'>
+    readonly pdfTheme: FieldRef<"Business", 'String'>
     readonly fbrSetupComplete: FieldRef<"Business", 'Boolean'>
     readonly fbrSetupSkipped: FieldRef<"Business", 'Boolean'>
+    readonly defaultScenario: FieldRef<"Business", 'String'>
     readonly integrationMode: FieldRef<"Business", 'IntegrationMode'>
     readonly sandboxValidated: FieldRef<"Business", 'Boolean'>
     readonly productionEnabled: FieldRef<"Business", 'Boolean'>
@@ -5353,6 +5588,13 @@ export namespace Prisma {
     postalCode: string | null
     ntnNumber: string | null
     registrationType: $Enums.RegistrationType | null
+    buyerCNIC: string | null
+    buyerPassport: string | null
+    buyerType: string | null
+    buyerCity: string | null
+    buyerProvince: string | null
+    buyerContact: string | null
+    buyerEmail: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5369,6 +5611,13 @@ export namespace Prisma {
     postalCode: string | null
     ntnNumber: string | null
     registrationType: $Enums.RegistrationType | null
+    buyerCNIC: string | null
+    buyerPassport: string | null
+    buyerType: string | null
+    buyerCity: string | null
+    buyerProvince: string | null
+    buyerContact: string | null
+    buyerEmail: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5385,6 +5634,13 @@ export namespace Prisma {
     postalCode: number
     ntnNumber: number
     registrationType: number
+    buyerCNIC: number
+    buyerPassport: number
+    buyerType: number
+    buyerCity: number
+    buyerProvince: number
+    buyerContact: number
+    buyerEmail: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5403,6 +5659,13 @@ export namespace Prisma {
     postalCode?: true
     ntnNumber?: true
     registrationType?: true
+    buyerCNIC?: true
+    buyerPassport?: true
+    buyerType?: true
+    buyerCity?: true
+    buyerProvince?: true
+    buyerContact?: true
+    buyerEmail?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5419,6 +5682,13 @@ export namespace Prisma {
     postalCode?: true
     ntnNumber?: true
     registrationType?: true
+    buyerCNIC?: true
+    buyerPassport?: true
+    buyerType?: true
+    buyerCity?: true
+    buyerProvince?: true
+    buyerContact?: true
+    buyerEmail?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5435,6 +5705,13 @@ export namespace Prisma {
     postalCode?: true
     ntnNumber?: true
     registrationType?: true
+    buyerCNIC?: true
+    buyerPassport?: true
+    buyerType?: true
+    buyerCity?: true
+    buyerProvince?: true
+    buyerContact?: true
+    buyerEmail?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5524,6 +5801,13 @@ export namespace Prisma {
     postalCode: string | null
     ntnNumber: string | null
     registrationType: $Enums.RegistrationType
+    buyerCNIC: string | null
+    buyerPassport: string | null
+    buyerType: string | null
+    buyerCity: string | null
+    buyerProvince: string | null
+    buyerContact: string | null
+    buyerEmail: string | null
     createdAt: Date
     updatedAt: Date
     _count: CustomerCountAggregateOutputType | null
@@ -5557,6 +5841,13 @@ export namespace Prisma {
     postalCode?: boolean
     ntnNumber?: boolean
     registrationType?: boolean
+    buyerCNIC?: boolean
+    buyerPassport?: boolean
+    buyerType?: boolean
+    buyerCity?: boolean
+    buyerProvince?: boolean
+    buyerContact?: boolean
+    buyerEmail?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -5576,6 +5867,13 @@ export namespace Prisma {
     postalCode?: boolean
     ntnNumber?: boolean
     registrationType?: boolean
+    buyerCNIC?: boolean
+    buyerPassport?: boolean
+    buyerType?: boolean
+    buyerCity?: boolean
+    buyerProvince?: boolean
+    buyerContact?: boolean
+    buyerEmail?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -5593,6 +5891,13 @@ export namespace Prisma {
     postalCode?: boolean
     ntnNumber?: boolean
     registrationType?: boolean
+    buyerCNIC?: boolean
+    buyerPassport?: boolean
+    buyerType?: boolean
+    buyerCity?: boolean
+    buyerProvince?: boolean
+    buyerContact?: boolean
+    buyerEmail?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -5624,6 +5929,13 @@ export namespace Prisma {
       postalCode: string | null
       ntnNumber: string | null
       registrationType: $Enums.RegistrationType
+      buyerCNIC: string | null
+      buyerPassport: string | null
+      buyerType: string | null
+      buyerCity: string | null
+      buyerProvince: string | null
+      buyerContact: string | null
+      buyerEmail: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["customer"]>
@@ -6032,6 +6344,13 @@ export namespace Prisma {
     readonly postalCode: FieldRef<"Customer", 'String'>
     readonly ntnNumber: FieldRef<"Customer", 'String'>
     readonly registrationType: FieldRef<"Customer", 'RegistrationType'>
+    readonly buyerCNIC: FieldRef<"Customer", 'String'>
+    readonly buyerPassport: FieldRef<"Customer", 'String'>
+    readonly buyerType: FieldRef<"Customer", 'String'>
+    readonly buyerCity: FieldRef<"Customer", 'String'>
+    readonly buyerProvince: FieldRef<"Customer", 'String'>
+    readonly buyerContact: FieldRef<"Customer", 'String'>
+    readonly buyerEmail: FieldRef<"Customer", 'String'>
     readonly createdAt: FieldRef<"Customer", 'DateTime'>
     readonly updatedAt: FieldRef<"Customer", 'DateTime'>
   }
@@ -6404,6 +6723,10 @@ export namespace Prisma {
     taxAmount: number | null
     totalAmount: number | null
     discount: number | null
+    totalWithholdingTax: number | null
+    totalExtraTax: number | null
+    totalFurtherTax: number | null
+    totalFED: number | null
   }
 
   export type InvoiceSumAggregateOutputType = {
@@ -6412,6 +6735,10 @@ export namespace Prisma {
     taxAmount: number | null
     totalAmount: number | null
     discount: number | null
+    totalWithholdingTax: number | null
+    totalExtraTax: number | null
+    totalFurtherTax: number | null
+    totalFED: number | null
   }
 
   export type InvoiceMinAggregateOutputType = {
@@ -6430,6 +6757,24 @@ export namespace Prisma {
     discount: number | null
     status: $Enums.InvoiceStatus | null
     mode: $Enums.IntegrationMode | null
+    documentType: string | null
+    scenarioId: string | null
+    paymentMode: string | null
+    taxPeriod: string | null
+    referenceInvoiceNo: string | null
+    fbrBuyerNTN: string | null
+    fbrBuyerCNIC: string | null
+    fbrBuyerPassport: string | null
+    fbrBuyerType: string | null
+    fbrBuyerCity: string | null
+    fbrBuyerProvince: string | null
+    fbrBuyerAddress: string | null
+    fbrBuyerContact: string | null
+    fbrBuyerEmail: string | null
+    totalWithholdingTax: number | null
+    totalExtraTax: number | null
+    totalFurtherTax: number | null
+    totalFED: number | null
     fbrSubmitted: boolean | null
     fbrValidated: boolean | null
     submissionTimestamp: Date | null
@@ -6461,6 +6806,24 @@ export namespace Prisma {
     discount: number | null
     status: $Enums.InvoiceStatus | null
     mode: $Enums.IntegrationMode | null
+    documentType: string | null
+    scenarioId: string | null
+    paymentMode: string | null
+    taxPeriod: string | null
+    referenceInvoiceNo: string | null
+    fbrBuyerNTN: string | null
+    fbrBuyerCNIC: string | null
+    fbrBuyerPassport: string | null
+    fbrBuyerType: string | null
+    fbrBuyerCity: string | null
+    fbrBuyerProvince: string | null
+    fbrBuyerAddress: string | null
+    fbrBuyerContact: string | null
+    fbrBuyerEmail: string | null
+    totalWithholdingTax: number | null
+    totalExtraTax: number | null
+    totalFurtherTax: number | null
+    totalFED: number | null
     fbrSubmitted: boolean | null
     fbrValidated: boolean | null
     submissionTimestamp: Date | null
@@ -6492,6 +6855,24 @@ export namespace Prisma {
     discount: number
     status: number
     mode: number
+    documentType: number
+    scenarioId: number
+    paymentMode: number
+    taxPeriod: number
+    referenceInvoiceNo: number
+    fbrBuyerNTN: number
+    fbrBuyerCNIC: number
+    fbrBuyerPassport: number
+    fbrBuyerType: number
+    fbrBuyerCity: number
+    fbrBuyerProvince: number
+    fbrBuyerAddress: number
+    fbrBuyerContact: number
+    fbrBuyerEmail: number
+    totalWithholdingTax: number
+    totalExtraTax: number
+    totalFurtherTax: number
+    totalFED: number
     fbrSubmitted: number
     fbrValidated: number
     submissionTimestamp: number
@@ -6516,6 +6897,10 @@ export namespace Prisma {
     taxAmount?: true
     totalAmount?: true
     discount?: true
+    totalWithholdingTax?: true
+    totalExtraTax?: true
+    totalFurtherTax?: true
+    totalFED?: true
   }
 
   export type InvoiceSumAggregateInputType = {
@@ -6524,6 +6909,10 @@ export namespace Prisma {
     taxAmount?: true
     totalAmount?: true
     discount?: true
+    totalWithholdingTax?: true
+    totalExtraTax?: true
+    totalFurtherTax?: true
+    totalFED?: true
   }
 
   export type InvoiceMinAggregateInputType = {
@@ -6542,6 +6931,24 @@ export namespace Prisma {
     discount?: true
     status?: true
     mode?: true
+    documentType?: true
+    scenarioId?: true
+    paymentMode?: true
+    taxPeriod?: true
+    referenceInvoiceNo?: true
+    fbrBuyerNTN?: true
+    fbrBuyerCNIC?: true
+    fbrBuyerPassport?: true
+    fbrBuyerType?: true
+    fbrBuyerCity?: true
+    fbrBuyerProvince?: true
+    fbrBuyerAddress?: true
+    fbrBuyerContact?: true
+    fbrBuyerEmail?: true
+    totalWithholdingTax?: true
+    totalExtraTax?: true
+    totalFurtherTax?: true
+    totalFED?: true
     fbrSubmitted?: true
     fbrValidated?: true
     submissionTimestamp?: true
@@ -6573,6 +6980,24 @@ export namespace Prisma {
     discount?: true
     status?: true
     mode?: true
+    documentType?: true
+    scenarioId?: true
+    paymentMode?: true
+    taxPeriod?: true
+    referenceInvoiceNo?: true
+    fbrBuyerNTN?: true
+    fbrBuyerCNIC?: true
+    fbrBuyerPassport?: true
+    fbrBuyerType?: true
+    fbrBuyerCity?: true
+    fbrBuyerProvince?: true
+    fbrBuyerAddress?: true
+    fbrBuyerContact?: true
+    fbrBuyerEmail?: true
+    totalWithholdingTax?: true
+    totalExtraTax?: true
+    totalFurtherTax?: true
+    totalFED?: true
     fbrSubmitted?: true
     fbrValidated?: true
     submissionTimestamp?: true
@@ -6604,6 +7029,24 @@ export namespace Prisma {
     discount?: true
     status?: true
     mode?: true
+    documentType?: true
+    scenarioId?: true
+    paymentMode?: true
+    taxPeriod?: true
+    referenceInvoiceNo?: true
+    fbrBuyerNTN?: true
+    fbrBuyerCNIC?: true
+    fbrBuyerPassport?: true
+    fbrBuyerType?: true
+    fbrBuyerCity?: true
+    fbrBuyerProvince?: true
+    fbrBuyerAddress?: true
+    fbrBuyerContact?: true
+    fbrBuyerEmail?: true
+    totalWithholdingTax?: true
+    totalExtraTax?: true
+    totalFurtherTax?: true
+    totalFED?: true
     fbrSubmitted?: true
     fbrValidated?: true
     submissionTimestamp?: true
@@ -6723,6 +7166,24 @@ export namespace Prisma {
     discount: number
     status: $Enums.InvoiceStatus
     mode: $Enums.IntegrationMode
+    documentType: string | null
+    scenarioId: string | null
+    paymentMode: string | null
+    taxPeriod: string | null
+    referenceInvoiceNo: string | null
+    fbrBuyerNTN: string | null
+    fbrBuyerCNIC: string | null
+    fbrBuyerPassport: string | null
+    fbrBuyerType: string | null
+    fbrBuyerCity: string | null
+    fbrBuyerProvince: string | null
+    fbrBuyerAddress: string | null
+    fbrBuyerContact: string | null
+    fbrBuyerEmail: string | null
+    totalWithholdingTax: number
+    totalExtraTax: number
+    totalFurtherTax: number
+    totalFED: number
     fbrSubmitted: boolean
     fbrValidated: boolean
     submissionTimestamp: Date | null
@@ -6774,6 +7235,24 @@ export namespace Prisma {
     discount?: boolean
     status?: boolean
     mode?: boolean
+    documentType?: boolean
+    scenarioId?: boolean
+    paymentMode?: boolean
+    taxPeriod?: boolean
+    referenceInvoiceNo?: boolean
+    fbrBuyerNTN?: boolean
+    fbrBuyerCNIC?: boolean
+    fbrBuyerPassport?: boolean
+    fbrBuyerType?: boolean
+    fbrBuyerCity?: boolean
+    fbrBuyerProvince?: boolean
+    fbrBuyerAddress?: boolean
+    fbrBuyerContact?: boolean
+    fbrBuyerEmail?: boolean
+    totalWithholdingTax?: boolean
+    totalExtraTax?: boolean
+    totalFurtherTax?: boolean
+    totalFED?: boolean
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: boolean
@@ -6810,6 +7289,24 @@ export namespace Prisma {
     discount?: boolean
     status?: boolean
     mode?: boolean
+    documentType?: boolean
+    scenarioId?: boolean
+    paymentMode?: boolean
+    taxPeriod?: boolean
+    referenceInvoiceNo?: boolean
+    fbrBuyerNTN?: boolean
+    fbrBuyerCNIC?: boolean
+    fbrBuyerPassport?: boolean
+    fbrBuyerType?: boolean
+    fbrBuyerCity?: boolean
+    fbrBuyerProvince?: boolean
+    fbrBuyerAddress?: boolean
+    fbrBuyerContact?: boolean
+    fbrBuyerEmail?: boolean
+    totalWithholdingTax?: boolean
+    totalExtraTax?: boolean
+    totalFurtherTax?: boolean
+    totalFED?: boolean
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: boolean
@@ -6844,6 +7341,24 @@ export namespace Prisma {
     discount?: boolean
     status?: boolean
     mode?: boolean
+    documentType?: boolean
+    scenarioId?: boolean
+    paymentMode?: boolean
+    taxPeriod?: boolean
+    referenceInvoiceNo?: boolean
+    fbrBuyerNTN?: boolean
+    fbrBuyerCNIC?: boolean
+    fbrBuyerPassport?: boolean
+    fbrBuyerType?: boolean
+    fbrBuyerCity?: boolean
+    fbrBuyerProvince?: boolean
+    fbrBuyerAddress?: boolean
+    fbrBuyerContact?: boolean
+    fbrBuyerEmail?: boolean
+    totalWithholdingTax?: boolean
+    totalExtraTax?: boolean
+    totalFurtherTax?: boolean
+    totalFED?: boolean
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: boolean
@@ -6894,6 +7409,24 @@ export namespace Prisma {
       discount: number
       status: $Enums.InvoiceStatus
       mode: $Enums.IntegrationMode
+      documentType: string | null
+      scenarioId: string | null
+      paymentMode: string | null
+      taxPeriod: string | null
+      referenceInvoiceNo: string | null
+      fbrBuyerNTN: string | null
+      fbrBuyerCNIC: string | null
+      fbrBuyerPassport: string | null
+      fbrBuyerType: string | null
+      fbrBuyerCity: string | null
+      fbrBuyerProvince: string | null
+      fbrBuyerAddress: string | null
+      fbrBuyerContact: string | null
+      fbrBuyerEmail: string | null
+      totalWithholdingTax: number
+      totalExtraTax: number
+      totalFurtherTax: number
+      totalFED: number
       fbrSubmitted: boolean
       fbrValidated: boolean
       submissionTimestamp: Date | null
@@ -7319,6 +7852,24 @@ export namespace Prisma {
     readonly discount: FieldRef<"Invoice", 'Float'>
     readonly status: FieldRef<"Invoice", 'InvoiceStatus'>
     readonly mode: FieldRef<"Invoice", 'IntegrationMode'>
+    readonly documentType: FieldRef<"Invoice", 'String'>
+    readonly scenarioId: FieldRef<"Invoice", 'String'>
+    readonly paymentMode: FieldRef<"Invoice", 'String'>
+    readonly taxPeriod: FieldRef<"Invoice", 'String'>
+    readonly referenceInvoiceNo: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerNTN: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerCNIC: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerPassport: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerType: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerCity: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerProvince: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerAddress: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerContact: FieldRef<"Invoice", 'String'>
+    readonly fbrBuyerEmail: FieldRef<"Invoice", 'String'>
+    readonly totalWithholdingTax: FieldRef<"Invoice", 'Float'>
+    readonly totalExtraTax: FieldRef<"Invoice", 'Float'>
+    readonly totalFurtherTax: FieldRef<"Invoice", 'Float'>
+    readonly totalFED: FieldRef<"Invoice", 'Float'>
     readonly fbrSubmitted: FieldRef<"Invoice", 'Boolean'>
     readonly fbrValidated: FieldRef<"Invoice", 'Boolean'>
     readonly submissionTimestamp: FieldRef<"Invoice", 'DateTime'>
@@ -7718,6 +8269,14 @@ export namespace Prisma {
     totalValue: number | null
     taxRate: number | null
     taxAmount: number | null
+    discount: number | null
+    valueSalesExcludingST: number | null
+    salesTaxApplicable: number | null
+    salesTaxWithheldAtSource: number | null
+    extraTax: number | null
+    furtherTax: number | null
+    fedPayable: number | null
+    fixedNotifiedValueOrRetailPrice: number | null
   }
 
   export type InvoiceItemSumAggregateOutputType = {
@@ -7726,11 +8285,20 @@ export namespace Prisma {
     totalValue: number | null
     taxRate: number | null
     taxAmount: number | null
+    discount: number | null
+    valueSalesExcludingST: number | null
+    salesTaxApplicable: number | null
+    salesTaxWithheldAtSource: number | null
+    extraTax: number | null
+    furtherTax: number | null
+    fedPayable: number | null
+    fixedNotifiedValueOrRetailPrice: number | null
   }
 
   export type InvoiceItemMinAggregateOutputType = {
     id: string | null
     invoiceId: string | null
+    productId: string | null
     description: string | null
     hsCode: string | null
     quantity: number | null
@@ -7740,11 +8308,23 @@ export namespace Prisma {
     taxAmount: number | null
     exemptionSRO: string | null
     unitOfMeasurement: string | null
+    discount: number | null
+    valueSalesExcludingST: number | null
+    salesTaxApplicable: number | null
+    salesTaxWithheldAtSource: number | null
+    extraTax: number | null
+    furtherTax: number | null
+    fedPayable: number | null
+    saleType: string | null
+    sroScheduleNo: string | null
+    sroItemSerialNo: string | null
+    fixedNotifiedValueOrRetailPrice: number | null
   }
 
   export type InvoiceItemMaxAggregateOutputType = {
     id: string | null
     invoiceId: string | null
+    productId: string | null
     description: string | null
     hsCode: string | null
     quantity: number | null
@@ -7754,11 +8334,23 @@ export namespace Prisma {
     taxAmount: number | null
     exemptionSRO: string | null
     unitOfMeasurement: string | null
+    discount: number | null
+    valueSalesExcludingST: number | null
+    salesTaxApplicable: number | null
+    salesTaxWithheldAtSource: number | null
+    extraTax: number | null
+    furtherTax: number | null
+    fedPayable: number | null
+    saleType: string | null
+    sroScheduleNo: string | null
+    sroItemSerialNo: string | null
+    fixedNotifiedValueOrRetailPrice: number | null
   }
 
   export type InvoiceItemCountAggregateOutputType = {
     id: number
     invoiceId: number
+    productId: number
     description: number
     hsCode: number
     quantity: number
@@ -7768,6 +8360,17 @@ export namespace Prisma {
     taxAmount: number
     exemptionSRO: number
     unitOfMeasurement: number
+    discount: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource: number
+    extraTax: number
+    furtherTax: number
+    fedPayable: number
+    saleType: number
+    sroScheduleNo: number
+    sroItemSerialNo: number
+    fixedNotifiedValueOrRetailPrice: number
     _all: number
   }
 
@@ -7778,6 +8381,14 @@ export namespace Prisma {
     totalValue?: true
     taxRate?: true
     taxAmount?: true
+    discount?: true
+    valueSalesExcludingST?: true
+    salesTaxApplicable?: true
+    salesTaxWithheldAtSource?: true
+    extraTax?: true
+    furtherTax?: true
+    fedPayable?: true
+    fixedNotifiedValueOrRetailPrice?: true
   }
 
   export type InvoiceItemSumAggregateInputType = {
@@ -7786,11 +8397,20 @@ export namespace Prisma {
     totalValue?: true
     taxRate?: true
     taxAmount?: true
+    discount?: true
+    valueSalesExcludingST?: true
+    salesTaxApplicable?: true
+    salesTaxWithheldAtSource?: true
+    extraTax?: true
+    furtherTax?: true
+    fedPayable?: true
+    fixedNotifiedValueOrRetailPrice?: true
   }
 
   export type InvoiceItemMinAggregateInputType = {
     id?: true
     invoiceId?: true
+    productId?: true
     description?: true
     hsCode?: true
     quantity?: true
@@ -7800,11 +8420,23 @@ export namespace Prisma {
     taxAmount?: true
     exemptionSRO?: true
     unitOfMeasurement?: true
+    discount?: true
+    valueSalesExcludingST?: true
+    salesTaxApplicable?: true
+    salesTaxWithheldAtSource?: true
+    extraTax?: true
+    furtherTax?: true
+    fedPayable?: true
+    saleType?: true
+    sroScheduleNo?: true
+    sroItemSerialNo?: true
+    fixedNotifiedValueOrRetailPrice?: true
   }
 
   export type InvoiceItemMaxAggregateInputType = {
     id?: true
     invoiceId?: true
+    productId?: true
     description?: true
     hsCode?: true
     quantity?: true
@@ -7814,11 +8446,23 @@ export namespace Prisma {
     taxAmount?: true
     exemptionSRO?: true
     unitOfMeasurement?: true
+    discount?: true
+    valueSalesExcludingST?: true
+    salesTaxApplicable?: true
+    salesTaxWithheldAtSource?: true
+    extraTax?: true
+    furtherTax?: true
+    fedPayable?: true
+    saleType?: true
+    sroScheduleNo?: true
+    sroItemSerialNo?: true
+    fixedNotifiedValueOrRetailPrice?: true
   }
 
   export type InvoiceItemCountAggregateInputType = {
     id?: true
     invoiceId?: true
+    productId?: true
     description?: true
     hsCode?: true
     quantity?: true
@@ -7828,6 +8472,17 @@ export namespace Prisma {
     taxAmount?: true
     exemptionSRO?: true
     unitOfMeasurement?: true
+    discount?: true
+    valueSalesExcludingST?: true
+    salesTaxApplicable?: true
+    salesTaxWithheldAtSource?: true
+    extraTax?: true
+    furtherTax?: true
+    fedPayable?: true
+    saleType?: true
+    sroScheduleNo?: true
+    sroItemSerialNo?: true
+    fixedNotifiedValueOrRetailPrice?: true
     _all?: true
   }
 
@@ -7920,6 +8575,7 @@ export namespace Prisma {
   export type InvoiceItemGroupByOutputType = {
     id: string
     invoiceId: string
+    productId: string | null
     description: string
     hsCode: string
     quantity: number
@@ -7929,6 +8585,17 @@ export namespace Prisma {
     taxAmount: number
     exemptionSRO: string | null
     unitOfMeasurement: string
+    discount: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource: number
+    extraTax: number
+    furtherTax: number
+    fedPayable: number
+    saleType: string
+    sroScheduleNo: string | null
+    sroItemSerialNo: string | null
+    fixedNotifiedValueOrRetailPrice: number
     _count: InvoiceItemCountAggregateOutputType | null
     _avg: InvoiceItemAvgAggregateOutputType | null
     _sum: InvoiceItemSumAggregateOutputType | null
@@ -7953,6 +8620,7 @@ export namespace Prisma {
   export type InvoiceItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     invoiceId?: boolean
+    productId?: boolean
     description?: boolean
     hsCode?: boolean
     quantity?: boolean
@@ -7962,12 +8630,25 @@ export namespace Prisma {
     taxAmount?: boolean
     exemptionSRO?: boolean
     unitOfMeasurement?: boolean
+    discount?: boolean
+    valueSalesExcludingST?: boolean
+    salesTaxApplicable?: boolean
+    salesTaxWithheldAtSource?: boolean
+    extraTax?: boolean
+    furtherTax?: boolean
+    fedPayable?: boolean
+    saleType?: boolean
+    sroScheduleNo?: boolean
+    sroItemSerialNo?: boolean
+    fixedNotifiedValueOrRetailPrice?: boolean
     invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
+    product?: boolean | InvoiceItem$productArgs<ExtArgs>
   }, ExtArgs["result"]["invoiceItem"]>
 
   export type InvoiceItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     invoiceId?: boolean
+    productId?: boolean
     description?: boolean
     hsCode?: boolean
     quantity?: boolean
@@ -7977,12 +8658,25 @@ export namespace Prisma {
     taxAmount?: boolean
     exemptionSRO?: boolean
     unitOfMeasurement?: boolean
+    discount?: boolean
+    valueSalesExcludingST?: boolean
+    salesTaxApplicable?: boolean
+    salesTaxWithheldAtSource?: boolean
+    extraTax?: boolean
+    furtherTax?: boolean
+    fedPayable?: boolean
+    saleType?: boolean
+    sroScheduleNo?: boolean
+    sroItemSerialNo?: boolean
+    fixedNotifiedValueOrRetailPrice?: boolean
     invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
+    product?: boolean | InvoiceItem$productArgs<ExtArgs>
   }, ExtArgs["result"]["invoiceItem"]>
 
   export type InvoiceItemSelectScalar = {
     id?: boolean
     invoiceId?: boolean
+    productId?: boolean
     description?: boolean
     hsCode?: boolean
     quantity?: boolean
@@ -7992,23 +8686,38 @@ export namespace Prisma {
     taxAmount?: boolean
     exemptionSRO?: boolean
     unitOfMeasurement?: boolean
+    discount?: boolean
+    valueSalesExcludingST?: boolean
+    salesTaxApplicable?: boolean
+    salesTaxWithheldAtSource?: boolean
+    extraTax?: boolean
+    furtherTax?: boolean
+    fedPayable?: boolean
+    saleType?: boolean
+    sroScheduleNo?: boolean
+    sroItemSerialNo?: boolean
+    fixedNotifiedValueOrRetailPrice?: boolean
   }
 
   export type InvoiceItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
+    product?: boolean | InvoiceItem$productArgs<ExtArgs>
   }
   export type InvoiceItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
+    product?: boolean | InvoiceItem$productArgs<ExtArgs>
   }
 
   export type $InvoiceItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "InvoiceItem"
     objects: {
       invoice: Prisma.$InvoicePayload<ExtArgs>
+      product: Prisma.$ProductPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       invoiceId: string
+      productId: string | null
       description: string
       hsCode: string
       quantity: number
@@ -8018,6 +8727,17 @@ export namespace Prisma {
       taxAmount: number
       exemptionSRO: string | null
       unitOfMeasurement: string
+      discount: number
+      valueSalesExcludingST: number
+      salesTaxApplicable: number
+      salesTaxWithheldAtSource: number
+      extraTax: number
+      furtherTax: number
+      fedPayable: number
+      saleType: string
+      sroScheduleNo: string | null
+      sroItemSerialNo: string | null
+      fixedNotifiedValueOrRetailPrice: number
     }, ExtArgs["result"]["invoiceItem"]>
     composites: {}
   }
@@ -8383,6 +9103,7 @@ export namespace Prisma {
   export interface Prisma__InvoiceItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     invoice<T extends InvoiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InvoiceDefaultArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    product<T extends InvoiceItem$productArgs<ExtArgs> = {}>(args?: Subset<T, InvoiceItem$productArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8414,6 +9135,7 @@ export namespace Prisma {
   interface InvoiceItemFieldRefs {
     readonly id: FieldRef<"InvoiceItem", 'String'>
     readonly invoiceId: FieldRef<"InvoiceItem", 'String'>
+    readonly productId: FieldRef<"InvoiceItem", 'String'>
     readonly description: FieldRef<"InvoiceItem", 'String'>
     readonly hsCode: FieldRef<"InvoiceItem", 'String'>
     readonly quantity: FieldRef<"InvoiceItem", 'Float'>
@@ -8423,6 +9145,17 @@ export namespace Prisma {
     readonly taxAmount: FieldRef<"InvoiceItem", 'Float'>
     readonly exemptionSRO: FieldRef<"InvoiceItem", 'String'>
     readonly unitOfMeasurement: FieldRef<"InvoiceItem", 'String'>
+    readonly discount: FieldRef<"InvoiceItem", 'Float'>
+    readonly valueSalesExcludingST: FieldRef<"InvoiceItem", 'Float'>
+    readonly salesTaxApplicable: FieldRef<"InvoiceItem", 'Float'>
+    readonly salesTaxWithheldAtSource: FieldRef<"InvoiceItem", 'Float'>
+    readonly extraTax: FieldRef<"InvoiceItem", 'Float'>
+    readonly furtherTax: FieldRef<"InvoiceItem", 'Float'>
+    readonly fedPayable: FieldRef<"InvoiceItem", 'Float'>
+    readonly saleType: FieldRef<"InvoiceItem", 'String'>
+    readonly sroScheduleNo: FieldRef<"InvoiceItem", 'String'>
+    readonly sroItemSerialNo: FieldRef<"InvoiceItem", 'String'>
+    readonly fixedNotifiedValueOrRetailPrice: FieldRef<"InvoiceItem", 'Float'>
   }
     
 
@@ -8741,6 +9474,21 @@ export namespace Prisma {
   }
 
   /**
+   * InvoiceItem.product
+   */
+  export type InvoiceItem$productArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+  }
+
+  /**
    * InvoiceItem without action
    */
   export type InvoiceItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8791,6 +9539,13 @@ export namespace Prisma {
     category: string | null
     sku: string | null
     stock: number | null
+    serialNumber: string | null
+    transactionType: string | null
+    transactionTypeDesc: string | null
+    rateId: string | null
+    rateDescription: string | null
+    sroScheduleNo: string | null
+    sroItemSerialNo: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8807,6 +9562,13 @@ export namespace Prisma {
     category: string | null
     sku: string | null
     stock: number | null
+    serialNumber: string | null
+    transactionType: string | null
+    transactionTypeDesc: string | null
+    rateId: string | null
+    rateDescription: string | null
+    sroScheduleNo: string | null
+    sroItemSerialNo: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8823,6 +9585,13 @@ export namespace Prisma {
     category: number
     sku: number
     stock: number
+    serialNumber: number
+    transactionType: number
+    transactionTypeDesc: number
+    rateId: number
+    rateDescription: number
+    sroScheduleNo: number
+    sroItemSerialNo: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8853,6 +9622,13 @@ export namespace Prisma {
     category?: true
     sku?: true
     stock?: true
+    serialNumber?: true
+    transactionType?: true
+    transactionTypeDesc?: true
+    rateId?: true
+    rateDescription?: true
+    sroScheduleNo?: true
+    sroItemSerialNo?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8869,6 +9645,13 @@ export namespace Prisma {
     category?: true
     sku?: true
     stock?: true
+    serialNumber?: true
+    transactionType?: true
+    transactionTypeDesc?: true
+    rateId?: true
+    rateDescription?: true
+    sroScheduleNo?: true
+    sroItemSerialNo?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8885,6 +9668,13 @@ export namespace Prisma {
     category?: true
     sku?: true
     stock?: true
+    serialNumber?: true
+    transactionType?: true
+    transactionTypeDesc?: true
+    rateId?: true
+    rateDescription?: true
+    sroScheduleNo?: true
+    sroItemSerialNo?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8988,6 +9778,13 @@ export namespace Prisma {
     category: string | null
     sku: string | null
     stock: number | null
+    serialNumber: string | null
+    transactionType: string | null
+    transactionTypeDesc: string | null
+    rateId: string | null
+    rateDescription: string | null
+    sroScheduleNo: string | null
+    sroItemSerialNo: string | null
     createdAt: Date
     updatedAt: Date
     _count: ProductCountAggregateOutputType | null
@@ -9023,9 +9820,18 @@ export namespace Prisma {
     category?: boolean
     sku?: boolean
     stock?: boolean
+    serialNumber?: boolean
+    transactionType?: boolean
+    transactionTypeDesc?: boolean
+    rateId?: boolean
+    rateDescription?: boolean
+    sroScheduleNo?: boolean
+    sroItemSerialNo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     business?: boolean | BusinessDefaultArgs<ExtArgs>
+    items?: boolean | Product$itemsArgs<ExtArgs>
+    _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9040,6 +9846,13 @@ export namespace Prisma {
     category?: boolean
     sku?: boolean
     stock?: boolean
+    serialNumber?: boolean
+    transactionType?: boolean
+    transactionTypeDesc?: boolean
+    rateId?: boolean
+    rateDescription?: boolean
+    sroScheduleNo?: boolean
+    sroItemSerialNo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -9057,12 +9870,21 @@ export namespace Prisma {
     category?: boolean
     sku?: boolean
     stock?: boolean
+    serialNumber?: boolean
+    transactionType?: boolean
+    transactionTypeDesc?: boolean
+    rateId?: boolean
+    rateDescription?: boolean
+    sroScheduleNo?: boolean
+    sroItemSerialNo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     business?: boolean | BusinessDefaultArgs<ExtArgs>
+    items?: boolean | Product$itemsArgs<ExtArgs>
+    _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -9072,6 +9894,7 @@ export namespace Prisma {
     name: "Product"
     objects: {
       business: Prisma.$BusinessPayload<ExtArgs>
+      items: Prisma.$InvoiceItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9085,6 +9908,13 @@ export namespace Prisma {
       category: string | null
       sku: string | null
       stock: number | null
+      serialNumber: string | null
+      transactionType: string | null
+      transactionTypeDesc: string | null
+      rateId: string | null
+      rateDescription: string | null
+      sroScheduleNo: string | null
+      sroItemSerialNo: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["product"]>
@@ -9452,6 +10282,7 @@ export namespace Prisma {
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     business<T extends BusinessDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusinessDefaultArgs<ExtArgs>>): Prisma__BusinessClient<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    items<T extends Product$itemsArgs<ExtArgs> = {}>(args?: Subset<T, Product$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoiceItemPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9492,6 +10323,13 @@ export namespace Prisma {
     readonly category: FieldRef<"Product", 'String'>
     readonly sku: FieldRef<"Product", 'String'>
     readonly stock: FieldRef<"Product", 'Int'>
+    readonly serialNumber: FieldRef<"Product", 'String'>
+    readonly transactionType: FieldRef<"Product", 'String'>
+    readonly transactionTypeDesc: FieldRef<"Product", 'String'>
+    readonly rateId: FieldRef<"Product", 'String'>
+    readonly rateDescription: FieldRef<"Product", 'String'>
+    readonly sroScheduleNo: FieldRef<"Product", 'String'>
+    readonly sroItemSerialNo: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
   }
@@ -9809,6 +10647,26 @@ export namespace Prisma {
      * Filter which Products to delete
      */
     where?: ProductWhereInput
+  }
+
+  /**
+   * Product.items
+   */
+  export type Product$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InvoiceItem
+     */
+    select?: InvoiceItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceItemInclude<ExtArgs> | null
+    where?: InvoiceItemWhereInput
+    orderBy?: InvoiceItemOrderByWithRelationInput | InvoiceItemOrderByWithRelationInput[]
+    cursor?: InvoiceItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvoiceItemScalarFieldEnum | InvoiceItemScalarFieldEnum[]
   }
 
   /**
@@ -15817,8 +16675,25 @@ export namespace Prisma {
     phoneNumber: 'phoneNumber',
     email: 'email',
     website: 'website',
+    sellerCity: 'sellerCity',
+    sellerContact: 'sellerContact',
+    sellerEmail: 'sellerEmail',
+    posId: 'posId',
+    electronicSoftwareRegNo: 'electronicSoftwareRegNo',
+    fbrIntegratorLicenseNo: 'fbrIntegratorLicenseNo',
+    logoUrl: 'logoUrl',
+    invoiceTemplate: 'invoiceTemplate',
+    invoicePrefix: 'invoicePrefix',
+    footerText: 'footerText',
+    taxIdLabel: 'taxIdLabel',
+    defaultPaymentTerms: 'defaultPaymentTerms',
+    primaryColor: 'primaryColor',
+    secondaryColor: 'secondaryColor',
+    defaultCurrency: 'defaultCurrency',
+    pdfTheme: 'pdfTheme',
     fbrSetupComplete: 'fbrSetupComplete',
     fbrSetupSkipped: 'fbrSetupSkipped',
+    defaultScenario: 'defaultScenario',
     integrationMode: 'integrationMode',
     sandboxValidated: 'sandboxValidated',
     productionEnabled: 'productionEnabled',
@@ -15843,6 +16718,13 @@ export namespace Prisma {
     postalCode: 'postalCode',
     ntnNumber: 'ntnNumber',
     registrationType: 'registrationType',
+    buyerCNIC: 'buyerCNIC',
+    buyerPassport: 'buyerPassport',
+    buyerType: 'buyerType',
+    buyerCity: 'buyerCity',
+    buyerProvince: 'buyerProvince',
+    buyerContact: 'buyerContact',
+    buyerEmail: 'buyerEmail',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15866,6 +16748,24 @@ export namespace Prisma {
     discount: 'discount',
     status: 'status',
     mode: 'mode',
+    documentType: 'documentType',
+    scenarioId: 'scenarioId',
+    paymentMode: 'paymentMode',
+    taxPeriod: 'taxPeriod',
+    referenceInvoiceNo: 'referenceInvoiceNo',
+    fbrBuyerNTN: 'fbrBuyerNTN',
+    fbrBuyerCNIC: 'fbrBuyerCNIC',
+    fbrBuyerPassport: 'fbrBuyerPassport',
+    fbrBuyerType: 'fbrBuyerType',
+    fbrBuyerCity: 'fbrBuyerCity',
+    fbrBuyerProvince: 'fbrBuyerProvince',
+    fbrBuyerAddress: 'fbrBuyerAddress',
+    fbrBuyerContact: 'fbrBuyerContact',
+    fbrBuyerEmail: 'fbrBuyerEmail',
+    totalWithholdingTax: 'totalWithholdingTax',
+    totalExtraTax: 'totalExtraTax',
+    totalFurtherTax: 'totalFurtherTax',
+    totalFED: 'totalFED',
     fbrSubmitted: 'fbrSubmitted',
     fbrValidated: 'fbrValidated',
     submissionTimestamp: 'submissionTimestamp',
@@ -15888,6 +16788,7 @@ export namespace Prisma {
   export const InvoiceItemScalarFieldEnum: {
     id: 'id',
     invoiceId: 'invoiceId',
+    productId: 'productId',
     description: 'description',
     hsCode: 'hsCode',
     quantity: 'quantity',
@@ -15896,7 +16797,18 @@ export namespace Prisma {
     taxRate: 'taxRate',
     taxAmount: 'taxAmount',
     exemptionSRO: 'exemptionSRO',
-    unitOfMeasurement: 'unitOfMeasurement'
+    unitOfMeasurement: 'unitOfMeasurement',
+    discount: 'discount',
+    valueSalesExcludingST: 'valueSalesExcludingST',
+    salesTaxApplicable: 'salesTaxApplicable',
+    salesTaxWithheldAtSource: 'salesTaxWithheldAtSource',
+    extraTax: 'extraTax',
+    furtherTax: 'furtherTax',
+    fedPayable: 'fedPayable',
+    saleType: 'saleType',
+    sroScheduleNo: 'sroScheduleNo',
+    sroItemSerialNo: 'sroItemSerialNo',
+    fixedNotifiedValueOrRetailPrice: 'fixedNotifiedValueOrRetailPrice'
   };
 
   export type InvoiceItemScalarFieldEnum = (typeof InvoiceItemScalarFieldEnum)[keyof typeof InvoiceItemScalarFieldEnum]
@@ -15914,6 +16826,13 @@ export namespace Prisma {
     category: 'category',
     sku: 'sku',
     stock: 'stock',
+    serialNumber: 'serialNumber',
+    transactionType: 'transactionType',
+    transactionTypeDesc: 'transactionTypeDesc',
+    rateId: 'rateId',
+    rateDescription: 'rateDescription',
+    sroScheduleNo: 'sroScheduleNo',
+    sroItemSerialNo: 'sroItemSerialNo',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16410,8 +17329,25 @@ export namespace Prisma {
     phoneNumber?: StringNullableFilter<"Business"> | string | null
     email?: StringNullableFilter<"Business"> | string | null
     website?: StringNullableFilter<"Business"> | string | null
+    sellerCity?: StringNullableFilter<"Business"> | string | null
+    sellerContact?: StringNullableFilter<"Business"> | string | null
+    sellerEmail?: StringNullableFilter<"Business"> | string | null
+    posId?: StringNullableFilter<"Business"> | string | null
+    electronicSoftwareRegNo?: StringNullableFilter<"Business"> | string | null
+    fbrIntegratorLicenseNo?: StringNullableFilter<"Business"> | string | null
+    logoUrl?: StringNullableFilter<"Business"> | string | null
+    invoiceTemplate?: StringNullableFilter<"Business"> | string | null
+    invoicePrefix?: StringNullableFilter<"Business"> | string | null
+    footerText?: StringNullableFilter<"Business"> | string | null
+    taxIdLabel?: StringNullableFilter<"Business"> | string | null
+    defaultPaymentTerms?: StringNullableFilter<"Business"> | string | null
+    primaryColor?: StringNullableFilter<"Business"> | string | null
+    secondaryColor?: StringNullableFilter<"Business"> | string | null
+    defaultCurrency?: StringFilter<"Business"> | string
+    pdfTheme?: StringNullableFilter<"Business"> | string | null
     fbrSetupComplete?: BoolFilter<"Business"> | boolean
     fbrSetupSkipped?: BoolFilter<"Business"> | boolean
+    defaultScenario?: StringNullableFilter<"Business"> | string | null
     integrationMode?: EnumIntegrationModeFilter<"Business"> | $Enums.IntegrationMode
     sandboxValidated?: BoolFilter<"Business"> | boolean
     productionEnabled?: BoolFilter<"Business"> | boolean
@@ -16439,8 +17375,25 @@ export namespace Prisma {
     phoneNumber?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
+    sellerCity?: SortOrderInput | SortOrder
+    sellerContact?: SortOrderInput | SortOrder
+    sellerEmail?: SortOrderInput | SortOrder
+    posId?: SortOrderInput | SortOrder
+    electronicSoftwareRegNo?: SortOrderInput | SortOrder
+    fbrIntegratorLicenseNo?: SortOrderInput | SortOrder
+    logoUrl?: SortOrderInput | SortOrder
+    invoiceTemplate?: SortOrderInput | SortOrder
+    invoicePrefix?: SortOrderInput | SortOrder
+    footerText?: SortOrderInput | SortOrder
+    taxIdLabel?: SortOrderInput | SortOrder
+    defaultPaymentTerms?: SortOrderInput | SortOrder
+    primaryColor?: SortOrderInput | SortOrder
+    secondaryColor?: SortOrderInput | SortOrder
+    defaultCurrency?: SortOrder
+    pdfTheme?: SortOrderInput | SortOrder
     fbrSetupComplete?: SortOrder
     fbrSetupSkipped?: SortOrder
+    defaultScenario?: SortOrderInput | SortOrder
     integrationMode?: SortOrder
     sandboxValidated?: SortOrder
     productionEnabled?: SortOrder
@@ -16471,8 +17424,25 @@ export namespace Prisma {
     phoneNumber?: StringNullableFilter<"Business"> | string | null
     email?: StringNullableFilter<"Business"> | string | null
     website?: StringNullableFilter<"Business"> | string | null
+    sellerCity?: StringNullableFilter<"Business"> | string | null
+    sellerContact?: StringNullableFilter<"Business"> | string | null
+    sellerEmail?: StringNullableFilter<"Business"> | string | null
+    posId?: StringNullableFilter<"Business"> | string | null
+    electronicSoftwareRegNo?: StringNullableFilter<"Business"> | string | null
+    fbrIntegratorLicenseNo?: StringNullableFilter<"Business"> | string | null
+    logoUrl?: StringNullableFilter<"Business"> | string | null
+    invoiceTemplate?: StringNullableFilter<"Business"> | string | null
+    invoicePrefix?: StringNullableFilter<"Business"> | string | null
+    footerText?: StringNullableFilter<"Business"> | string | null
+    taxIdLabel?: StringNullableFilter<"Business"> | string | null
+    defaultPaymentTerms?: StringNullableFilter<"Business"> | string | null
+    primaryColor?: StringNullableFilter<"Business"> | string | null
+    secondaryColor?: StringNullableFilter<"Business"> | string | null
+    defaultCurrency?: StringFilter<"Business"> | string
+    pdfTheme?: StringNullableFilter<"Business"> | string | null
     fbrSetupComplete?: BoolFilter<"Business"> | boolean
     fbrSetupSkipped?: BoolFilter<"Business"> | boolean
+    defaultScenario?: StringNullableFilter<"Business"> | string | null
     integrationMode?: EnumIntegrationModeFilter<"Business"> | $Enums.IntegrationMode
     sandboxValidated?: BoolFilter<"Business"> | boolean
     productionEnabled?: BoolFilter<"Business"> | boolean
@@ -16500,8 +17470,25 @@ export namespace Prisma {
     phoneNumber?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
+    sellerCity?: SortOrderInput | SortOrder
+    sellerContact?: SortOrderInput | SortOrder
+    sellerEmail?: SortOrderInput | SortOrder
+    posId?: SortOrderInput | SortOrder
+    electronicSoftwareRegNo?: SortOrderInput | SortOrder
+    fbrIntegratorLicenseNo?: SortOrderInput | SortOrder
+    logoUrl?: SortOrderInput | SortOrder
+    invoiceTemplate?: SortOrderInput | SortOrder
+    invoicePrefix?: SortOrderInput | SortOrder
+    footerText?: SortOrderInput | SortOrder
+    taxIdLabel?: SortOrderInput | SortOrder
+    defaultPaymentTerms?: SortOrderInput | SortOrder
+    primaryColor?: SortOrderInput | SortOrder
+    secondaryColor?: SortOrderInput | SortOrder
+    defaultCurrency?: SortOrder
+    pdfTheme?: SortOrderInput | SortOrder
     fbrSetupComplete?: SortOrder
     fbrSetupSkipped?: SortOrder
+    defaultScenario?: SortOrderInput | SortOrder
     integrationMode?: SortOrder
     sandboxValidated?: SortOrder
     productionEnabled?: SortOrder
@@ -16531,8 +17518,25 @@ export namespace Prisma {
     phoneNumber?: StringNullableWithAggregatesFilter<"Business"> | string | null
     email?: StringNullableWithAggregatesFilter<"Business"> | string | null
     website?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    sellerCity?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    sellerContact?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    sellerEmail?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    posId?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    electronicSoftwareRegNo?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    fbrIntegratorLicenseNo?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    logoUrl?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    invoiceTemplate?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    invoicePrefix?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    footerText?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    taxIdLabel?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    defaultPaymentTerms?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    primaryColor?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    secondaryColor?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    defaultCurrency?: StringWithAggregatesFilter<"Business"> | string
+    pdfTheme?: StringNullableWithAggregatesFilter<"Business"> | string | null
     fbrSetupComplete?: BoolWithAggregatesFilter<"Business"> | boolean
     fbrSetupSkipped?: BoolWithAggregatesFilter<"Business"> | boolean
+    defaultScenario?: StringNullableWithAggregatesFilter<"Business"> | string | null
     integrationMode?: EnumIntegrationModeWithAggregatesFilter<"Business"> | $Enums.IntegrationMode
     sandboxValidated?: BoolWithAggregatesFilter<"Business"> | boolean
     productionEnabled?: BoolWithAggregatesFilter<"Business"> | boolean
@@ -16557,6 +17561,13 @@ export namespace Prisma {
     postalCode?: StringNullableFilter<"Customer"> | string | null
     ntnNumber?: StringNullableFilter<"Customer"> | string | null
     registrationType?: EnumRegistrationTypeFilter<"Customer"> | $Enums.RegistrationType
+    buyerCNIC?: StringNullableFilter<"Customer"> | string | null
+    buyerPassport?: StringNullableFilter<"Customer"> | string | null
+    buyerType?: StringNullableFilter<"Customer"> | string | null
+    buyerCity?: StringNullableFilter<"Customer"> | string | null
+    buyerProvince?: StringNullableFilter<"Customer"> | string | null
+    buyerContact?: StringNullableFilter<"Customer"> | string | null
+    buyerEmail?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
     business?: XOR<BusinessRelationFilter, BusinessWhereInput>
@@ -16575,6 +17586,13 @@ export namespace Prisma {
     postalCode?: SortOrderInput | SortOrder
     ntnNumber?: SortOrderInput | SortOrder
     registrationType?: SortOrder
+    buyerCNIC?: SortOrderInput | SortOrder
+    buyerPassport?: SortOrderInput | SortOrder
+    buyerType?: SortOrderInput | SortOrder
+    buyerCity?: SortOrderInput | SortOrder
+    buyerProvince?: SortOrderInput | SortOrder
+    buyerContact?: SortOrderInput | SortOrder
+    buyerEmail?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     business?: BusinessOrderByWithRelationInput
@@ -16596,6 +17614,13 @@ export namespace Prisma {
     postalCode?: StringNullableFilter<"Customer"> | string | null
     ntnNumber?: StringNullableFilter<"Customer"> | string | null
     registrationType?: EnumRegistrationTypeFilter<"Customer"> | $Enums.RegistrationType
+    buyerCNIC?: StringNullableFilter<"Customer"> | string | null
+    buyerPassport?: StringNullableFilter<"Customer"> | string | null
+    buyerType?: StringNullableFilter<"Customer"> | string | null
+    buyerCity?: StringNullableFilter<"Customer"> | string | null
+    buyerProvince?: StringNullableFilter<"Customer"> | string | null
+    buyerContact?: StringNullableFilter<"Customer"> | string | null
+    buyerEmail?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
     business?: XOR<BusinessRelationFilter, BusinessWhereInput>
@@ -16614,6 +17639,13 @@ export namespace Prisma {
     postalCode?: SortOrderInput | SortOrder
     ntnNumber?: SortOrderInput | SortOrder
     registrationType?: SortOrder
+    buyerCNIC?: SortOrderInput | SortOrder
+    buyerPassport?: SortOrderInput | SortOrder
+    buyerType?: SortOrderInput | SortOrder
+    buyerCity?: SortOrderInput | SortOrder
+    buyerProvince?: SortOrderInput | SortOrder
+    buyerContact?: SortOrderInput | SortOrder
+    buyerEmail?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CustomerCountOrderByAggregateInput
@@ -16636,6 +17668,13 @@ export namespace Prisma {
     postalCode?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     ntnNumber?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     registrationType?: EnumRegistrationTypeWithAggregatesFilter<"Customer"> | $Enums.RegistrationType
+    buyerCNIC?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    buyerPassport?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    buyerType?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    buyerCity?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    buyerProvince?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    buyerContact?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    buyerEmail?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
   }
@@ -16659,6 +17698,24 @@ export namespace Prisma {
     discount?: FloatFilter<"Invoice"> | number
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFilter<"Invoice"> | $Enums.IntegrationMode
+    documentType?: StringNullableFilter<"Invoice"> | string | null
+    scenarioId?: StringNullableFilter<"Invoice"> | string | null
+    paymentMode?: StringNullableFilter<"Invoice"> | string | null
+    taxPeriod?: StringNullableFilter<"Invoice"> | string | null
+    referenceInvoiceNo?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerNTN?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerCNIC?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerPassport?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerType?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerCity?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerProvince?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerAddress?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerContact?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerEmail?: StringNullableFilter<"Invoice"> | string | null
+    totalWithholdingTax?: FloatFilter<"Invoice"> | number
+    totalExtraTax?: FloatFilter<"Invoice"> | number
+    totalFurtherTax?: FloatFilter<"Invoice"> | number
+    totalFED?: FloatFilter<"Invoice"> | number
     fbrSubmitted?: BoolFilter<"Invoice"> | boolean
     fbrValidated?: BoolFilter<"Invoice"> | boolean
     submissionTimestamp?: DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -16694,6 +17751,24 @@ export namespace Prisma {
     discount?: SortOrder
     status?: SortOrder
     mode?: SortOrder
+    documentType?: SortOrderInput | SortOrder
+    scenarioId?: SortOrderInput | SortOrder
+    paymentMode?: SortOrderInput | SortOrder
+    taxPeriod?: SortOrderInput | SortOrder
+    referenceInvoiceNo?: SortOrderInput | SortOrder
+    fbrBuyerNTN?: SortOrderInput | SortOrder
+    fbrBuyerCNIC?: SortOrderInput | SortOrder
+    fbrBuyerPassport?: SortOrderInput | SortOrder
+    fbrBuyerType?: SortOrderInput | SortOrder
+    fbrBuyerCity?: SortOrderInput | SortOrder
+    fbrBuyerProvince?: SortOrderInput | SortOrder
+    fbrBuyerAddress?: SortOrderInput | SortOrder
+    fbrBuyerContact?: SortOrderInput | SortOrder
+    fbrBuyerEmail?: SortOrderInput | SortOrder
+    totalWithholdingTax?: SortOrder
+    totalExtraTax?: SortOrder
+    totalFurtherTax?: SortOrder
+    totalFED?: SortOrder
     fbrSubmitted?: SortOrder
     fbrValidated?: SortOrder
     submissionTimestamp?: SortOrderInput | SortOrder
@@ -16733,6 +17808,24 @@ export namespace Prisma {
     discount?: FloatFilter<"Invoice"> | number
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFilter<"Invoice"> | $Enums.IntegrationMode
+    documentType?: StringNullableFilter<"Invoice"> | string | null
+    scenarioId?: StringNullableFilter<"Invoice"> | string | null
+    paymentMode?: StringNullableFilter<"Invoice"> | string | null
+    taxPeriod?: StringNullableFilter<"Invoice"> | string | null
+    referenceInvoiceNo?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerNTN?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerCNIC?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerPassport?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerType?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerCity?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerProvince?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerAddress?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerContact?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerEmail?: StringNullableFilter<"Invoice"> | string | null
+    totalWithholdingTax?: FloatFilter<"Invoice"> | number
+    totalExtraTax?: FloatFilter<"Invoice"> | number
+    totalFurtherTax?: FloatFilter<"Invoice"> | number
+    totalFED?: FloatFilter<"Invoice"> | number
     fbrSubmitted?: BoolFilter<"Invoice"> | boolean
     fbrValidated?: BoolFilter<"Invoice"> | boolean
     submissionTimestamp?: DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -16768,6 +17861,24 @@ export namespace Prisma {
     discount?: SortOrder
     status?: SortOrder
     mode?: SortOrder
+    documentType?: SortOrderInput | SortOrder
+    scenarioId?: SortOrderInput | SortOrder
+    paymentMode?: SortOrderInput | SortOrder
+    taxPeriod?: SortOrderInput | SortOrder
+    referenceInvoiceNo?: SortOrderInput | SortOrder
+    fbrBuyerNTN?: SortOrderInput | SortOrder
+    fbrBuyerCNIC?: SortOrderInput | SortOrder
+    fbrBuyerPassport?: SortOrderInput | SortOrder
+    fbrBuyerType?: SortOrderInput | SortOrder
+    fbrBuyerCity?: SortOrderInput | SortOrder
+    fbrBuyerProvince?: SortOrderInput | SortOrder
+    fbrBuyerAddress?: SortOrderInput | SortOrder
+    fbrBuyerContact?: SortOrderInput | SortOrder
+    fbrBuyerEmail?: SortOrderInput | SortOrder
+    totalWithholdingTax?: SortOrder
+    totalExtraTax?: SortOrder
+    totalFurtherTax?: SortOrder
+    totalFED?: SortOrder
     fbrSubmitted?: SortOrder
     fbrValidated?: SortOrder
     submissionTimestamp?: SortOrderInput | SortOrder
@@ -16808,6 +17919,24 @@ export namespace Prisma {
     discount?: FloatWithAggregatesFilter<"Invoice"> | number
     status?: EnumInvoiceStatusWithAggregatesFilter<"Invoice"> | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeWithAggregatesFilter<"Invoice"> | $Enums.IntegrationMode
+    documentType?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    scenarioId?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    paymentMode?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    taxPeriod?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    referenceInvoiceNo?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerNTN?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerCNIC?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerPassport?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerType?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerCity?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerProvince?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerAddress?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerContact?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    fbrBuyerEmail?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    totalWithholdingTax?: FloatWithAggregatesFilter<"Invoice"> | number
+    totalExtraTax?: FloatWithAggregatesFilter<"Invoice"> | number
+    totalFurtherTax?: FloatWithAggregatesFilter<"Invoice"> | number
+    totalFED?: FloatWithAggregatesFilter<"Invoice"> | number
     fbrSubmitted?: BoolWithAggregatesFilter<"Invoice"> | boolean
     fbrValidated?: BoolWithAggregatesFilter<"Invoice"> | boolean
     submissionTimestamp?: DateTimeNullableWithAggregatesFilter<"Invoice"> | Date | string | null
@@ -16830,6 +17959,7 @@ export namespace Prisma {
     NOT?: InvoiceItemWhereInput | InvoiceItemWhereInput[]
     id?: StringFilter<"InvoiceItem"> | string
     invoiceId?: StringFilter<"InvoiceItem"> | string
+    productId?: StringNullableFilter<"InvoiceItem"> | string | null
     description?: StringFilter<"InvoiceItem"> | string
     hsCode?: StringFilter<"InvoiceItem"> | string
     quantity?: FloatFilter<"InvoiceItem"> | number
@@ -16839,12 +17969,25 @@ export namespace Prisma {
     taxAmount?: FloatFilter<"InvoiceItem"> | number
     exemptionSRO?: StringNullableFilter<"InvoiceItem"> | string | null
     unitOfMeasurement?: StringFilter<"InvoiceItem"> | string
+    discount?: FloatFilter<"InvoiceItem"> | number
+    valueSalesExcludingST?: FloatFilter<"InvoiceItem"> | number
+    salesTaxApplicable?: FloatFilter<"InvoiceItem"> | number
+    salesTaxWithheldAtSource?: FloatFilter<"InvoiceItem"> | number
+    extraTax?: FloatFilter<"InvoiceItem"> | number
+    furtherTax?: FloatFilter<"InvoiceItem"> | number
+    fedPayable?: FloatFilter<"InvoiceItem"> | number
+    saleType?: StringFilter<"InvoiceItem"> | string
+    sroScheduleNo?: StringNullableFilter<"InvoiceItem"> | string | null
+    sroItemSerialNo?: StringNullableFilter<"InvoiceItem"> | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFilter<"InvoiceItem"> | number
     invoice?: XOR<InvoiceRelationFilter, InvoiceWhereInput>
+    product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
   }
 
   export type InvoiceItemOrderByWithRelationInput = {
     id?: SortOrder
     invoiceId?: SortOrder
+    productId?: SortOrderInput | SortOrder
     description?: SortOrder
     hsCode?: SortOrder
     quantity?: SortOrder
@@ -16854,7 +17997,19 @@ export namespace Prisma {
     taxAmount?: SortOrder
     exemptionSRO?: SortOrderInput | SortOrder
     unitOfMeasurement?: SortOrder
+    discount?: SortOrder
+    valueSalesExcludingST?: SortOrder
+    salesTaxApplicable?: SortOrder
+    salesTaxWithheldAtSource?: SortOrder
+    extraTax?: SortOrder
+    furtherTax?: SortOrder
+    fedPayable?: SortOrder
+    saleType?: SortOrder
+    sroScheduleNo?: SortOrderInput | SortOrder
+    sroItemSerialNo?: SortOrderInput | SortOrder
+    fixedNotifiedValueOrRetailPrice?: SortOrder
     invoice?: InvoiceOrderByWithRelationInput
+    product?: ProductOrderByWithRelationInput
   }
 
   export type InvoiceItemWhereUniqueInput = Prisma.AtLeast<{
@@ -16863,6 +18018,7 @@ export namespace Prisma {
     OR?: InvoiceItemWhereInput[]
     NOT?: InvoiceItemWhereInput | InvoiceItemWhereInput[]
     invoiceId?: StringFilter<"InvoiceItem"> | string
+    productId?: StringNullableFilter<"InvoiceItem"> | string | null
     description?: StringFilter<"InvoiceItem"> | string
     hsCode?: StringFilter<"InvoiceItem"> | string
     quantity?: FloatFilter<"InvoiceItem"> | number
@@ -16872,12 +18028,25 @@ export namespace Prisma {
     taxAmount?: FloatFilter<"InvoiceItem"> | number
     exemptionSRO?: StringNullableFilter<"InvoiceItem"> | string | null
     unitOfMeasurement?: StringFilter<"InvoiceItem"> | string
+    discount?: FloatFilter<"InvoiceItem"> | number
+    valueSalesExcludingST?: FloatFilter<"InvoiceItem"> | number
+    salesTaxApplicable?: FloatFilter<"InvoiceItem"> | number
+    salesTaxWithheldAtSource?: FloatFilter<"InvoiceItem"> | number
+    extraTax?: FloatFilter<"InvoiceItem"> | number
+    furtherTax?: FloatFilter<"InvoiceItem"> | number
+    fedPayable?: FloatFilter<"InvoiceItem"> | number
+    saleType?: StringFilter<"InvoiceItem"> | string
+    sroScheduleNo?: StringNullableFilter<"InvoiceItem"> | string | null
+    sroItemSerialNo?: StringNullableFilter<"InvoiceItem"> | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFilter<"InvoiceItem"> | number
     invoice?: XOR<InvoiceRelationFilter, InvoiceWhereInput>
+    product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
   }, "id">
 
   export type InvoiceItemOrderByWithAggregationInput = {
     id?: SortOrder
     invoiceId?: SortOrder
+    productId?: SortOrderInput | SortOrder
     description?: SortOrder
     hsCode?: SortOrder
     quantity?: SortOrder
@@ -16887,6 +18056,17 @@ export namespace Prisma {
     taxAmount?: SortOrder
     exemptionSRO?: SortOrderInput | SortOrder
     unitOfMeasurement?: SortOrder
+    discount?: SortOrder
+    valueSalesExcludingST?: SortOrder
+    salesTaxApplicable?: SortOrder
+    salesTaxWithheldAtSource?: SortOrder
+    extraTax?: SortOrder
+    furtherTax?: SortOrder
+    fedPayable?: SortOrder
+    saleType?: SortOrder
+    sroScheduleNo?: SortOrderInput | SortOrder
+    sroItemSerialNo?: SortOrderInput | SortOrder
+    fixedNotifiedValueOrRetailPrice?: SortOrder
     _count?: InvoiceItemCountOrderByAggregateInput
     _avg?: InvoiceItemAvgOrderByAggregateInput
     _max?: InvoiceItemMaxOrderByAggregateInput
@@ -16900,6 +18080,7 @@ export namespace Prisma {
     NOT?: InvoiceItemScalarWhereWithAggregatesInput | InvoiceItemScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"InvoiceItem"> | string
     invoiceId?: StringWithAggregatesFilter<"InvoiceItem"> | string
+    productId?: StringNullableWithAggregatesFilter<"InvoiceItem"> | string | null
     description?: StringWithAggregatesFilter<"InvoiceItem"> | string
     hsCode?: StringWithAggregatesFilter<"InvoiceItem"> | string
     quantity?: FloatWithAggregatesFilter<"InvoiceItem"> | number
@@ -16909,6 +18090,17 @@ export namespace Prisma {
     taxAmount?: FloatWithAggregatesFilter<"InvoiceItem"> | number
     exemptionSRO?: StringNullableWithAggregatesFilter<"InvoiceItem"> | string | null
     unitOfMeasurement?: StringWithAggregatesFilter<"InvoiceItem"> | string
+    discount?: FloatWithAggregatesFilter<"InvoiceItem"> | number
+    valueSalesExcludingST?: FloatWithAggregatesFilter<"InvoiceItem"> | number
+    salesTaxApplicable?: FloatWithAggregatesFilter<"InvoiceItem"> | number
+    salesTaxWithheldAtSource?: FloatWithAggregatesFilter<"InvoiceItem"> | number
+    extraTax?: FloatWithAggregatesFilter<"InvoiceItem"> | number
+    furtherTax?: FloatWithAggregatesFilter<"InvoiceItem"> | number
+    fedPayable?: FloatWithAggregatesFilter<"InvoiceItem"> | number
+    saleType?: StringWithAggregatesFilter<"InvoiceItem"> | string
+    sroScheduleNo?: StringNullableWithAggregatesFilter<"InvoiceItem"> | string | null
+    sroItemSerialNo?: StringNullableWithAggregatesFilter<"InvoiceItem"> | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatWithAggregatesFilter<"InvoiceItem"> | number
   }
 
   export type ProductWhereInput = {
@@ -16926,9 +18118,17 @@ export namespace Prisma {
     category?: StringNullableFilter<"Product"> | string | null
     sku?: StringNullableFilter<"Product"> | string | null
     stock?: IntNullableFilter<"Product"> | number | null
+    serialNumber?: StringNullableFilter<"Product"> | string | null
+    transactionType?: StringNullableFilter<"Product"> | string | null
+    transactionTypeDesc?: StringNullableFilter<"Product"> | string | null
+    rateId?: StringNullableFilter<"Product"> | string | null
+    rateDescription?: StringNullableFilter<"Product"> | string | null
+    sroScheduleNo?: StringNullableFilter<"Product"> | string | null
+    sroItemSerialNo?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     business?: XOR<BusinessRelationFilter, BusinessWhereInput>
+    items?: InvoiceItemListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -16943,9 +18143,17 @@ export namespace Prisma {
     category?: SortOrderInput | SortOrder
     sku?: SortOrderInput | SortOrder
     stock?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    transactionType?: SortOrderInput | SortOrder
+    transactionTypeDesc?: SortOrderInput | SortOrder
+    rateId?: SortOrderInput | SortOrder
+    rateDescription?: SortOrderInput | SortOrder
+    sroScheduleNo?: SortOrderInput | SortOrder
+    sroItemSerialNo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     business?: BusinessOrderByWithRelationInput
+    items?: InvoiceItemOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -16963,9 +18171,17 @@ export namespace Prisma {
     category?: StringNullableFilter<"Product"> | string | null
     sku?: StringNullableFilter<"Product"> | string | null
     stock?: IntNullableFilter<"Product"> | number | null
+    serialNumber?: StringNullableFilter<"Product"> | string | null
+    transactionType?: StringNullableFilter<"Product"> | string | null
+    transactionTypeDesc?: StringNullableFilter<"Product"> | string | null
+    rateId?: StringNullableFilter<"Product"> | string | null
+    rateDescription?: StringNullableFilter<"Product"> | string | null
+    sroScheduleNo?: StringNullableFilter<"Product"> | string | null
+    sroItemSerialNo?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     business?: XOR<BusinessRelationFilter, BusinessWhereInput>
+    items?: InvoiceItemListRelationFilter
   }, "id">
 
   export type ProductOrderByWithAggregationInput = {
@@ -16980,6 +18196,13 @@ export namespace Prisma {
     category?: SortOrderInput | SortOrder
     sku?: SortOrderInput | SortOrder
     stock?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    transactionType?: SortOrderInput | SortOrder
+    transactionTypeDesc?: SortOrderInput | SortOrder
+    rateId?: SortOrderInput | SortOrder
+    rateDescription?: SortOrderInput | SortOrder
+    sroScheduleNo?: SortOrderInput | SortOrder
+    sroItemSerialNo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -17004,6 +18227,13 @@ export namespace Prisma {
     category?: StringNullableWithAggregatesFilter<"Product"> | string | null
     sku?: StringNullableWithAggregatesFilter<"Product"> | string | null
     stock?: IntNullableWithAggregatesFilter<"Product"> | number | null
+    serialNumber?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    transactionType?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    transactionTypeDesc?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    rateId?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    rateDescription?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    sroScheduleNo?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    sroItemSerialNo?: StringNullableWithAggregatesFilter<"Product"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
   }
@@ -17702,8 +18932,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -17731,8 +18978,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -17758,8 +19022,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -17787,8 +19068,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -17815,8 +19113,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -17839,8 +19154,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -17864,8 +19196,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -17886,6 +19235,13 @@ export namespace Prisma {
     postalCode?: string | null
     ntnNumber?: string | null
     registrationType?: $Enums.RegistrationType
+    buyerCNIC?: string | null
+    buyerPassport?: string | null
+    buyerType?: string | null
+    buyerCity?: string | null
+    buyerProvince?: string | null
+    buyerContact?: string | null
+    buyerEmail?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     business: BusinessCreateNestedOneWithoutCustomersInput
@@ -17904,6 +19260,13 @@ export namespace Prisma {
     postalCode?: string | null
     ntnNumber?: string | null
     registrationType?: $Enums.RegistrationType
+    buyerCNIC?: string | null
+    buyerPassport?: string | null
+    buyerType?: string | null
+    buyerCity?: string | null
+    buyerProvince?: string | null
+    buyerContact?: string | null
+    buyerEmail?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
@@ -17920,6 +19283,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     business?: BusinessUpdateOneRequiredWithoutCustomersNestedInput
@@ -17938,6 +19308,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
@@ -17955,6 +19332,13 @@ export namespace Prisma {
     postalCode?: string | null
     ntnNumber?: string | null
     registrationType?: $Enums.RegistrationType
+    buyerCNIC?: string | null
+    buyerPassport?: string | null
+    buyerType?: string | null
+    buyerCity?: string | null
+    buyerProvince?: string | null
+    buyerContact?: string | null
+    buyerEmail?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17970,6 +19354,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17986,6 +19377,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18004,6 +19402,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -18039,6 +19455,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -18070,6 +19504,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18105,6 +19557,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18138,6 +19608,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -18168,6 +19656,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18200,6 +19706,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18227,12 +19751,25 @@ export namespace Prisma {
     taxAmount: number
     exemptionSRO?: string | null
     unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
     invoice: InvoiceCreateNestedOneWithoutItemsInput
+    product?: ProductCreateNestedOneWithoutItemsInput
   }
 
   export type InvoiceItemUncheckedCreateInput = {
     id?: string
     invoiceId: string
+    productId?: string | null
     description: string
     hsCode: string
     quantity: number
@@ -18242,6 +19779,17 @@ export namespace Prisma {
     taxAmount: number
     exemptionSRO?: string | null
     unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
   }
 
   export type InvoiceItemUpdateInput = {
@@ -18255,12 +19803,25 @@ export namespace Prisma {
     taxAmount?: FloatFieldUpdateOperationsInput | number
     exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
     invoice?: InvoiceUpdateOneRequiredWithoutItemsNestedInput
+    product?: ProductUpdateOneWithoutItemsNestedInput
   }
 
   export type InvoiceItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoiceId?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     hsCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
@@ -18270,11 +19831,23 @@ export namespace Prisma {
     taxAmount?: FloatFieldUpdateOperationsInput | number
     exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type InvoiceItemCreateManyInput = {
     id?: string
     invoiceId: string
+    productId?: string | null
     description: string
     hsCode: string
     quantity: number
@@ -18284,6 +19857,17 @@ export namespace Prisma {
     taxAmount: number
     exemptionSRO?: string | null
     unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
   }
 
   export type InvoiceItemUpdateManyMutationInput = {
@@ -18297,11 +19881,23 @@ export namespace Prisma {
     taxAmount?: FloatFieldUpdateOperationsInput | number
     exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type InvoiceItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoiceId?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     hsCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
@@ -18311,6 +19907,17 @@ export namespace Prisma {
     taxAmount?: FloatFieldUpdateOperationsInput | number
     exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type ProductCreateInput = {
@@ -18324,9 +19931,17 @@ export namespace Prisma {
     category?: string | null
     sku?: string | null
     stock?: number | null
+    serialNumber?: string | null
+    transactionType?: string | null
+    transactionTypeDesc?: string | null
+    rateId?: string | null
+    rateDescription?: string | null
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     business: BusinessCreateNestedOneWithoutProductsInput
+    items?: InvoiceItemCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -18341,8 +19956,16 @@ export namespace Prisma {
     category?: string | null
     sku?: string | null
     stock?: number | null
+    serialNumber?: string | null
+    transactionType?: string | null
+    transactionTypeDesc?: string | null
+    rateId?: string | null
+    rateDescription?: string | null
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    items?: InvoiceItemUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
@@ -18356,9 +19979,17 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     business?: BusinessUpdateOneRequiredWithoutProductsNestedInput
+    items?: InvoiceItemUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -18373,8 +20004,16 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: InvoiceItemUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -18389,6 +20028,13 @@ export namespace Prisma {
     category?: string | null
     sku?: string | null
     stock?: number | null
+    serialNumber?: string | null
+    transactionType?: string | null
+    transactionTypeDesc?: string | null
+    rateId?: string | null
+    rateDescription?: string | null
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18404,6 +20050,13 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18420,6 +20073,13 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19329,8 +20989,25 @@ export namespace Prisma {
     phoneNumber?: SortOrder
     email?: SortOrder
     website?: SortOrder
+    sellerCity?: SortOrder
+    sellerContact?: SortOrder
+    sellerEmail?: SortOrder
+    posId?: SortOrder
+    electronicSoftwareRegNo?: SortOrder
+    fbrIntegratorLicenseNo?: SortOrder
+    logoUrl?: SortOrder
+    invoiceTemplate?: SortOrder
+    invoicePrefix?: SortOrder
+    footerText?: SortOrder
+    taxIdLabel?: SortOrder
+    defaultPaymentTerms?: SortOrder
+    primaryColor?: SortOrder
+    secondaryColor?: SortOrder
+    defaultCurrency?: SortOrder
+    pdfTheme?: SortOrder
     fbrSetupComplete?: SortOrder
     fbrSetupSkipped?: SortOrder
+    defaultScenario?: SortOrder
     integrationMode?: SortOrder
     sandboxValidated?: SortOrder
     productionEnabled?: SortOrder
@@ -19354,8 +21031,25 @@ export namespace Prisma {
     phoneNumber?: SortOrder
     email?: SortOrder
     website?: SortOrder
+    sellerCity?: SortOrder
+    sellerContact?: SortOrder
+    sellerEmail?: SortOrder
+    posId?: SortOrder
+    electronicSoftwareRegNo?: SortOrder
+    fbrIntegratorLicenseNo?: SortOrder
+    logoUrl?: SortOrder
+    invoiceTemplate?: SortOrder
+    invoicePrefix?: SortOrder
+    footerText?: SortOrder
+    taxIdLabel?: SortOrder
+    defaultPaymentTerms?: SortOrder
+    primaryColor?: SortOrder
+    secondaryColor?: SortOrder
+    defaultCurrency?: SortOrder
+    pdfTheme?: SortOrder
     fbrSetupComplete?: SortOrder
     fbrSetupSkipped?: SortOrder
+    defaultScenario?: SortOrder
     integrationMode?: SortOrder
     sandboxValidated?: SortOrder
     productionEnabled?: SortOrder
@@ -19379,8 +21073,25 @@ export namespace Prisma {
     phoneNumber?: SortOrder
     email?: SortOrder
     website?: SortOrder
+    sellerCity?: SortOrder
+    sellerContact?: SortOrder
+    sellerEmail?: SortOrder
+    posId?: SortOrder
+    electronicSoftwareRegNo?: SortOrder
+    fbrIntegratorLicenseNo?: SortOrder
+    logoUrl?: SortOrder
+    invoiceTemplate?: SortOrder
+    invoicePrefix?: SortOrder
+    footerText?: SortOrder
+    taxIdLabel?: SortOrder
+    defaultPaymentTerms?: SortOrder
+    primaryColor?: SortOrder
+    secondaryColor?: SortOrder
+    defaultCurrency?: SortOrder
+    pdfTheme?: SortOrder
     fbrSetupComplete?: SortOrder
     fbrSetupSkipped?: SortOrder
+    defaultScenario?: SortOrder
     integrationMode?: SortOrder
     sandboxValidated?: SortOrder
     productionEnabled?: SortOrder
@@ -19424,6 +21135,13 @@ export namespace Prisma {
     postalCode?: SortOrder
     ntnNumber?: SortOrder
     registrationType?: SortOrder
+    buyerCNIC?: SortOrder
+    buyerPassport?: SortOrder
+    buyerType?: SortOrder
+    buyerCity?: SortOrder
+    buyerProvince?: SortOrder
+    buyerContact?: SortOrder
+    buyerEmail?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19440,6 +21158,13 @@ export namespace Prisma {
     postalCode?: SortOrder
     ntnNumber?: SortOrder
     registrationType?: SortOrder
+    buyerCNIC?: SortOrder
+    buyerPassport?: SortOrder
+    buyerType?: SortOrder
+    buyerCity?: SortOrder
+    buyerProvince?: SortOrder
+    buyerContact?: SortOrder
+    buyerEmail?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19456,6 +21181,13 @@ export namespace Prisma {
     postalCode?: SortOrder
     ntnNumber?: SortOrder
     registrationType?: SortOrder
+    buyerCNIC?: SortOrder
+    buyerPassport?: SortOrder
+    buyerType?: SortOrder
+    buyerCity?: SortOrder
+    buyerProvince?: SortOrder
+    buyerContact?: SortOrder
+    buyerEmail?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19557,6 +21289,24 @@ export namespace Prisma {
     discount?: SortOrder
     status?: SortOrder
     mode?: SortOrder
+    documentType?: SortOrder
+    scenarioId?: SortOrder
+    paymentMode?: SortOrder
+    taxPeriod?: SortOrder
+    referenceInvoiceNo?: SortOrder
+    fbrBuyerNTN?: SortOrder
+    fbrBuyerCNIC?: SortOrder
+    fbrBuyerPassport?: SortOrder
+    fbrBuyerType?: SortOrder
+    fbrBuyerCity?: SortOrder
+    fbrBuyerProvince?: SortOrder
+    fbrBuyerAddress?: SortOrder
+    fbrBuyerContact?: SortOrder
+    fbrBuyerEmail?: SortOrder
+    totalWithholdingTax?: SortOrder
+    totalExtraTax?: SortOrder
+    totalFurtherTax?: SortOrder
+    totalFED?: SortOrder
     fbrSubmitted?: SortOrder
     fbrValidated?: SortOrder
     submissionTimestamp?: SortOrder
@@ -19579,6 +21329,10 @@ export namespace Prisma {
     taxAmount?: SortOrder
     totalAmount?: SortOrder
     discount?: SortOrder
+    totalWithholdingTax?: SortOrder
+    totalExtraTax?: SortOrder
+    totalFurtherTax?: SortOrder
+    totalFED?: SortOrder
   }
 
   export type InvoiceMaxOrderByAggregateInput = {
@@ -19597,6 +21351,24 @@ export namespace Prisma {
     discount?: SortOrder
     status?: SortOrder
     mode?: SortOrder
+    documentType?: SortOrder
+    scenarioId?: SortOrder
+    paymentMode?: SortOrder
+    taxPeriod?: SortOrder
+    referenceInvoiceNo?: SortOrder
+    fbrBuyerNTN?: SortOrder
+    fbrBuyerCNIC?: SortOrder
+    fbrBuyerPassport?: SortOrder
+    fbrBuyerType?: SortOrder
+    fbrBuyerCity?: SortOrder
+    fbrBuyerProvince?: SortOrder
+    fbrBuyerAddress?: SortOrder
+    fbrBuyerContact?: SortOrder
+    fbrBuyerEmail?: SortOrder
+    totalWithholdingTax?: SortOrder
+    totalExtraTax?: SortOrder
+    totalFurtherTax?: SortOrder
+    totalFED?: SortOrder
     fbrSubmitted?: SortOrder
     fbrValidated?: SortOrder
     submissionTimestamp?: SortOrder
@@ -19628,6 +21400,24 @@ export namespace Prisma {
     discount?: SortOrder
     status?: SortOrder
     mode?: SortOrder
+    documentType?: SortOrder
+    scenarioId?: SortOrder
+    paymentMode?: SortOrder
+    taxPeriod?: SortOrder
+    referenceInvoiceNo?: SortOrder
+    fbrBuyerNTN?: SortOrder
+    fbrBuyerCNIC?: SortOrder
+    fbrBuyerPassport?: SortOrder
+    fbrBuyerType?: SortOrder
+    fbrBuyerCity?: SortOrder
+    fbrBuyerProvince?: SortOrder
+    fbrBuyerAddress?: SortOrder
+    fbrBuyerContact?: SortOrder
+    fbrBuyerEmail?: SortOrder
+    totalWithholdingTax?: SortOrder
+    totalExtraTax?: SortOrder
+    totalFurtherTax?: SortOrder
+    totalFED?: SortOrder
     fbrSubmitted?: SortOrder
     fbrValidated?: SortOrder
     submissionTimestamp?: SortOrder
@@ -19649,6 +21439,10 @@ export namespace Prisma {
     taxAmount?: SortOrder
     totalAmount?: SortOrder
     discount?: SortOrder
+    totalWithholdingTax?: SortOrder
+    totalExtraTax?: SortOrder
+    totalFurtherTax?: SortOrder
+    totalFED?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -19723,9 +21517,15 @@ export namespace Prisma {
     isNot?: InvoiceWhereInput
   }
 
+  export type ProductNullableRelationFilter = {
+    is?: ProductWhereInput | null
+    isNot?: ProductWhereInput | null
+  }
+
   export type InvoiceItemCountOrderByAggregateInput = {
     id?: SortOrder
     invoiceId?: SortOrder
+    productId?: SortOrder
     description?: SortOrder
     hsCode?: SortOrder
     quantity?: SortOrder
@@ -19735,6 +21535,17 @@ export namespace Prisma {
     taxAmount?: SortOrder
     exemptionSRO?: SortOrder
     unitOfMeasurement?: SortOrder
+    discount?: SortOrder
+    valueSalesExcludingST?: SortOrder
+    salesTaxApplicable?: SortOrder
+    salesTaxWithheldAtSource?: SortOrder
+    extraTax?: SortOrder
+    furtherTax?: SortOrder
+    fedPayable?: SortOrder
+    saleType?: SortOrder
+    sroScheduleNo?: SortOrder
+    sroItemSerialNo?: SortOrder
+    fixedNotifiedValueOrRetailPrice?: SortOrder
   }
 
   export type InvoiceItemAvgOrderByAggregateInput = {
@@ -19743,11 +21554,20 @@ export namespace Prisma {
     totalValue?: SortOrder
     taxRate?: SortOrder
     taxAmount?: SortOrder
+    discount?: SortOrder
+    valueSalesExcludingST?: SortOrder
+    salesTaxApplicable?: SortOrder
+    salesTaxWithheldAtSource?: SortOrder
+    extraTax?: SortOrder
+    furtherTax?: SortOrder
+    fedPayable?: SortOrder
+    fixedNotifiedValueOrRetailPrice?: SortOrder
   }
 
   export type InvoiceItemMaxOrderByAggregateInput = {
     id?: SortOrder
     invoiceId?: SortOrder
+    productId?: SortOrder
     description?: SortOrder
     hsCode?: SortOrder
     quantity?: SortOrder
@@ -19757,11 +21577,23 @@ export namespace Prisma {
     taxAmount?: SortOrder
     exemptionSRO?: SortOrder
     unitOfMeasurement?: SortOrder
+    discount?: SortOrder
+    valueSalesExcludingST?: SortOrder
+    salesTaxApplicable?: SortOrder
+    salesTaxWithheldAtSource?: SortOrder
+    extraTax?: SortOrder
+    furtherTax?: SortOrder
+    fedPayable?: SortOrder
+    saleType?: SortOrder
+    sroScheduleNo?: SortOrder
+    sroItemSerialNo?: SortOrder
+    fixedNotifiedValueOrRetailPrice?: SortOrder
   }
 
   export type InvoiceItemMinOrderByAggregateInput = {
     id?: SortOrder
     invoiceId?: SortOrder
+    productId?: SortOrder
     description?: SortOrder
     hsCode?: SortOrder
     quantity?: SortOrder
@@ -19771,6 +21603,17 @@ export namespace Prisma {
     taxAmount?: SortOrder
     exemptionSRO?: SortOrder
     unitOfMeasurement?: SortOrder
+    discount?: SortOrder
+    valueSalesExcludingST?: SortOrder
+    salesTaxApplicable?: SortOrder
+    salesTaxWithheldAtSource?: SortOrder
+    extraTax?: SortOrder
+    furtherTax?: SortOrder
+    fedPayable?: SortOrder
+    saleType?: SortOrder
+    sroScheduleNo?: SortOrder
+    sroItemSerialNo?: SortOrder
+    fixedNotifiedValueOrRetailPrice?: SortOrder
   }
 
   export type InvoiceItemSumOrderByAggregateInput = {
@@ -19779,6 +21622,14 @@ export namespace Prisma {
     totalValue?: SortOrder
     taxRate?: SortOrder
     taxAmount?: SortOrder
+    discount?: SortOrder
+    valueSalesExcludingST?: SortOrder
+    salesTaxApplicable?: SortOrder
+    salesTaxWithheldAtSource?: SortOrder
+    extraTax?: SortOrder
+    furtherTax?: SortOrder
+    fedPayable?: SortOrder
+    fixedNotifiedValueOrRetailPrice?: SortOrder
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -19815,6 +21666,13 @@ export namespace Prisma {
     category?: SortOrder
     sku?: SortOrder
     stock?: SortOrder
+    serialNumber?: SortOrder
+    transactionType?: SortOrder
+    transactionTypeDesc?: SortOrder
+    rateId?: SortOrder
+    rateDescription?: SortOrder
+    sroScheduleNo?: SortOrder
+    sroItemSerialNo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19837,6 +21695,13 @@ export namespace Prisma {
     category?: SortOrder
     sku?: SortOrder
     stock?: SortOrder
+    serialNumber?: SortOrder
+    transactionType?: SortOrder
+    transactionTypeDesc?: SortOrder
+    rateId?: SortOrder
+    rateDescription?: SortOrder
+    sroScheduleNo?: SortOrder
+    sroItemSerialNo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19853,6 +21718,13 @@ export namespace Prisma {
     category?: SortOrder
     sku?: SortOrder
     stock?: SortOrder
+    serialNumber?: SortOrder
+    transactionType?: SortOrder
+    transactionTypeDesc?: SortOrder
+    rateId?: SortOrder
+    rateDescription?: SortOrder
+    sroScheduleNo?: SortOrder
+    sroItemSerialNo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20726,6 +22598,12 @@ export namespace Prisma {
     connect?: InvoiceWhereUniqueInput
   }
 
+  export type ProductCreateNestedOneWithoutItemsInput = {
+    create?: XOR<ProductCreateWithoutItemsInput, ProductUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutItemsInput
+    connect?: ProductWhereUniqueInput
+  }
+
   export type InvoiceUpdateOneRequiredWithoutItemsNestedInput = {
     create?: XOR<InvoiceCreateWithoutItemsInput, InvoiceUncheckedCreateWithoutItemsInput>
     connectOrCreate?: InvoiceCreateOrConnectWithoutItemsInput
@@ -20734,10 +22612,34 @@ export namespace Prisma {
     update?: XOR<XOR<InvoiceUpdateToOneWithWhereWithoutItemsInput, InvoiceUpdateWithoutItemsInput>, InvoiceUncheckedUpdateWithoutItemsInput>
   }
 
+  export type ProductUpdateOneWithoutItemsNestedInput = {
+    create?: XOR<ProductCreateWithoutItemsInput, ProductUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutItemsInput
+    upsert?: ProductUpsertWithoutItemsInput
+    disconnect?: ProductWhereInput | boolean
+    delete?: ProductWhereInput | boolean
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutItemsInput, ProductUpdateWithoutItemsInput>, ProductUncheckedUpdateWithoutItemsInput>
+  }
+
   export type BusinessCreateNestedOneWithoutProductsInput = {
     create?: XOR<BusinessCreateWithoutProductsInput, BusinessUncheckedCreateWithoutProductsInput>
     connectOrCreate?: BusinessCreateOrConnectWithoutProductsInput
     connect?: BusinessWhereUniqueInput
+  }
+
+  export type InvoiceItemCreateNestedManyWithoutProductInput = {
+    create?: XOR<InvoiceItemCreateWithoutProductInput, InvoiceItemUncheckedCreateWithoutProductInput> | InvoiceItemCreateWithoutProductInput[] | InvoiceItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: InvoiceItemCreateOrConnectWithoutProductInput | InvoiceItemCreateOrConnectWithoutProductInput[]
+    createMany?: InvoiceItemCreateManyProductInputEnvelope
+    connect?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+  }
+
+  export type InvoiceItemUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<InvoiceItemCreateWithoutProductInput, InvoiceItemUncheckedCreateWithoutProductInput> | InvoiceItemCreateWithoutProductInput[] | InvoiceItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: InvoiceItemCreateOrConnectWithoutProductInput | InvoiceItemCreateOrConnectWithoutProductInput[]
+    createMany?: InvoiceItemCreateManyProductInputEnvelope
+    connect?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
   }
 
   export type DecimalFieldUpdateOperationsInput = {
@@ -20762,6 +22664,34 @@ export namespace Prisma {
     upsert?: BusinessUpsertWithoutProductsInput
     connect?: BusinessWhereUniqueInput
     update?: XOR<XOR<BusinessUpdateToOneWithWhereWithoutProductsInput, BusinessUpdateWithoutProductsInput>, BusinessUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type InvoiceItemUpdateManyWithoutProductNestedInput = {
+    create?: XOR<InvoiceItemCreateWithoutProductInput, InvoiceItemUncheckedCreateWithoutProductInput> | InvoiceItemCreateWithoutProductInput[] | InvoiceItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: InvoiceItemCreateOrConnectWithoutProductInput | InvoiceItemCreateOrConnectWithoutProductInput[]
+    upsert?: InvoiceItemUpsertWithWhereUniqueWithoutProductInput | InvoiceItemUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: InvoiceItemCreateManyProductInputEnvelope
+    set?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+    disconnect?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+    delete?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+    connect?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+    update?: InvoiceItemUpdateWithWhereUniqueWithoutProductInput | InvoiceItemUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: InvoiceItemUpdateManyWithWhereWithoutProductInput | InvoiceItemUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: InvoiceItemScalarWhereInput | InvoiceItemScalarWhereInput[]
+  }
+
+  export type InvoiceItemUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<InvoiceItemCreateWithoutProductInput, InvoiceItemUncheckedCreateWithoutProductInput> | InvoiceItemCreateWithoutProductInput[] | InvoiceItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: InvoiceItemCreateOrConnectWithoutProductInput | InvoiceItemCreateOrConnectWithoutProductInput[]
+    upsert?: InvoiceItemUpsertWithWhereUniqueWithoutProductInput | InvoiceItemUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: InvoiceItemCreateManyProductInputEnvelope
+    set?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+    disconnect?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+    delete?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+    connect?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
+    update?: InvoiceItemUpdateWithWhereUniqueWithoutProductInput | InvoiceItemUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: InvoiceItemUpdateManyWithWhereWithoutProductInput | InvoiceItemUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: InvoiceItemScalarWhereInput | InvoiceItemScalarWhereInput[]
   }
 
   export type BulkInvoiceItemCreateNestedManyWithoutBatchInput = {
@@ -21282,8 +23212,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -21309,8 +23256,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -21388,8 +23352,25 @@ export namespace Prisma {
     phoneNumber?: StringNullableFilter<"Business"> | string | null
     email?: StringNullableFilter<"Business"> | string | null
     website?: StringNullableFilter<"Business"> | string | null
+    sellerCity?: StringNullableFilter<"Business"> | string | null
+    sellerContact?: StringNullableFilter<"Business"> | string | null
+    sellerEmail?: StringNullableFilter<"Business"> | string | null
+    posId?: StringNullableFilter<"Business"> | string | null
+    electronicSoftwareRegNo?: StringNullableFilter<"Business"> | string | null
+    fbrIntegratorLicenseNo?: StringNullableFilter<"Business"> | string | null
+    logoUrl?: StringNullableFilter<"Business"> | string | null
+    invoiceTemplate?: StringNullableFilter<"Business"> | string | null
+    invoicePrefix?: StringNullableFilter<"Business"> | string | null
+    footerText?: StringNullableFilter<"Business"> | string | null
+    taxIdLabel?: StringNullableFilter<"Business"> | string | null
+    defaultPaymentTerms?: StringNullableFilter<"Business"> | string | null
+    primaryColor?: StringNullableFilter<"Business"> | string | null
+    secondaryColor?: StringNullableFilter<"Business"> | string | null
+    defaultCurrency?: StringFilter<"Business"> | string
+    pdfTheme?: StringNullableFilter<"Business"> | string | null
     fbrSetupComplete?: BoolFilter<"Business"> | boolean
     fbrSetupSkipped?: BoolFilter<"Business"> | boolean
+    defaultScenario?: StringNullableFilter<"Business"> | string | null
     integrationMode?: EnumIntegrationModeFilter<"Business"> | $Enums.IntegrationMode
     sandboxValidated?: BoolFilter<"Business"> | boolean
     productionEnabled?: BoolFilter<"Business"> | boolean
@@ -21556,6 +23537,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -21589,6 +23588,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -21627,6 +23644,13 @@ export namespace Prisma {
     postalCode?: string | null
     ntnNumber?: string | null
     registrationType?: $Enums.RegistrationType
+    buyerCNIC?: string | null
+    buyerPassport?: string | null
+    buyerType?: string | null
+    buyerCity?: string | null
+    buyerProvince?: string | null
+    buyerContact?: string | null
+    buyerEmail?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
@@ -21643,6 +23667,13 @@ export namespace Prisma {
     postalCode?: string | null
     ntnNumber?: string | null
     registrationType?: $Enums.RegistrationType
+    buyerCNIC?: string | null
+    buyerPassport?: string | null
+    buyerType?: string | null
+    buyerCity?: string | null
+    buyerProvince?: string | null
+    buyerContact?: string | null
+    buyerEmail?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
@@ -21669,8 +23700,16 @@ export namespace Prisma {
     category?: string | null
     sku?: string | null
     stock?: number | null
+    serialNumber?: string | null
+    transactionType?: string | null
+    transactionTypeDesc?: string | null
+    rateId?: string | null
+    rateDescription?: string | null
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    items?: InvoiceItemCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutBusinessInput = {
@@ -21684,8 +23723,16 @@ export namespace Prisma {
     category?: string | null
     sku?: string | null
     stock?: number | null
+    serialNumber?: string | null
+    transactionType?: string | null
+    transactionTypeDesc?: string | null
+    rateId?: string | null
+    rateDescription?: string | null
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    items?: InvoiceItemUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutBusinessInput = {
@@ -21776,6 +23823,24 @@ export namespace Prisma {
     discount?: FloatFilter<"Invoice"> | number
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFilter<"Invoice"> | $Enums.IntegrationMode
+    documentType?: StringNullableFilter<"Invoice"> | string | null
+    scenarioId?: StringNullableFilter<"Invoice"> | string | null
+    paymentMode?: StringNullableFilter<"Invoice"> | string | null
+    taxPeriod?: StringNullableFilter<"Invoice"> | string | null
+    referenceInvoiceNo?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerNTN?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerCNIC?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerPassport?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerType?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerCity?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerProvince?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerAddress?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerContact?: StringNullableFilter<"Invoice"> | string | null
+    fbrBuyerEmail?: StringNullableFilter<"Invoice"> | string | null
+    totalWithholdingTax?: FloatFilter<"Invoice"> | number
+    totalExtraTax?: FloatFilter<"Invoice"> | number
+    totalFurtherTax?: FloatFilter<"Invoice"> | number
+    totalFED?: FloatFilter<"Invoice"> | number
     fbrSubmitted?: BoolFilter<"Invoice"> | boolean
     fbrValidated?: BoolFilter<"Invoice"> | boolean
     submissionTimestamp?: DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -21823,6 +23888,13 @@ export namespace Prisma {
     postalCode?: StringNullableFilter<"Customer"> | string | null
     ntnNumber?: StringNullableFilter<"Customer"> | string | null
     registrationType?: EnumRegistrationTypeFilter<"Customer"> | $Enums.RegistrationType
+    buyerCNIC?: StringNullableFilter<"Customer"> | string | null
+    buyerPassport?: StringNullableFilter<"Customer"> | string | null
+    buyerType?: StringNullableFilter<"Customer"> | string | null
+    buyerCity?: StringNullableFilter<"Customer"> | string | null
+    buyerProvince?: StringNullableFilter<"Customer"> | string | null
+    buyerContact?: StringNullableFilter<"Customer"> | string | null
+    buyerEmail?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
   }
@@ -21858,6 +23930,13 @@ export namespace Prisma {
     category?: StringNullableFilter<"Product"> | string | null
     sku?: StringNullableFilter<"Product"> | string | null
     stock?: IntNullableFilter<"Product"> | number | null
+    serialNumber?: StringNullableFilter<"Product"> | string | null
+    transactionType?: StringNullableFilter<"Product"> | string | null
+    transactionTypeDesc?: StringNullableFilter<"Product"> | string | null
+    rateId?: StringNullableFilter<"Product"> | string | null
+    rateDescription?: StringNullableFilter<"Product"> | string | null
+    sroScheduleNo?: StringNullableFilter<"Product"> | string | null
+    sroItemSerialNo?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
   }
@@ -21875,8 +23954,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -21903,8 +23999,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -21935,6 +24048,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -21968,6 +24099,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -22019,8 +24168,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22047,8 +24213,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22089,8 +24272,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -22117,8 +24317,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -22146,6 +24363,13 @@ export namespace Prisma {
     postalCode?: string | null
     ntnNumber?: string | null
     registrationType?: $Enums.RegistrationType
+    buyerCNIC?: string | null
+    buyerPassport?: string | null
+    buyerType?: string | null
+    buyerCity?: string | null
+    buyerProvince?: string | null
+    buyerContact?: string | null
+    buyerEmail?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     business: BusinessCreateNestedOneWithoutCustomersInput
@@ -22163,6 +24387,13 @@ export namespace Prisma {
     postalCode?: string | null
     ntnNumber?: string | null
     registrationType?: $Enums.RegistrationType
+    buyerCNIC?: string | null
+    buyerPassport?: string | null
+    buyerType?: string | null
+    buyerCity?: string | null
+    buyerProvince?: string | null
+    buyerContact?: string | null
+    buyerEmail?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22183,10 +24414,23 @@ export namespace Prisma {
     taxAmount: number
     exemptionSRO?: string | null
     unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
+    product?: ProductCreateNestedOneWithoutItemsInput
   }
 
   export type InvoiceItemUncheckedCreateWithoutInvoiceInput = {
     id?: string
+    productId?: string | null
     description: string
     hsCode: string
     quantity: number
@@ -22196,6 +24440,17 @@ export namespace Prisma {
     taxAmount: number
     exemptionSRO?: string | null
     unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
   }
 
   export type InvoiceItemCreateOrConnectWithoutInvoiceInput = {
@@ -22232,8 +24487,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22260,8 +24532,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22295,6 +24584,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     business?: BusinessUpdateOneRequiredWithoutCustomersNestedInput
@@ -22312,6 +24608,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22338,6 +24641,7 @@ export namespace Prisma {
     NOT?: InvoiceItemScalarWhereInput | InvoiceItemScalarWhereInput[]
     id?: StringFilter<"InvoiceItem"> | string
     invoiceId?: StringFilter<"InvoiceItem"> | string
+    productId?: StringNullableFilter<"InvoiceItem"> | string | null
     description?: StringFilter<"InvoiceItem"> | string
     hsCode?: StringFilter<"InvoiceItem"> | string
     quantity?: FloatFilter<"InvoiceItem"> | number
@@ -22347,6 +24651,17 @@ export namespace Prisma {
     taxAmount?: FloatFilter<"InvoiceItem"> | number
     exemptionSRO?: StringNullableFilter<"InvoiceItem"> | string | null
     unitOfMeasurement?: StringFilter<"InvoiceItem"> | string
+    discount?: FloatFilter<"InvoiceItem"> | number
+    valueSalesExcludingST?: FloatFilter<"InvoiceItem"> | number
+    salesTaxApplicable?: FloatFilter<"InvoiceItem"> | number
+    salesTaxWithheldAtSource?: FloatFilter<"InvoiceItem"> | number
+    extraTax?: FloatFilter<"InvoiceItem"> | number
+    furtherTax?: FloatFilter<"InvoiceItem"> | number
+    fedPayable?: FloatFilter<"InvoiceItem"> | number
+    saleType?: StringFilter<"InvoiceItem"> | string
+    sroScheduleNo?: StringNullableFilter<"InvoiceItem"> | string | null
+    sroItemSerialNo?: StringNullableFilter<"InvoiceItem"> | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFilter<"InvoiceItem"> | number
   }
 
   export type InvoiceCreateWithoutItemsInput = {
@@ -22363,6 +24678,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -22397,6 +24730,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -22416,6 +24767,57 @@ export namespace Prisma {
   export type InvoiceCreateOrConnectWithoutItemsInput = {
     where: InvoiceWhereUniqueInput
     create: XOR<InvoiceCreateWithoutItemsInput, InvoiceUncheckedCreateWithoutItemsInput>
+  }
+
+  export type ProductCreateWithoutItemsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    hsCode: string
+    unitOfMeasurement: string
+    unitPrice: Decimal | DecimalJsLike | number | string
+    taxRate?: number
+    category?: string | null
+    sku?: string | null
+    stock?: number | null
+    serialNumber?: string | null
+    transactionType?: string | null
+    transactionTypeDesc?: string | null
+    rateId?: string | null
+    rateDescription?: string | null
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    business: BusinessCreateNestedOneWithoutProductsInput
+  }
+
+  export type ProductUncheckedCreateWithoutItemsInput = {
+    id?: string
+    businessId: string
+    name: string
+    description?: string | null
+    hsCode: string
+    unitOfMeasurement: string
+    unitPrice: Decimal | DecimalJsLike | number | string
+    taxRate?: number
+    category?: string | null
+    sku?: string | null
+    stock?: number | null
+    serialNumber?: string | null
+    transactionType?: string | null
+    transactionTypeDesc?: string | null
+    rateId?: string | null
+    rateDescription?: string | null
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductCreateOrConnectWithoutItemsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutItemsInput, ProductUncheckedCreateWithoutItemsInput>
   }
 
   export type InvoiceUpsertWithoutItemsInput = {
@@ -22443,6 +24845,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -22477,6 +24897,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -22489,6 +24927,63 @@ export namespace Prisma {
     pdfGenerated?: BoolFieldUpdateOperationsInput | boolean
     pdfStoragePath?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedData?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUpsertWithoutItemsInput = {
+    update: XOR<ProductUpdateWithoutItemsInput, ProductUncheckedUpdateWithoutItemsInput>
+    create: XOR<ProductCreateWithoutItemsInput, ProductUncheckedCreateWithoutItemsInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutItemsInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutItemsInput, ProductUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type ProductUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    hsCode?: StringFieldUpdateOperationsInput | string
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxRate?: IntFieldUpdateOperationsInput | number
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    business?: BusinessUpdateOneRequiredWithoutProductsNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    businessId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    hsCode?: StringFieldUpdateOperationsInput | string
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxRate?: IntFieldUpdateOperationsInput | number
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22506,8 +25001,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -22534,8 +25046,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -22550,6 +25079,66 @@ export namespace Prisma {
   export type BusinessCreateOrConnectWithoutProductsInput = {
     where: BusinessWhereUniqueInput
     create: XOR<BusinessCreateWithoutProductsInput, BusinessUncheckedCreateWithoutProductsInput>
+  }
+
+  export type InvoiceItemCreateWithoutProductInput = {
+    id?: string
+    description: string
+    hsCode: string
+    quantity: number
+    unitPrice: number
+    totalValue: number
+    taxRate: number
+    taxAmount: number
+    exemptionSRO?: string | null
+    unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
+    invoice: InvoiceCreateNestedOneWithoutItemsInput
+  }
+
+  export type InvoiceItemUncheckedCreateWithoutProductInput = {
+    id?: string
+    invoiceId: string
+    description: string
+    hsCode: string
+    quantity: number
+    unitPrice: number
+    totalValue: number
+    taxRate: number
+    taxAmount: number
+    exemptionSRO?: string | null
+    unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
+  }
+
+  export type InvoiceItemCreateOrConnectWithoutProductInput = {
+    where: InvoiceItemWhereUniqueInput
+    create: XOR<InvoiceItemCreateWithoutProductInput, InvoiceItemUncheckedCreateWithoutProductInput>
+  }
+
+  export type InvoiceItemCreateManyProductInputEnvelope = {
+    data: InvoiceItemCreateManyProductInput | InvoiceItemCreateManyProductInput[]
+    skipDuplicates?: boolean
   }
 
   export type BusinessUpsertWithoutProductsInput = {
@@ -22576,8 +25165,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22604,8 +25210,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22615,6 +25238,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutBusinessNestedInput
     customers?: CustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  }
+
+  export type InvoiceItemUpsertWithWhereUniqueWithoutProductInput = {
+    where: InvoiceItemWhereUniqueInput
+    update: XOR<InvoiceItemUpdateWithoutProductInput, InvoiceItemUncheckedUpdateWithoutProductInput>
+    create: XOR<InvoiceItemCreateWithoutProductInput, InvoiceItemUncheckedCreateWithoutProductInput>
+  }
+
+  export type InvoiceItemUpdateWithWhereUniqueWithoutProductInput = {
+    where: InvoiceItemWhereUniqueInput
+    data: XOR<InvoiceItemUpdateWithoutProductInput, InvoiceItemUncheckedUpdateWithoutProductInput>
+  }
+
+  export type InvoiceItemUpdateManyWithWhereWithoutProductInput = {
+    where: InvoiceItemScalarWhereInput
+    data: XOR<InvoiceItemUpdateManyMutationInput, InvoiceItemUncheckedUpdateManyWithoutProductInput>
   }
 
   export type BulkInvoiceItemCreateWithoutBatchInput = {
@@ -22800,8 +25439,25 @@ export namespace Prisma {
     phoneNumber?: string | null
     email?: string | null
     website?: string | null
+    sellerCity?: string | null
+    sellerContact?: string | null
+    sellerEmail?: string | null
+    posId?: string | null
+    electronicSoftwareRegNo?: string | null
+    fbrIntegratorLicenseNo?: string | null
+    logoUrl?: string | null
+    invoiceTemplate?: string | null
+    invoicePrefix?: string | null
+    footerText?: string | null
+    taxIdLabel?: string | null
+    defaultPaymentTerms?: string | null
+    primaryColor?: string | null
+    secondaryColor?: string | null
+    defaultCurrency?: string
+    pdfTheme?: string | null
     fbrSetupComplete?: boolean
     fbrSetupSkipped?: boolean
+    defaultScenario?: string | null
     integrationMode?: $Enums.IntegrationMode
     sandboxValidated?: boolean
     productionEnabled?: boolean
@@ -22830,8 +25486,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22857,8 +25530,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22884,8 +25574,25 @@ export namespace Prisma {
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    sellerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    posId?: NullableStringFieldUpdateOperationsInput | string | null
+    electronicSoftwareRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrIntegratorLicenseNo?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    invoicePrefix?: NullableStringFieldUpdateOperationsInput | string | null
+    footerText?: NullableStringFieldUpdateOperationsInput | string | null
+    taxIdLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultPaymentTerms?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryColor?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCurrency?: StringFieldUpdateOperationsInput | string
+    pdfTheme?: NullableStringFieldUpdateOperationsInput | string | null
     fbrSetupComplete?: BoolFieldUpdateOperationsInput | boolean
     fbrSetupSkipped?: BoolFieldUpdateOperationsInput | boolean
+    defaultScenario?: NullableStringFieldUpdateOperationsInput | string | null
     integrationMode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
     sandboxValidated?: BoolFieldUpdateOperationsInput | boolean
     productionEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -22928,6 +25635,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -22955,6 +25680,13 @@ export namespace Prisma {
     postalCode?: string | null
     ntnNumber?: string | null
     registrationType?: $Enums.RegistrationType
+    buyerCNIC?: string | null
+    buyerPassport?: string | null
+    buyerType?: string | null
+    buyerCity?: string | null
+    buyerProvince?: string | null
+    buyerContact?: string | null
+    buyerEmail?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22970,6 +25702,13 @@ export namespace Prisma {
     category?: string | null
     sku?: string | null
     stock?: number | null
+    serialNumber?: string | null
+    transactionType?: string | null
+    transactionTypeDesc?: string | null
+    rateId?: string | null
+    rateDescription?: string | null
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22988,6 +25727,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23021,6 +25778,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23053,6 +25828,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23080,6 +25873,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
@@ -23096,6 +25896,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
@@ -23112,6 +25919,13 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     ntnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registrationType?: EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+    buyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23127,8 +25941,16 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: InvoiceItemUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutBusinessInput = {
@@ -23142,8 +25964,16 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: InvoiceItemUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutBusinessInput = {
@@ -23157,6 +25987,13 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock?: NullableIntFieldUpdateOperationsInput | number | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionTypeDesc?: NullableStringFieldUpdateOperationsInput | string | null
+    rateId?: NullableStringFieldUpdateOperationsInput | string | null
+    rateDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23176,6 +26013,24 @@ export namespace Prisma {
     discount?: number
     status?: $Enums.InvoiceStatus
     mode?: $Enums.IntegrationMode
+    documentType?: string | null
+    scenarioId?: string | null
+    paymentMode?: string | null
+    taxPeriod?: string | null
+    referenceInvoiceNo?: string | null
+    fbrBuyerNTN?: string | null
+    fbrBuyerCNIC?: string | null
+    fbrBuyerPassport?: string | null
+    fbrBuyerType?: string | null
+    fbrBuyerCity?: string | null
+    fbrBuyerProvince?: string | null
+    fbrBuyerAddress?: string | null
+    fbrBuyerContact?: string | null
+    fbrBuyerEmail?: string | null
+    totalWithholdingTax?: number
+    totalExtraTax?: number
+    totalFurtherTax?: number
+    totalFED?: number
     fbrSubmitted?: boolean
     fbrValidated?: boolean
     submissionTimestamp?: Date | string | null
@@ -23206,6 +26061,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23239,6 +26112,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23271,6 +26162,24 @@ export namespace Prisma {
     discount?: FloatFieldUpdateOperationsInput | number
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     mode?: EnumIntegrationModeFieldUpdateOperationsInput | $Enums.IntegrationMode
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    scenarioId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    taxPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceInvoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerNTN?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCNIC?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerPassport?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerType?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerCity?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerContact?: NullableStringFieldUpdateOperationsInput | string | null
+    fbrBuyerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    totalWithholdingTax?: FloatFieldUpdateOperationsInput | number
+    totalExtraTax?: FloatFieldUpdateOperationsInput | number
+    totalFurtherTax?: FloatFieldUpdateOperationsInput | number
+    totalFED?: FloatFieldUpdateOperationsInput | number
     fbrSubmitted?: BoolFieldUpdateOperationsInput | boolean
     fbrValidated?: BoolFieldUpdateOperationsInput | boolean
     submissionTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23289,6 +26198,7 @@ export namespace Prisma {
 
   export type InvoiceItemCreateManyInvoiceInput = {
     id?: string
+    productId?: string | null
     description: string
     hsCode: string
     quantity: number
@@ -23298,6 +26208,17 @@ export namespace Prisma {
     taxAmount: number
     exemptionSRO?: string | null
     unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
   }
 
   export type InvoiceItemUpdateWithoutInvoiceInput = {
@@ -23311,10 +26232,23 @@ export namespace Prisma {
     taxAmount?: FloatFieldUpdateOperationsInput | number
     exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
+    product?: ProductUpdateOneWithoutItemsNestedInput
   }
 
   export type InvoiceItemUncheckedUpdateWithoutInvoiceInput = {
     id?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     hsCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
@@ -23324,9 +26258,70 @@ export namespace Prisma {
     taxAmount?: FloatFieldUpdateOperationsInput | number
     exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type InvoiceItemUncheckedUpdateManyWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    hsCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    totalValue?: FloatFieldUpdateOperationsInput | number
+    taxRate?: FloatFieldUpdateOperationsInput | number
+    taxAmount?: FloatFieldUpdateOperationsInput | number
+    exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type InvoiceItemCreateManyProductInput = {
+    id?: string
+    invoiceId: string
+    description: string
+    hsCode: string
+    quantity: number
+    unitPrice: number
+    totalValue: number
+    taxRate: number
+    taxAmount: number
+    exemptionSRO?: string | null
+    unitOfMeasurement: string
+    discount?: number
+    valueSalesExcludingST: number
+    salesTaxApplicable: number
+    salesTaxWithheldAtSource?: number
+    extraTax?: number
+    furtherTax?: number
+    fedPayable?: number
+    saleType?: string
+    sroScheduleNo?: string | null
+    sroItemSerialNo?: string | null
+    fixedNotifiedValueOrRetailPrice?: number
+  }
+
+  export type InvoiceItemUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     hsCode?: StringFieldUpdateOperationsInput | string
@@ -23337,6 +26332,68 @@ export namespace Prisma {
     taxAmount?: FloatFieldUpdateOperationsInput | number
     exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
+    invoice?: InvoiceUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type InvoiceItemUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoiceId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    hsCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    totalValue?: FloatFieldUpdateOperationsInput | number
+    taxRate?: FloatFieldUpdateOperationsInput | number
+    taxAmount?: FloatFieldUpdateOperationsInput | number
+    exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type InvoiceItemUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoiceId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    hsCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    totalValue?: FloatFieldUpdateOperationsInput | number
+    taxRate?: FloatFieldUpdateOperationsInput | number
+    taxAmount?: FloatFieldUpdateOperationsInput | number
+    exemptionSRO?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    valueSalesExcludingST?: FloatFieldUpdateOperationsInput | number
+    salesTaxApplicable?: FloatFieldUpdateOperationsInput | number
+    salesTaxWithheldAtSource?: FloatFieldUpdateOperationsInput | number
+    extraTax?: FloatFieldUpdateOperationsInput | number
+    furtherTax?: FloatFieldUpdateOperationsInput | number
+    fedPayable?: FloatFieldUpdateOperationsInput | number
+    saleType?: StringFieldUpdateOperationsInput | string
+    sroScheduleNo?: NullableStringFieldUpdateOperationsInput | string | null
+    sroItemSerialNo?: NullableStringFieldUpdateOperationsInput | string | null
+    fixedNotifiedValueOrRetailPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type BulkInvoiceItemCreateManyBatchInput = {
@@ -23424,6 +26481,10 @@ export namespace Prisma {
      * @deprecated Use InvoiceCountOutputTypeDefaultArgs instead
      */
     export type InvoiceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InvoiceCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProductCountOutputTypeDefaultArgs instead
+     */
+    export type ProductCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use BulkInvoiceBatchCountOutputTypeDefaultArgs instead
      */

@@ -10,10 +10,14 @@ import Link from "next/link"
 import { SharedLoading } from "@/components/shared-loading"
 import { SharedNavigation } from "@/components/shared-navigation"
 
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
+
 export default function CustomersPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [customers, setCustomers] = useState<any[]>([])
+  const [businessData, setBusinessData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -23,25 +27,34 @@ export default function CustomersPage() {
       return
     }
 
-    loadCustomers()
+    loadData()
   }, [session, status])
 
-  const loadCustomers = async () => {
+  const loadData = async () => {
     try {
       setLoading(true)
       
       // Fetch customers from API
-      const response = await fetch('/api/customers')
-      if (response.ok) {
-        const data = await response.json()
-        setCustomers(data.customers || [])
+      const customersResponse = await fetch('/api/customers')
+      if (customersResponse.ok) {
+        const result = await customersResponse.json()
+        setCustomers(result.customers || [])
       } else {
-        console.error('Failed to fetch customers:', response.statusText)
+        console.error('Failed to fetch customers:', customersResponse.statusText)
         setCustomers([])
       }
       
+      // Fetch business data
+      const businessResponse = await fetch('/api/settings/business')
+      if (businessResponse.ok) {
+        const businessResult = await businessResponse.json()
+        setBusinessData(businessResult.business)
+      } else {
+        console.error('Failed to fetch business data:', businessResponse.statusText)
+      }
+      
     } catch (error) {
-      console.error('Failed to load customers:', error)
+      console.error('Failed to load data:', error)
       setCustomers([])
     } finally {
       setLoading(false)
@@ -105,10 +118,10 @@ export default function CustomersPage() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Building className="h-5 w-5 mr-2" />
-              Demo Business ({session?.user?.name})
+              {businessData?.companyName || 'Demo Business'} ({session?.user?.name})
             </CardTitle>
             <CardDescription>
-              NTN: 1234567 • Punjab
+              NTN: {businessData?.ntnNumber || '1234567'} • {businessData?.province || 'Punjab'}
             </CardDescription>
           </CardHeader>
         </Card>

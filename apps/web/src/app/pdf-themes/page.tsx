@@ -17,6 +17,9 @@ import {
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
+
 interface BusinessSettings {
   companyName: string
   ntnNumber: string

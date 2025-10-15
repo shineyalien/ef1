@@ -21,7 +21,15 @@ export default function NewCustomerPage() {
     province: '',
     postalCode: '',
     ntnNumber: '',
-    registrationType: 'UNREGISTERED'
+    registrationType: 'UNREGISTERED',
+    // Additional FBR fields
+    buyerCNIC: '',
+    buyerPassport: '',
+    buyerType: '2', // Default to CNIC for individuals
+    buyerCity: '',
+    buyerProvince: '',
+    buyerContact: '',
+    buyerEmail: ''
   })
 
   const provinces = [
@@ -86,7 +94,8 @@ export default function NewCustomerPage() {
     setCustomerData({
       ...customerData,
       registrationType: type,
-      ntnNumber: type === 'UNREGISTERED' ? '' : customerData.ntnNumber
+      ntnNumber: type === 'UNREGISTERED' ? '' : customerData.ntnNumber,
+      buyerType: type === 'REGISTERED' ? '1' : '2' // Set buyer type based on registration
     })
   }
 

@@ -1,5 +1,8 @@
 'use client'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
@@ -82,10 +85,10 @@ export default function FBRSettingsPage() {
   const loadSettings = async () => {
     try {
       const response = await fetch('/api/settings/fbr')
-      const data = await response.json()
+      const result = await response.json()
       
-      if (data.success) {
-        setSettings(data.settings)
+      if (result.success) {
+        setSettings(result.settings)
       }
     } catch (error) {
       console.error('Failed to load settings:', error)
@@ -97,10 +100,10 @@ export default function FBRSettingsPage() {
   const loadStats = async () => {
     try {
       const response = await fetch('/api/settings/fbr/stats')
-      const data = await response.json()
+      const result = await response.json()
       
-      if (data.success) {
-        setStats(data.stats)
+      if (result.success) {
+        setStats(result.stats)
       }
     } catch (error) {
       console.error('Failed to load stats:', error)

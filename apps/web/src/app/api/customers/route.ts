@@ -192,11 +192,19 @@ export async function POST(request: NextRequest) {
           ntnNumber: body.ntnNumber?.trim() || null,
           phone: body.phone?.trim() || null,
           email: body.email?.trim().toLowerCase() || null,
-          buyerProvince: body.province.trim(),
-          buyerCity: body.city?.trim() || null,
-          buyerContact: body.phone?.trim() || null,
-          buyerEmail: body.email?.trim().toLowerCase() || null
-        }
+          // FBR Buyer Information
+          buyerCNIC: body.buyerCNIC?.trim() || null,
+          buyerPassport: body.buyerPassport?.trim() || null,
+          buyerType: body.buyerType?.trim() || (body.ntnNumber ? '1' : '2'), // Default to NTN if available, otherwise CNIC
+          buyerCity: body.buyerCity?.trim() || body.city?.trim() || null,
+          buyerProvince: body.province?.trim() || null,
+          buyerContact: body.phone?.trim() || body.buyerContact?.trim() || null,
+          buyerEmail: body.email?.trim().toLowerCase() || body.buyerEmail?.trim().toLowerCase() || null,
+          // Regular address fields
+          city: body.city?.trim() || null,
+          province: body.province?.trim() || null,
+          postalCode: body.postalCode?.trim() || null
+        } as any
       })
     } catch (createError) {
       console.error('Failed to create customer:', createError)

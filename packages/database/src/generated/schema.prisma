@@ -67,9 +67,30 @@ model Business {
   email        String?
   website      String?
 
+  // Seller Information Fields
+  sellerCity              String?
+  sellerContact           String?
+  sellerEmail             String?
+  posId                   String?
+  electronicSoftwareRegNo String?
+  fbrIntegratorLicenseNo  String?
+
+  // Invoice Customization Fields
+  logoUrl             String?
+  invoiceTemplate     String?
+  invoicePrefix       String?
+  footerText          String?
+  taxIdLabel          String?
+  defaultPaymentTerms String?
+  primaryColor        String?
+  secondaryColor      String?
+  defaultCurrency     String  @default("PKR")
+  pdfTheme            String?
+
   // FBR Integration Status
   fbrSetupComplete Boolean @default(false)
   fbrSetupSkipped  Boolean @default(false)
+  defaultScenario  String?
 
   // Integration Configuration
   integrationMode   IntegrationMode @default(LOCAL)
@@ -109,6 +130,15 @@ model Customer {
   ntnNumber        String?
   registrationType RegistrationType @default(UNREGISTERED)
 
+  // FBR Buyer Information
+  buyerCNIC     String?
+  buyerPassport String?
+  buyerType     String? // '1' for NTN, '2' for CNIC, '3' for Passport
+  buyerCity     String?
+  buyerProvince String?
+  buyerContact  String?
+  buyerEmail    String?
+
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -145,6 +175,30 @@ model Invoice {
   // Status
   status InvoiceStatus   @default(DRAFT)
   mode   IntegrationMode @default(LOCAL)
+
+  // FBR Required Fields
+  documentType       String?
+  scenarioId         String?
+  paymentMode        String?
+  taxPeriod          String?
+  referenceInvoiceNo String?
+
+  // FBR Buyer Information Fields
+  fbrBuyerNTN      String?
+  fbrBuyerCNIC     String?
+  fbrBuyerPassport String?
+  fbrBuyerType     String?
+  fbrBuyerCity     String?
+  fbrBuyerProvince String?
+  fbrBuyerAddress  String?
+  fbrBuyerContact  String?
+  fbrBuyerEmail    String?
+
+  // Additional Tax Amounts
+  totalWithholdingTax Float @default(0)
+  totalExtraTax       Float @default(0)
+  totalFurtherTax     Float @default(0)
+  totalFED            Float @default(0)
 
   // FBR Submission Status
   fbrSubmitted        Boolean   @default(false)
@@ -183,8 +237,9 @@ model Invoice {
 
 // Invoice Line Items
 model InvoiceItem {
-  id        String @id @default(cuid())
+  id        String  @id @default(cuid())
   invoiceId String
+  productId String?
 
   // Product Details
   description String
@@ -201,8 +256,22 @@ model InvoiceItem {
   // Unit of Measurement
   unitOfMeasurement String
 
+  // Additional FBR Tax Fields
+  discount                        Float   @default(0)
+  valueSalesExcludingST           Float
+  salesTaxApplicable              Float
+  salesTaxWithheldAtSource        Float   @default(0)
+  extraTax                        Float   @default(0)
+  furtherTax                      Float   @default(0)
+  fedPayable                      Float   @default(0)
+  saleType                        String  @default("Standard")
+  sroScheduleNo                   String?
+  sroItemSerialNo                 String?
+  fixedNotifiedValueOrRetailPrice Float   @default(0)
+
   // Relations
-  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoice Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 
   @@map("invoice_items")
 }
@@ -221,12 +290,22 @@ model Product {
   sku               String?
   stock             Int?    @default(0)
 
+  // Additional FBR fields
+  serialNumber        String?
+  transactionType     String?
+  transactionTypeDesc String?
+  rateId              String?
+  rateDescription     String?
+  sroScheduleNo       String?
+  sroItemSerialNo     String?
+
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  business Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  items    InvoiceItem[]
 
   @@map("products")
 }

@@ -21,6 +21,9 @@ import {
   Home
 } from "lucide-react"
 
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
+
 interface AnalyticsData {
   summary: {
     totalInvoices: number
@@ -117,7 +120,7 @@ export default function AnalyticsPage() {
     )
   }
 
-  const firstBusiness = businesses[0]
+  const firstBusiness = businesses && businesses.length > 0 ? businesses[0] : null
 
   return (
     <div className="min-h-screen bg-gray-50">

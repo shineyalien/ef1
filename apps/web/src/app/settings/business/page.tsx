@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
+
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -241,37 +244,37 @@ export default function BusinessSettingsPage() {
         throw new Error(`Failed to load business settings: ${response.status}`)
       }
       
-      const data = await response.json()
+      const responseJson = await response.json()
       
-      if (data.success) {
-        setBusiness(data.business)
+      if (responseJson.success) {
+        setBusiness(responseJson.business)
         setFormData({
-          companyName: data.business.companyName || '',
-          ntnNumber: data.business.ntnNumber || '',
-          address: data.business.address || '',
-          province: data.business.province || 'Punjab',
-          businessType: data.business.businessType || 'Service Provider',
-          sector: data.business.sector || 'All Other Sectors',
-          sellerCity: data.business.sellerCity || '',
-          sellerContact: data.business.sellerContact || '',
-          sellerEmail: data.business.sellerEmail || '',
-          posId: data.business.posId || '',
-          electronicSoftwareRegNo: data.business.electronicSoftwareRegNo || '',
-          fbrIntegratorLicenseNo: data.business.fbrIntegratorLicenseNo || '',
-          logoUrl: (data.business as any).logoUrl || null,
-          invoiceTemplate: (data.business as any).invoiceTemplate || 'default',
-          invoicePrefix: (data.business as any).invoicePrefix || 'INV-',
-          invoiceFooter: (data.business as any).footerText || null,
-          taxIdLabel: (data.business as any).taxIdLabel || 'NTN',
-          defaultTerms: (data.business as any).defaultPaymentTerms || 'Payment due within 30 days',
-          primaryColor: (data.business as any).primaryColor || '#3B82F6',
-          secondaryColor: (data.business as any).secondaryColor || '#10B981',
-          defaultCurrency: (data.business as any).defaultCurrency || 'PKR',
-          pdfTheme: (data.business as any).invoiceTemplate || 'default',
-          defaultScenario: (data.business as any).defaultScenario || null
+          companyName: responseJson.business.companyName || '',
+          ntnNumber: responseJson.business.ntnNumber || '',
+          address: responseJson.business.address || '',
+          province: responseJson.business.province || 'Punjab',
+          businessType: responseJson.business.businessType || 'Service Provider',
+          sector: responseJson.business.sector || 'All Other Sectors',
+          sellerCity: responseJson.business.sellerCity || '',
+          sellerContact: responseJson.business.sellerContact || '',
+          sellerEmail: responseJson.business.sellerEmail || '',
+          posId: responseJson.business.posId || '',
+          electronicSoftwareRegNo: responseJson.business.electronicSoftwareRegNo || '',
+          fbrIntegratorLicenseNo: responseJson.business.fbrIntegratorLicenseNo || '',
+          logoUrl: responseJson.business.logoUrl || null,
+          invoiceTemplate: responseJson.business.invoiceTemplate || 'default',
+          invoicePrefix: responseJson.business.invoicePrefix || 'INV-',
+          invoiceFooter: responseJson.business.footerText || null,
+          taxIdLabel: responseJson.business.taxIdLabel || 'NTN',
+          defaultTerms: responseJson.business.defaultPaymentTerms || 'Payment due within 30 days',
+          primaryColor: responseJson.business.primaryColor || '#3B82F6',
+          secondaryColor: responseJson.business.secondaryColor || '#10B981',
+          defaultCurrency: responseJson.business.defaultCurrency || 'PKR',
+          pdfTheme: responseJson.business.invoiceTemplate || 'default',
+          defaultScenario: responseJson.business.defaultScenario || null
         })
       } else {
-        throw new Error(data.error?.message || 'Failed to load business settings')
+        throw new Error(responseJson.error?.message || 'Failed to load business settings')
       }
     } catch (error) {
       console.error('Failed to load business:', error)

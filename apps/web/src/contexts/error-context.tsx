@@ -1,49 +1,13 @@
 'use client'
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react'
-import { AppError, ErrorSeverity, ErrorCategory } from '@/components/error-boundary'
-import { generateUUID } from '@/lib/uuid'
-
-// Toast notification types
-export type ToastType = 'error' | 'warning' | 'info' | 'success'
-
-export interface ToastNotification {
-  id: string
-  type: ToastType
-  title: string
-  message: string
-  duration?: number
-  persistent?: boolean
-  actions?: Array<{
-    label: string
-    action: () => void
-    variant?: 'default' | 'destructive'
-  }>
-}
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
+import { toast } from 'sonner'
 
 interface ErrorContextType {
-  // Error state
-  errors: AppError[]
-  toasts: ToastNotification[]
-  
-  // Error handling methods
-  addError: (error: AppError) => void
-  clearErrors: () => void
-  clearError: (id: string) => void
-  
-  // Toast notification methods
-  showToast: (toast: Omit<ToastNotification, 'id'>) => void
-  showSuccessToast: (title: string, message: string, duration?: number) => void
-  showErrorToast: (title: string, message: string, duration?: number) => void
-  showWarningToast: (title: string, message: string, duration?: number) => void
-  showInfoToast: (title: string, message: string, duration?: number) => void
-  clearToast: (id: string) => void
-  clearToasts: () => void
-  
-  // Convenience methods for common errors
+  showErrorToast: (title: string, message: string) => void
+  showSuccessToast: (title: string, message: string) => void
   handleNetworkError: (error: Error, context?: string) => void
   handleValidationError: (message: string, field?: string) => void
-  handleAuthError: (message?: string) => void
   handleApiError: (error: any, context?: string) => void
   handleGenericError: (error: Error, context?: string) => void
 }
@@ -61,208 +25,98 @@ export function ErrorProvider({
   children, 
   enableErrorLogging = true,
   maxErrors = 50,
-  maxToasts = 5 
+  maxToasts = 5
 }: ErrorProviderProps) {
-  const [errors, setErrors] = useState<AppError[]>([])
-  const [toasts, setToasts] = useState<ToastNotification[]>([])
+  const [errorCount, setErrorCount] = useState(0)
+  const [toastCount, setToastCount] = useState(0)
 
-  // Add error to the error log
-  const addError = useCallback((error: AppError) => {
-    setErrors(prevErrors => {
-      const newErrors = [error, ...prevErrors].slice(0, maxErrors)
-      
-      // Log error to console
-      if (enableErrorLogging) {
-        console.group(`🚨 Error Logged: ${error.category.toUpperCase()}`)
-        console.error('Error:', error)
-        console.groupEnd()
-      }
-      
-      // In production, send to error reporting service
-      if (process.env.NODE_ENV === 'production') {
-        // sendErrorToReportingService(error)
-      }
-      
-      return newErrors
-    })
-
-    // Auto-show toast for user-facing errors
-    if (error.severity === ErrorSeverity.HIGH || error.severity === ErrorSeverity.CRITICAL) {
-      showToast({
-        type: 'error',
-        title: 'Error',
-        message: error.userMessage,
-        duration: 5000
-      })
-    }
-  }, [enableErrorLogging, maxErrors])
-
-  // Clear all errors
-  const clearErrors = useCallback(() => {
-    setErrors([])
-  }, [])
-
-  // Clear a specific error
-  const clearError = useCallback((id: string) => {
-    setErrors(prevErrors => prevErrors.filter(error => error.message !== id))
-  }, [])
-
-  // Show toast notification
-  const showToast = useCallback((toast: Omit<ToastNotification, 'id'>) => {
-    // Generate a unique ID with fallback for older browsers
-    const id = generateUUID()
+  const showErrorToast = useCallback((title: string, message: string) => {
+    if (typeof window === 'undefined') return // SSR guard
     
-    const newToast: ToastNotification = {
-      ...toast,
-      id,
-      duration: toast.duration ?? 4000
+    if (toastCount < maxToasts) {
+      toast.error(title, { description: message })
+      setToastCount(prev => prev + 1)
     }
-    
-    setToasts(prevToasts => {
-      const updatedToasts = [newToast, ...prevToasts].slice(0, maxToasts)
-      return updatedToasts
-    })
-    
-    // Auto-dismiss toast after duration
-    if (newToast.duration && newToast.duration > 0 && !newToast.persistent) {
-      setTimeout(() => {
-        clearToast(id)
-      }, newToast.duration)
+    if (enableErrorLogging) {
+      console.error(`[Error Toast] ${title}: ${message}`)
     }
-  }, [maxToasts])
+  }, [toastCount, maxToasts, enableErrorLogging])
 
-  // Clear a specific toast
-  const clearToast = useCallback((id: string) => {
-    setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id))
-  }, [])
+  const showSuccessToast = useCallback((title: string, message: string) => {
+    if (typeof window === 'undefined') return // SSR guard
+    
+    if (toastCount < maxToasts) {
+      toast.success(title, { description: message })
+      setToastCount(prev => prev + 1)
+    }
+    if (enableErrorLogging) {
+      console.log(`[Success Toast] ${title}: ${message}`)
+    }
+  }, [toastCount, maxToasts, enableErrorLogging])
 
-  // Clear all toasts
-  const clearToasts = useCallback(() => {
-    setToasts([])
-  }, [])
-
-  // Convenience methods for different toast types
-  const showSuccessToast = useCallback((title: string, message: string, duration = 3000) => {
-    showToast({ type: 'success', title, message, duration })
-  }, [showToast])
-
-  const showErrorToast = useCallback((title: string, message: string, duration = 5000) => {
-    showToast({ type: 'error', title, message, duration })
-  }, [showToast])
-
-  const showWarningToast = useCallback((title: string, message: string, duration = 4000) => {
-    showToast({ type: 'warning', title, message, duration })
-  }, [showToast])
-
-  const showInfoToast = useCallback((title: string, message: string, duration = 3000) => {
-    showToast({ type: 'info', title, message, duration })
-  }, [showToast])
-
-  // Convenience methods for common error types
   const handleNetworkError = useCallback((error: Error, context?: string) => {
-    const appError: AppError = {
-      message: error.message,
-      severity: ErrorSeverity.MEDIUM,
-      category: ErrorCategory.NETWORK,
-      timestamp: new Date(),
-      recoverable: true,
-      userMessage: 'Network connection issue. Please check your internet connection and try again.',
-      code: 'NETWORK_ERROR',
-      context: { context, originalError: error.toString() }
+    if (errorCount < maxErrors) {
+      showErrorToast(
+        'Network Error',
+        `Failed to connect${context ? ` in ${context}` : ''}. Please check your internet connection.`
+      )
+      setErrorCount(prev => prev + 1)
     }
-    addError(appError)
-  }, [addError])
+    if (enableErrorLogging) {
+      console.error(`[Network Error]${context ? ` ${context}:` : ''}`, error)
+    }
+  }, [errorCount, maxErrors, showErrorToast, enableErrorLogging])
 
   const handleValidationError = useCallback((message: string, field?: string) => {
-    const appError: AppError = {
-      message,
-      severity: ErrorSeverity.LOW,
-      category: ErrorCategory.VALIDATION,
-      timestamp: new Date(),
-      recoverable: true,
-      userMessage: message,
-      code: 'VALIDATION_ERROR',
-      context: { field }
+    if (errorCount < maxErrors) {
+      showErrorToast(
+        'Validation Error',
+        field ? `${field}: ${message}` : message
+      )
+      setErrorCount(prev => prev + 1)
     }
-    addError(appError)
-  }, [addError])
-
-  const handleAuthError = useCallback((message = 'You need to log in to access this feature.') => {
-    const appError: AppError = {
-      message,
-      severity: ErrorSeverity.HIGH,
-      category: ErrorCategory.AUTHENTICATION,
-      timestamp: new Date(),
-      recoverable: false,
-      userMessage: message,
-      code: 'AUTH_ERROR'
+    if (enableErrorLogging) {
+      console.error(`[Validation Error]${field ? ` ${field}:` : ''}`, message)
     }
-    addError(appError)
-  }, [addError])
+  }, [errorCount, maxErrors, showErrorToast, enableErrorLogging])
 
   const handleApiError = useCallback((error: any, context?: string) => {
-    const message = error?.message || error?.error || 'API request failed'
-    const userMessage = error?.userMessage || 'Server error occurred. Please try again later.'
-    
-    const appError: AppError = {
-      message,
-      severity: ErrorSeverity.HIGH,
-      category: ErrorCategory.API,
-      timestamp: new Date(),
-      recoverable: true,
-      userMessage,
-      code: error?.code || 'API_ERROR',
-      context: { 
-        context, 
-        status: error?.status,
-        url: error?.url,
-        originalError: error.toString()
-      }
+    if (errorCount < maxErrors) {
+      const message = error?.response?.data?.message || error?.message || 'An unexpected error occurred'
+      showErrorToast(
+        'API Error',
+        `${context ? `${context}: ` : ''}${message}`
+      )
+      setErrorCount(prev => prev + 1)
     }
-    addError(appError)
-  }, [addError])
+    if (enableErrorLogging) {
+      console.error(`[API Error]${context ? ` ${context}:` : ''}`, error)
+    }
+  }, [errorCount, maxErrors, showErrorToast, enableErrorLogging])
 
   const handleGenericError = useCallback((error: Error, context?: string) => {
-    const appError: AppError = {
-      message: error.message,
-      severity: ErrorSeverity.MEDIUM,
-      category: ErrorCategory.UNKNOWN,
-      timestamp: new Date(),
-      recoverable: true,
-      userMessage: 'An unexpected error occurred. Please try again.',
-      code: 'UNKNOWN_ERROR',
-      context: { context, originalError: error.toString() }
+    if (errorCount < maxErrors) {
+      showErrorToast(
+        'Error',
+        `${context ? `${context}: ` : ''}${error.message}`
+      )
+      setErrorCount(prev => prev + 1)
     }
-    addError(appError)
-  }, [addError])
+    if (enableErrorLogging) {
+      console.error(`[Generic Error]${context ? ` ${context}:` : ''}`, error)
+    }
+  }, [errorCount, maxErrors, showErrorToast, enableErrorLogging])
 
   const value: ErrorContextType = {
-    // Error state
-    errors,
-    toasts,
-    
-    // Error handling methods
-    addError,
-    clearErrors,
-    clearError,
-    
-    // Toast notification methods
-    showToast,
-    showSuccessToast,
     showErrorToast,
-    showWarningToast,
-    showInfoToast,
-    clearToast,
-    clearToasts,
-    
-    // Convenience methods
+    showSuccessToast,
     handleNetworkError,
     handleValidationError,
-    handleAuthError,
     handleApiError,
     handleGenericError
   }
 
+  // Explicitly return valid React children
   return (
     <ErrorContext.Provider value={value}>
       {children}
@@ -270,37 +124,12 @@ export function ErrorProvider({
   )
 }
 
-// Hook to use the error context
 export function useError() {
   const context = useContext(ErrorContext)
-  if (context === undefined) {
-    throw new Error('useError must be used within an ErrorProvider')
+  if (!context) {
+    throw new Error('useError must be used within ErrorProvider')
   }
   return context
-}
-
-// Higher-order component to provide error context
-export function withErrorContext<P extends object>(
-  Component: React.ComponentType<P>,
-  options?: {
-    enableErrorLogging?: boolean
-    maxErrors?: number
-    maxToasts?: number
-  }
-) {
-  const WrappedComponent = (props: P) => (
-    <ErrorProvider 
-      enableErrorLogging={options?.enableErrorLogging}
-      maxErrors={options?.maxErrors}
-      maxToasts={options?.maxToasts}
-    >
-      <Component {...props} />
-    </ErrorProvider>
-  )
-
-  WrappedComponent.displayName = `withErrorContext(${Component.displayName || Component.name})`
-  
-  return WrappedComponent
 }
 
 export default ErrorContext

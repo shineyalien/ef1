@@ -3,8 +3,24 @@
 import React, { useEffect, useState } from 'react'
 import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { ToastNotification, ToastType } from '@/contexts/error-context'
 import { cn } from '@/lib/utils'
+
+type ToastType = 'success' | 'error' | 'warning' | 'info'
+
+interface ToastAction {
+  label: string
+  action: () => void
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
+}
+
+interface ToastNotification {
+  id: string
+  type: ToastType
+  title: string
+  message: string
+  persistent?: boolean
+  actions?: ToastAction[]
+}
 
 interface ToastProps {
   toast: ToastNotification

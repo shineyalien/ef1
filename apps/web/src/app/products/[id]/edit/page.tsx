@@ -11,6 +11,9 @@ import { FileText, ArrowLeft, Package, DollarSign, Hash, Tag } from 'lucide-reac
 import { SharedLoading } from "@/components/shared-loading"
 import { SharedNavigation } from "@/components/shared-navigation"
 
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
+
 export default function EditProductPage() {
   const { data: session } = useSession()
   const [loading, setLoading] = useState(false)

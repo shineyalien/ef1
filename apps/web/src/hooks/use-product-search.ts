@@ -17,7 +17,7 @@ interface Product {
   isActive: boolean
 }
 
-interface SearchFilters {
+export interface SearchFilters {
   category: string
   minPrice: string
   maxPrice: string

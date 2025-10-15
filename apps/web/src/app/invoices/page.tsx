@@ -11,6 +11,9 @@ import { DeleteInvoiceDialog } from "@/components/delete-invoice-dialog"
 import Link from "next/link"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
+
 export default function InvoicesPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -42,8 +45,8 @@ export default function InvoicesPage() {
       // Fetch invoices from API
       const response = await fetch('/api/invoices')
       if (response.ok) {
-        const data = await response.json()
-        setInvoices(data.invoices || [])
+        const invoicesResult = await response.json()
+        setInvoices(invoicesResult || [])
       } else {
         console.error('Failed to fetch invoices:', response.statusText)
         setInvoices([])
@@ -88,11 +91,37 @@ export default function InvoicesPage() {
         throw new Error('Failed to generate FBR JSON')
       }
       
-      const data = await response.json()
-      setJsonData(data.fbrJson)
+      const fbrResult = await response.json()
+      setJsonData(fbrResult.fbrJson)
       setShowJsonModal(true)
     } catch (error) {
       console.error('Error generating FBR JSON:', error)
+      
+      // Fetch business settings for seller information
+      let sellerData = {
+        ntnNumber: '1234567',
+        companyName: 'Demo Business',
+        province: 'Punjab',
+        address: 'Demo Address'
+      }
+      
+      try {
+        const businessResponse = await fetch('/api/settings/business')
+        if (businessResponse.ok) {
+          const businessResult = await businessResponse.json()
+          if (businessResult.business) {
+            sellerData = {
+              ntnNumber: businessResult.business.ntnNumber || '1234567',
+              companyName: businessResult.business.companyName || 'Demo Business',
+              province: businessResult.business.province || 'Punjab',
+              address: businessResult.business.address || 'Demo Address'
+            }
+          }
+        }
+      } catch (businessError) {
+        console.error('Error fetching business data:', businessError)
+        // Use default values if fetch fails
+      }
       
       // Fallback to client-side generation if API fails
       const fbrData = {
@@ -100,10 +129,10 @@ export default function InvoicesPage() {
         invoiceDate: invoice.invoiceDate ? invoice.invoiceDate.split('T')[0] : new Date().toISOString().split('T')[0],
         
         // Seller information
-        sellerNTNCNIC: invoice.business?.ntnNumber || '1234567',
-        sellerBusinessName: invoice.business?.companyName || 'Demo Business',
-        sellerProvince: invoice.business?.province || 'Punjab',
-        sellerAddress: invoice.business?.address || 'Demo Address',
+        sellerNTNCNIC: invoice.business?.ntnNumber || sellerData.ntnNumber,
+        sellerBusinessName: invoice.business?.companyName || sellerData.companyName,
+        sellerProvince: invoice.business?.province || sellerData.province,
+        sellerAddress: invoice.business?.address || sellerData.address,
         
         // Buyer information
         buyerNTNCNIC: invoice.customer?.ntnNumber || invoice.customer?.buyerNTN || undefined,
@@ -191,17 +220,17 @@ export default function InvoicesPage() {
         method: 'DELETE'
       })
 
-      const result = await response.json()
+      const deleteResult = await response.json()
 
       if (response.ok) {
         // Success - reload invoice list
         await loadData()
         setShowDeleteDialog(false)
         setInvoiceToDelete(null)
-        alert(result.message || 'Invoice deleted successfully')
+        alert(deleteResult.message || 'Invoice deleted successfully')
       } else {
         // Error - show message
-        alert(result.error || result.message || 'Failed to delete invoice')
+        alert(deleteResult.error || deleteResult.message || 'Failed to delete invoice')
       }
     } catch (error) {
       console.error('Delete error:', error)
@@ -451,9 +480,9 @@ export default function InvoicesPage() {
                           size="sm"
                           onClick={async () => {
                             try {
-                              const response = await fetch(`/api/invoices/${invoice.id}/pdf`)
-                              if (!response.ok) throw new Error('Failed to generate PDF')
-                              const blob = await response.blob()
+                              const pdfResponse = await fetch(`/api/invoices/${invoice.id}/pdf`)
+                              if (!pdfResponse.ok) throw new Error('Failed to generate PDF')
+                              const blob = await pdfResponse.blob()
                               const url = window.URL.createObjectURL(blob)
                               const link = document.createElement('a')
                               link.href = url

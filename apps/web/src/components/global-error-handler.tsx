@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import ErrorBoundary, { AppError, ErrorSeverity, ErrorCategory } from '@/components/error-boundary'
-import { ErrorProvider, useError } from '@/contexts/error-context'
-import { ToastContainer } from '@/components/ui/toast'
+import { useError } from '@/contexts/error-context'
 import errorLogger from '@/lib/error-logger'
 
 interface GlobalErrorHandlerProps {
@@ -15,12 +14,11 @@ interface GlobalErrorHandlerProps {
 }
 
 // Global error handler component that wraps the entire app
-function GlobalErrorHandlerContent({ 
-  children, 
+function GlobalErrorHandlerContent({
+  children,
   enableErrorLogging = true,
   enableToastNotifications = true
 }: GlobalErrorHandlerProps) {
-  const { toasts, clearToast } = useError()
   const [mounted, setMounted] = useState(false)
 
   // Set up global error handlers
@@ -95,21 +93,12 @@ function GlobalErrorHandlerContent({
 
   // Don't render until mounted to avoid hydration issues
   if (!mounted) {
-    return <>{children}</>
+    return <div>{children}</div>
   }
 
   return (
     <>
       {children}
-      
-      {/* Toast notifications */}
-      {enableToastNotifications && (
-        <ToastContainer 
-          toasts={toasts} 
-          onClose={clearToast}
-          position="top-right"
-        />
-      )}
     </>
   )
 }
@@ -137,39 +126,28 @@ export default function GlobalErrorHandler({
       onError={(error, errorInfo) => {
         // Log error to the error logger
         errorLogger.logError(error, {
-          componentStack: errorInfo?.componentStack,
+          componentStack: errorInfo?.componentStack || undefined,
           global: true
         })
       }}
       maxRetries={3}
       showErrorDetails={process.env.NODE_ENV === 'development'}
     >
-      <ErrorProvider
+      <GlobalErrorHandlerContent
         enableErrorLogging={enableErrorLogging}
-        maxErrors={50}
-        maxToasts={5}
+        enableToastNotifications={enableToastNotifications}
       >
-        <GlobalErrorHandlerContent
-          enableErrorLogging={enableErrorLogging}
-          enableToastNotifications={enableToastNotifications}
-        >
-          {children}
-        </GlobalErrorHandlerContent>
-      </ErrorProvider>
+        {children}
+      </GlobalErrorHandlerContent>
     </ErrorBoundary>
   )
 }
 
 // Hook to access global error handling functionality
 export function useGlobalErrorHandler() {
-  const { 
-    addError, 
-    clearErrors, 
-    showToast, 
-    showSuccessToast, 
-    showErrorToast, 
-    showWarningToast, 
-    showInfoToast 
+  const {
+    showErrorToast,
+    showSuccessToast
   } = useError()
 
   // Enhanced error reporting
@@ -192,9 +170,6 @@ export function useGlobalErrorHandler() {
 
     // Log to error logger
     const errorId = errorLogger.logError(appError, context)
-    
-    // Add to error context
-    addError(appError)
     
     // Show error toast
     showErrorToast('Error Occurred', appError.userMessage)
@@ -226,18 +201,13 @@ export function useGlobalErrorHandler() {
     // Log to error logger
     const errorId = errorLogger.logError(appError, context)
     
-    // Add to error context
-    addError(appError)
-    
     // Show error toast
     if (severity === ErrorSeverity.CRITICAL) {
       showErrorToast('Critical Error', appError.userMessage)
     } else if (severity === ErrorSeverity.HIGH) {
       showErrorToast('Error', appError.userMessage)
-    } else if (severity === ErrorSeverity.MEDIUM) {
-      showWarningToast('Warning', appError.userMessage)
     } else {
-      showInfoToast('Notice', appError.userMessage)
+      showErrorToast('Warning', appError.userMessage)
     }
     
     return errorId
@@ -256,7 +226,6 @@ export function useGlobalErrorHandler() {
   // Clear all error logs
   const clearErrorLogs = () => {
     errorLogger.clearErrors()
-    clearErrors()
   }
 
   return {
@@ -272,10 +241,7 @@ export function useGlobalErrorHandler() {
     clearErrorLogs,
     
     // Toast notifications
-    showToast,
     showSuccessToast,
-    showErrorToast,
-    showWarningToast,
-    showInfoToast
+    showErrorToast
   }
 }

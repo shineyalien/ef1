@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/database'
+import { PakistaniTaxCalculator } from '@/lib/fbr-integration'
 
 // Error response helper
 function createErrorResponse(
@@ -322,6 +323,11 @@ export async function POST(request: NextRequest) {
     const nextSequence = lastInvoice ? lastInvoice.invoiceSequence + 1 : 1
     const invoiceNumber = `INV-${new Date().getFullYear()}-${String(nextSequence).padStart(4, '0')}`
 
+    // Get business information for FBR compliance
+    const businessDetails = await prisma.business.findUnique({
+      where: { id: business.id }
+    })
+
     // Create real invoice in database with all FBR fields
     let newInvoice
     try {
@@ -339,7 +345,7 @@ export async function POST(request: NextRequest) {
           dueDate: body.dueDate ? new Date(body.dueDate) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           documentType: body.documentType || 'Sale Invoice',
           paymentMode: body.paymentMode || 'Cash',
-          scenarioId: body.scenarioId || null,
+          scenarioId: body.scenarioId || 'SN001',
           taxPeriod: body.taxPeriod || new Date().toISOString().slice(0, 7),
           referenceInvoiceNo: body.invoiceRefNo || null,
           subtotal: body.subtotal || 0,
@@ -351,6 +357,18 @@ export async function POST(request: NextRequest) {
           totalFED: body.totalFED || 0,
           status: body.status || 'DRAFT',
           mode: body.mode || 'LOCAL',
+          
+          // FBR Buyer Information Fields
+          fbrBuyerNTN: body.fbrBuyerNTN || '',
+          fbrBuyerCNIC: body.fbrBuyerCNIC || '',
+          fbrBuyerPassport: body.fbrBuyerPassport || '',
+          fbrBuyerType: body.fbrBuyerType || '',
+          fbrBuyerCity: body.fbrBuyerCity || '',
+          fbrBuyerProvince: body.fbrBuyerProvince || '',
+          fbrBuyerAddress: body.fbrBuyerAddress || '',
+          fbrBuyerContact: body.fbrBuyerContact || '',
+          fbrBuyerEmail: body.fbrBuyerEmail || '',
+          
           items: {
             create: body.items.map((item: any) => {
               const subtotal = item.quantity * item.unitPrice
@@ -413,13 +431,22 @@ export async function POST(request: NextRequest) {
 
     console.log('Created invoice in database:', newInvoice)
 
+    // Get the created invoice with items
+    const createdInvoiceWithItems = await prisma.invoice.findUnique({
+      where: { id: newInvoice.id },
+      include: {
+        items: true,
+        customer: true
+      }
+    })
+
     return NextResponse.json({
       success: true,
-      invoice: newInvoice,
+      invoice: createdInvoiceWithItems,
       metadata: {
         processingTime: Date.now() - startTime,
         invoiceNumber: newInvoice.invoiceNumber,
-        itemCount: newInvoice.items.length
+        itemCount: createdInvoiceWithItems?.items.length || 0
       }
     }, { status: 201 })
   } catch (error) {

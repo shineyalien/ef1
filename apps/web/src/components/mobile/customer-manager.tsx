@@ -74,7 +74,7 @@ export default function MobileCustomerManager() {
       const offlineCustomers = await getOfflineCustomers()
       const mergedCustomers = [
         ...customerData,
-        ...offlineCustomers.map(c => ({ ...c, isOffline: true }))
+        ...offlineCustomers.map((c: any) => ({ ...c, isOffline: true }))
       ]
       
       setCustomers(mergedCustomers)

@@ -3,7 +3,8 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { FileText, Users, DollarSign, TrendingUp, Plus, Download, ArrowRight, Wifi, Smartphone, Package, LogOut } from "lucide-react"
+import { FileText, Users, DollarSign, TrendingUp, Plus, Download, ArrowRight, Wifi, Smartphone, Package, LogOut, Zap } from "lucide-react"
+import SpreadsheetInvoiceWrapper from "@/components/spreadsheet-invoice-wrapper"
 
 async function SignOutButton() {
   return (
@@ -216,6 +217,35 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Rapid Invoice Creator Section */}
+        <Card className="mb-6 sm:mb-8">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center w-10 h-10 bg-yellow-100 rounded-lg">
+                  <Zap className="h-5 w-5 text-yellow-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg sm:text-xl">Rapid Invoice Creator</CardTitle>
+                  <CardDescription className="text-sm">
+                    Create, validate, and publish invoices in seconds with our spreadsheet-style interface
+                  </CardDescription>
+                </div>
+              </div>
+              <Link href="/invoices/create">
+                <Button variant="outline" size="sm" className="hidden sm:flex">
+                  Traditional Form
+                </Button>
+              </Link>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0 sm:p-6">
+            <div className="overflow-x-auto">
+              <SpreadsheetInvoiceWrapper />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* PWA Features Banner - Mobile */}
         <div className="block sm:hidden mb-6">

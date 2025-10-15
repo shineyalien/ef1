@@ -1,15 +1,33 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typedRoutes: true,
-  transpilePackages: [
-    // Note: Workspace packages will be added when they exist
-    // Currently using local imports until monorepo is fully set up
-  ],
+  transpilePackages: [],
   images: {
     domains: ['localhost'],
+    unoptimized: true,
   },
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
+  },
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
+  serverExternalPackages: ['@prisma/client'],
+  trailingSlash: false,
+  generateEtags: false,
+  poweredByHeader: false,
+  compress: false,
+  skipTrailingSlashRedirect: true,
+  reactStrictMode: true,
+  distDir: '.next',
+  // Optimize build performance
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   async headers() {
     return [
@@ -24,44 +42,9 @@ const nextConfig = {
       }
     ]
   },
-  webpack: (config, { isServer, dev }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-      }
-    }
-    
-    // Fix for @react-pdf/renderer in server environment
-    if (isServer) {
-      config.externals = config.externals || []
-      config.externals.push({
-        'react-pdf': 'commonjs react-pdf'
-      })
-    }
-    
-    // Suppress webpack cache warnings in development
-    if (dev) {
-      const originalEmit = config.infrastructureLogging?.level
-      config.infrastructureLogging = {
-        level: 'error',
-      }
-      
-      // Filter out cache warnings specifically
-      config.stats = {
-        ...config.stats,
-        warnings: false,
-        warningsFilter: [
-          /PackFileCacheStrategy/,
-          /Serializing big strings/,
-        ],
-      }
-    }
-    
-    return config
-  }
+  async redirects() {
+    return []
+  },
 }
 
 module.exports = nextConfig

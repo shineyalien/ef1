@@ -11,10 +11,14 @@ import Link from "next/link"
 import { SharedLoading } from "@/components/shared-loading"
 import { SharedNavigation } from "@/components/shared-navigation"
 
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
+
 export default function ProductsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [products, setProducts] = useState<any[]>([])
+  const [businessData, setBusinessData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -24,25 +28,34 @@ export default function ProductsPage() {
       return
     }
 
-    loadProducts()
+    loadData()
   }, [session, status])
 
-  const loadProducts = async () => {
+  const loadData = async () => {
     try {
       setLoading(true)
       
       // Fetch products from API
-      const response = await fetch('/api/products')
-      if (response.ok) {
-        const data = await response.json()
+      const productsResponse = await fetch('/api/products')
+      if (productsResponse.ok) {
+        const data = await productsResponse.json()
         setProducts(data.products || [])
       } else {
-        console.error('Failed to fetch products:', response.statusText)
+        console.error('Failed to fetch products:', productsResponse.statusText)
         setProducts([])
       }
       
+      // Fetch business data
+      const businessResponse = await fetch('/api/settings/business')
+      if (businessResponse.ok) {
+        const businessResult = await businessResponse.json()
+        setBusinessData(businessResult.business)
+      } else {
+        console.error('Failed to fetch business data:', businessResponse.statusText)
+      }
+      
     } catch (error) {
-      console.error('Failed to load products:', error)
+      console.error('Failed to load data:', error)
       setProducts([])
     } finally {
       setLoading(false)
@@ -103,10 +116,10 @@ export default function ProductsPage() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Building className="h-5 w-5 mr-2" />
-              Demo Business ({session?.user?.name})
+              {businessData?.companyName || 'Demo Business'} ({session?.user?.name})
             </CardTitle>
             <CardDescription>
-              NTN: 1234567 • Punjab
+              NTN: {businessData?.ntnNumber || '1234567'} • {businessData?.province || 'Punjab'}
             </CardDescription>
           </CardHeader>
         </Card>

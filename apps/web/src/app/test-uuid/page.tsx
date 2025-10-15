@@ -6,6 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { generateUUID, isValidUUID, safeGenerateUUID } from '@/lib/uuid'
 import { useError } from '@/contexts/error-context'
 
+// Prevent static generation since this page uses ErrorProvider hooks
+export const dynamic = 'force-dynamic'
+
 export default function TestUUIDPage() {
   const { showErrorToast, showSuccessToast } = useError()
   const [uuids, setUuids] = useState<string[]>([])
@@ -89,14 +92,8 @@ export default function TestUUIDPage() {
 
   const testErrorContext = () => {
     try {
-      // This will test the error context with our UUID fix
-      const { showToast } = useError()
-      showToast({
-        type: 'info',
-        title: 'Test Toast',
-        message: 'This toast should have a valid UUID'
-      })
-      showSuccessToast('Success', 'Error context test completed')
+      // Test the error context with available methods
+      showSuccessToast('Success', 'Error context test completed successfully')
     } catch (error) {
       showErrorToast('Error', 'Error context test failed')
       console.error('Error context test failed:', error)

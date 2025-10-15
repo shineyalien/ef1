@@ -3,6 +3,9 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
+
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -320,7 +323,7 @@ export default function SecuritySettingsPage() {
                 <div className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                 <div>
                   <p className="font-medium text-gray-900">Email Verified</p>
-                  <p className="text-sm text-gray-600">{session.user?.email}</p>
+                  <p className="text-sm text-gray-600">{session.user?.email || 'No email provided'}</p>
                 </div>
               </div>
 

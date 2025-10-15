@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -75,6 +74,9 @@ interface LookupData {
 // Import error context directly to avoid dynamic loading issues
 import { useError } from '@/contexts/error-context'
 import { generateUUID } from '@/lib/uuid'
+
+// Prevent static generation for this page since it uses useSession and ErrorProvider
+export const dynamic = 'force-dynamic'
 
 export default function CreateInvoicePage() {
   const router = useRouter()

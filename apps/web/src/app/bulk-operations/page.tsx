@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -21,6 +21,9 @@ import {
   Home
 } from "lucide-react"
 import { useDropzone } from 'react-dropzone'
+
+// Prevent static generation for this page since it uses useSession
+export const dynamic = 'force-dynamic'
 
 interface BulkOperationResult {
   id: string
@@ -43,6 +46,23 @@ export default function BulkOperationsPage() {
   const [uploadResult, setUploadResult] = useState<BulkOperationResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [recentOperations, setRecentOperations] = useState<BulkOperationResult[]>([])
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Prevent SSR issues
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (status === 'loading') {
     return (

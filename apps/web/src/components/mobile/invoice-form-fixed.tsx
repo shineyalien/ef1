@@ -50,7 +50,6 @@ export default function MobileInvoiceFormFixed() {
   const {
     showErrorToast,
     showSuccessToast,
-    handleAuthError,
     handleNetworkError,
     handleApiError,
     handleGenericError,
@@ -605,7 +604,7 @@ export default function MobileInvoiceFormFixed() {
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
         handleNetworkError(error, 'Saving invoice')
       } else if (error.status === 401) {
-        handleAuthError('Your session has expired. Please log in again.')
+        showErrorToast('Session Expired', 'Your session has expired. Please log in again.')
       } else if (error.status === 403) {
         showErrorToast('Permission Denied', 'You don\'t have permission to save invoices')
       } else if (error.status >= 500) {

@@ -91,11 +91,11 @@ export async function POST(
       sellerAddress: invoice.business.address,
       
       // Buyer information (FBR production compliant)
-      buyerNTNCNIC: invoice.customer?.ntnNumber || invoice.customer?.buyerNTN || invoice.customer?.buyerCNIC || invoice.customer?.buyerPassport || undefined,
+      buyerNTNCNIC: invoice.fbrBuyerNTN || invoice.customer?.ntnNumber || invoice.customer?.buyerNTN || invoice.customer?.buyerCNIC || invoice.customer?.buyerPassport || undefined,
       buyerBusinessName: invoice.customer?.name || 'Walk-in Customer',
-      buyerProvince: invoice.customer?.buyerProvince || invoice.business.province,
-      buyerAddress: invoice.customer?.address || 'N/A',
-      buyerRegistrationType: invoice.customer?.ntnNumber ? 'Registered' as const : 'Unregistered' as const,
+      buyerProvince: invoice.fbrBuyerProvince || invoice.customer?.buyerProvince || invoice.business.province,
+      buyerAddress: invoice.fbrBuyerAddress || invoice.customer?.address || 'N/A',
+      buyerRegistrationType: invoice.fbrBuyerNTN || invoice.customer?.ntnNumber ? 'Registered' as const : 'Unregistered' as const,
       
       // Reference for debit notes
       invoiceRefNo: invoice.referenceInvoiceNo || undefined,
