@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft, Download, Send, Edit, Loader2 } from 'lucide-react'
+import { ArrowLeft, Download, Send, Edit, Loader2, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 export default function InvoiceDetailPage() {
   const params = useParams()
@@ -16,6 +17,11 @@ export default function InvoiceDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [downloading, setDownloading] = useState(false)
+  const [errorModal, setErrorModal] = useState<{ open: boolean; error: string | null; details: any }>({
+    open: false,
+    error: null,
+    details: null
+  })
 
   useEffect(() => {
     loadInvoice()
@@ -263,6 +269,42 @@ export default function InvoiceDetailPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* FBR Error Display */}
+        {invoice.fbrErrorMessage && (
+          <Card className="mb-6 border-red-200 bg-red-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-red-600">
+                <AlertCircle className="h-5 w-5" />
+                FBR Submission Error
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-red-700 mb-2">{invoice.fbrErrorMessage}</p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setErrorModal({
+                    open: true,
+                    error: invoice.fbrErrorMessage,
+                    details: {
+                      type: 'fbr_submission_error',
+                      timestamp: invoice.updatedAt || new Date().toISOString(),
+                      invoiceId: invoice.id,
+                      invoiceNumber: invoice.invoiceNumber,
+                      status: invoice.status,
+                      fbrResponse: invoice.fbrResponse
+                    }
+                  })
+                }}
+                className="text-red-700 border-red-300 hover:bg-red-100"
+              >
+                View Full Error Details
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Customer & Invoice Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

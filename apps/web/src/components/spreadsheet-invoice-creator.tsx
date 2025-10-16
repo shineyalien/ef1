@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { format } from 'date-fns'
-import { Plus, Save, Edit2, Check, X, Upload, AlertCircle, CheckCircle, Clock, Filter, Calendar, CheckSquare, Square, MoreHorizontal, Eye, Trash2 } from 'lucide-react'
+import { Plus, Save, Edit2, Check, X, Upload, AlertCircle, CheckCircle, Clock, Filter, Calendar, CheckSquare, Square, MoreHorizontal, Eye, Trash2, Download, Send, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -51,6 +51,8 @@ interface Invoice {
   status: 'DRAFT' | 'SAVED' | 'VALIDATED' | 'PUBLISHED' | 'FAILED'
   fbrStatus?: 'PENDING' | 'SUBMITTED' | 'VALIDATED' | 'PUBLISHED' | 'ERROR'
   fbrErrorMessage?: string
+  fbrSubmitted?: boolean
+  fbrValidated?: boolean
   items: InvoiceItem[]
   subtotal: number
   taxAmount: number
@@ -146,84 +148,30 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
   const [bulkPublishing, setBulkPublishing] = useState(false)
   const [selectedInvoices, setSelectedInvoices] = useState<string[]>([])
   const [jsonViewInvoice, setJsonViewInvoice] = useState<any>(null)
+  const [errorModal, setErrorModal] = useState<{ open: boolean; invoice: Invoice | null; error: string | null; details: any }>({
+    open: false,
+    invoice: null,
+    error: null,
+    details: null
+  })
   const { showSuccessToast, showErrorToast } = useError()
 
-  // Convert internal invoice format to FBR format
+  // Convert internal invoice format to FBR format using unified utility
   const convertToFbrFormat = async (invoice: Invoice) => {
-    // Fetch seller data from business settings
-    let sellerData = {
-      ntnCnic: "1234567", // Default fallback
-      businessName: "Your Business Name", // Default fallback
-      province: "Sindh", // Default fallback
-      address: "Your Address" // Default fallback
-    }
+    // Import the unified FBR JSON generator
+    const { convertToFbrFormat: unifiedConverter } = await import('@/lib/fbr-json-generator')
     
-    try {
-      const response = await fetch('/api/settings/business')
-      if (response.ok) {
-        const businessData = await response.json()
-        if (businessData.business) {
-          sellerData = {
-            ntnCnic: businessData.business.ntnNumber || "1234567",
-            businessName: businessData.business.companyName || "Your Business Name",
-            province: businessData.business.province || "Sindh",
-            address: businessData.business.address || "Your Address"
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching business data:', error)
-      // Use default values if fetch fails
-    }
-
     // Find customer data
     const customer = customers.find(c => c.id === invoice.customerId)
     
-    // Use the FBR buyer fields from the invoice if available, otherwise use customer data
-    const buyerNTNCNIC = invoice.fbrBuyerNTN || customer?.ntnNumber || customer?.buyerCNIC || ""
-    const buyerBusinessName = customer?.name || ""
-    const buyerProvince = invoice.fbrBuyerProvince || customer?.province || customer?.buyerProvince || ""
-    const buyerAddress = invoice.fbrBuyerAddress || customer?.address || ""
+    // Create invoice object with customer data for the unified converter
+    const invoiceWithCustomer = {
+      ...invoice,
+      customer
+    }
     
-    // Determine buyer registration type based on NTN/CNIC
-    let buyerRegistrationType = "Unregistered"
-    if (buyerNTNCNIC) {
-      buyerRegistrationType = "Registered"
-    }
-
-    return {
-      invoiceType: invoice.documentType || "Sale Invoice",
-      invoiceDate: invoice.invoiceDate,
-      sellerNTNCNIC: sellerData.ntnCnic,
-      sellerBusinessName: sellerData.businessName,
-      sellerProvince: sellerData.province,
-      sellerAddress: sellerData.address,
-      buyerNTNCNIC: buyerNTNCNIC,
-      buyerBusinessName: buyerBusinessName,
-      buyerProvince: buyerProvince,
-      buyerAddress: buyerAddress,
-      buyerRegistrationType,
-      invoiceRefNo: invoice.invoiceRefNo || "",
-      items: invoice.items.map(item => ({
-        hsCode: item.hsCode,
-        productDescription: item.description,
-        rate: `${item.taxRate}%`,
-        uoM: item.unitOfMeasurement,
-        quantity: parseFloat(item.quantity.toFixed(4)),
-        totalValues: item.totalValue || 0,
-        valueSalesExcludingST: item.valueSalesExcludingST,
-        fixedNotifiedValueOrRetailPrice: item.fixedNotifiedValueOrRetailPrice || 0,
-        salesTaxApplicable: item.salesTaxApplicable,
-        salesTaxWithheldAtSource: item.salesTaxWithheldAtSource || 0,
-        extraTax: item.extraTax || 0,
-        furtherTax: item.furtherTax || 0,
-        sroScheduleNo: item.sroScheduleNo || "",
-        fedPayable: item.fedPayable || 0,
-        discount: item.discount || 0,
-        saleType: item.saleType === "Standard" ? "Goods at standard rate (default)" : item.saleType,
-        sroItemSerialNo: item.sroItemSerialNo || ""
-      }))
-    }
+    // Use the unified converter
+    return await unifiedConverter(invoiceWithCustomer)
   }
 
   // Fetch initial data
@@ -250,6 +198,8 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
         dueDate: format(new Date(inv.dueDate), 'yyyy-MM-dd'),
         status: inv.status,
         fbrStatus: inv.fbrSubmitted ? (inv.fbrValidated ? 'VALIDATED' : 'SUBMITTED') : 'PENDING',
+        fbrSubmitted: inv.fbrSubmitted || false,
+        fbrValidated: inv.fbrValidated || false,
         items: inv.items.map((item: any) => ({
           id: item.id,
           description: item.description,
@@ -278,6 +228,7 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
         taxAmount: inv.taxAmount || 0,
         totalAmount: inv.totalAmount || 0,
         fbrErrorMessage: inv.fbrErrorMessage,
+        fbrInvoiceNumber: inv.fbrInvoiceNumber,
         // FBR Required Fields
         documentType: inv.documentType || 'Sale Invoice',
         scenarioId: inv.scenarioId || 'SN001',
@@ -591,11 +542,13 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
         customerId: invoice.customerId,
         invoiceDate: invoice.invoiceDate,
         dueDate: invoice.dueDate,
+        status: 'SAVED', // Explicitly set status to SAVED
         // FBR Required Fields
         documentType: invoice.documentType || 'Sale Invoice',
         scenarioId: invoice.scenarioId,
         paymentMode: invoice.paymentMode || '1',
         taxPeriod: invoice.taxPeriod,
+        invoiceRefNo: invoice.invoiceRefNo,
         // FBR Production Compliance Fields
         fbrBuyerNTN: invoice.fbrBuyerNTN,
         fbrBuyerCNIC: invoice.fbrBuyerCNIC,
@@ -607,6 +560,13 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
         fbrBuyerContact: invoice.fbrBuyerContact,
         fbrBuyerEmail: invoice.fbrBuyerEmail,
         notes: invoice.notes,
+        subtotal: invoice.subtotal,
+        taxAmount: invoice.taxAmount,
+        totalAmount: invoice.totalAmount,
+        totalWithholdingTax: invoice.totalWithholdingTax,
+        totalExtraTax: invoice.totalExtraTax,
+        totalFurtherTax: invoice.totalFurtherTax,
+        totalFED: invoice.totalFED,
         items: invoice.items.map(item => ({
           description: item.description,
           hsCode: item.hsCode,
@@ -630,33 +590,122 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
         }))
       }
 
-      const response = await fetch('/api/invoices', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(invoiceData)
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error?.message || 'Failed to save invoice')
-      }
-
-      const savedInvoice = await response.json()
+      let response
+      let savedInvoice: any
       
-      // Update the invoice in state
-      setInvoices(prev => prev.map(inv => {
-        if (inv.id === invoiceId) {
-          return {
-            ...inv,
-            id: savedInvoice.invoice.id,
-            invoiceNumber: savedInvoice.invoice.invoiceNumber,
-            isEditing: false,
-            isNew: false,
-            status: 'SAVED'
-          }
+      // Check if this is a new invoice or an existing one
+      if (invoice.isNew) {
+        // Create new invoice
+        response = await fetch('/api/invoices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(invoiceData)
+        })
+        
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error?.message || 'Failed to save invoice')
         }
-        return inv
-      }))
+        
+        savedInvoice = await response.json()
+        
+        // Update the invoice in state with all the returned data
+        setInvoices(prev => prev.map(inv => {
+          if (inv.id === invoiceId) {
+            return {
+              ...inv,
+              id: savedInvoice.invoice.id,
+              invoiceNumber: savedInvoice.invoice.invoiceNumber,
+              isEditing: false,
+              isNew: false,
+              status: 'SAVED', // Always set to SAVED after successful save
+              // Update all fields from the saved invoice to ensure state persistence
+              customerId: savedInvoice.invoice.customerId,
+              customerName: savedInvoice.invoice.customer?.name,
+              invoiceDate: format(new Date(savedInvoice.invoice.invoiceDate), 'yyyy-MM-dd'),
+              dueDate: format(new Date(savedInvoice.invoice.dueDate), 'yyyy-MM-dd'),
+              items: savedInvoice.invoice.items.map((item: any) => ({
+                ...item,
+                id: item.id,
+                showAdditionalTaxes: false // Reset additional taxes view
+              })),
+              subtotal: savedInvoice.invoice.subtotal || 0,
+              taxAmount: savedInvoice.invoice.taxAmount || 0,
+              totalAmount: savedInvoice.invoice.totalAmount || 0,
+              // Preserve FBR fields
+              documentType: savedInvoice.invoice.documentType || inv.documentType,
+              scenarioId: savedInvoice.invoice.scenarioId || inv.scenarioId,
+              paymentMode: savedInvoice.invoice.paymentMode || inv.paymentMode,
+              taxPeriod: savedInvoice.invoice.taxPeriod || inv.taxPeriod,
+              fbrBuyerNTN: savedInvoice.invoice.fbrBuyerNTN || inv.fbrBuyerNTN,
+              fbrBuyerCNIC: savedInvoice.invoice.fbrBuyerCNIC || inv.fbrBuyerCNIC,
+              fbrBuyerPassport: savedInvoice.invoice.fbrBuyerPassport || inv.fbrBuyerPassport,
+              fbrBuyerType: savedInvoice.invoice.fbrBuyerType || inv.fbrBuyerType,
+              fbrBuyerCity: savedInvoice.invoice.fbrBuyerCity || inv.fbrBuyerCity,
+              fbrBuyerProvince: savedInvoice.invoice.fbrBuyerProvince || inv.fbrBuyerProvince,
+              fbrBuyerAddress: savedInvoice.invoice.fbrBuyerAddress || inv.fbrBuyerAddress,
+              fbrBuyerContact: savedInvoice.invoice.fbrBuyerContact || inv.fbrBuyerContact,
+              fbrBuyerEmail: savedInvoice.invoice.fbrBuyerEmail || inv.fbrBuyerEmail,
+              notes: savedInvoice.invoice.notes || inv.notes
+            }
+          }
+          return inv
+        }))
+      } else {
+        // Update existing invoice
+        response = await fetch(`/api/invoices/${invoiceId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(invoiceData)
+        })
+        
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error?.message || 'Failed to update invoice')
+        }
+        
+        savedInvoice = await response.json()
+        
+        // Update the invoice in state with the updated data
+        setInvoices(prev => prev.map(inv => {
+          if (inv.id === invoiceId) {
+            return {
+              ...inv,
+              isEditing: false,
+              status: 'SAVED', // Always set to SAVED after successful save
+              // Update all fields from the saved invoice to ensure state persistence
+              customerId: savedInvoice.invoice.customerId,
+              customerName: savedInvoice.invoice.customer?.name,
+              invoiceDate: format(new Date(savedInvoice.invoice.invoiceDate), 'yyyy-MM-dd'),
+              dueDate: format(new Date(savedInvoice.invoice.dueDate), 'yyyy-MM-dd'),
+              items: savedInvoice.invoice.items.map((item: any) => ({
+                ...item,
+                id: item.id,
+                showAdditionalTaxes: false // Reset additional taxes view
+              })),
+              subtotal: savedInvoice.invoice.subtotal || 0,
+              taxAmount: savedInvoice.invoice.taxAmount || 0,
+              totalAmount: savedInvoice.invoice.totalAmount || 0,
+              // Preserve FBR fields
+              documentType: savedInvoice.invoice.documentType || inv.documentType,
+              scenarioId: savedInvoice.invoice.scenarioId || inv.scenarioId,
+              paymentMode: savedInvoice.invoice.paymentMode || inv.paymentMode,
+              taxPeriod: savedInvoice.invoice.taxPeriod || inv.taxPeriod,
+              fbrBuyerNTN: savedInvoice.invoice.fbrBuyerNTN || inv.fbrBuyerNTN,
+              fbrBuyerCNIC: savedInvoice.invoice.fbrBuyerCNIC || inv.fbrBuyerCNIC,
+              fbrBuyerPassport: savedInvoice.invoice.fbrBuyerPassport || inv.fbrBuyerPassport,
+              fbrBuyerType: savedInvoice.invoice.fbrBuyerType || inv.fbrBuyerType,
+              fbrBuyerCity: savedInvoice.invoice.fbrBuyerCity || inv.fbrBuyerCity,
+              fbrBuyerProvince: savedInvoice.invoice.fbrBuyerProvince || inv.fbrBuyerProvince,
+              fbrBuyerAddress: savedInvoice.invoice.fbrBuyerAddress || inv.fbrBuyerAddress,
+              fbrBuyerContact: savedInvoice.invoice.fbrBuyerContact || inv.fbrBuyerContact,
+              fbrBuyerEmail: savedInvoice.invoice.fbrBuyerEmail || inv.fbrBuyerEmail,
+              notes: savedInvoice.invoice.notes || inv.notes
+            }
+          }
+          return inv
+        }))
+      }
 
       showSuccessToast('Success', `Invoice ${savedInvoice.invoice.invoiceNumber} saved successfully`)
     } catch (error) {
@@ -716,8 +765,30 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
         }
         return inv
       }))
+      
+      // Refresh the invoice list to ensure the state persists
+      setTimeout(() => {
+        fetchInvoices()
+      }, 500)
 
+      // Show error toast
       showErrorToast('Validation Error', error instanceof Error ? error.message : 'Failed to validate invoice')
+      
+      // Store error details for modal
+      const invoice = invoices.find(inv => inv.id === invoiceId)
+      if (invoice) {
+        setErrorModal({
+          open: true,
+          invoice,
+          error: error instanceof Error ? error.message : 'Validation failed',
+          details: {
+            type: 'validation',
+            environment: 'sandbox',
+            timestamp: new Date().toISOString(),
+            error: error
+          }
+        })
+      }
     } finally {
       setValidating(prev => prev.filter(id => id !== invoiceId))
     }
@@ -755,11 +826,33 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
         }
         return inv
       }))
+      
+      // Refresh the invoice list to ensure the state persists
+      setTimeout(() => {
+        fetchInvoices()
+      }, 500)
 
       showSuccessToast('Success', 'Invoice published to FBR production')
     } catch (error) {
       console.error('Error publishing invoice:', error)
+      // Show error toast
       showErrorToast('Publish Error', error instanceof Error ? error.message : 'Failed to publish invoice')
+      
+      // Store error details for modal
+      const invoice = invoices.find(inv => inv.id === invoiceId)
+      if (invoice) {
+        setErrorModal({
+          open: true,
+          invoice,
+          error: error instanceof Error ? error.message : 'Failed to publish invoice',
+          details: {
+            type: 'publish',
+            environment: 'production',
+            timestamp: new Date().toISOString(),
+            error: error
+          }
+        })
+      }
     } finally {
       setPublishing(prev => prev.filter(id => id !== invoiceId))
     }
@@ -871,6 +964,23 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
             }
             return inv
           }))
+          
+          // Store error details for modal
+          const invoice = invoices.find(inv => inv.id === invoiceId)
+          if (invoice) {
+            setErrorModal({
+              open: true,
+              invoice,
+              error: errorMessage,
+              details: {
+                type: 'bulk_validation',
+                environment: 'sandbox',
+                timestamp: new Date().toISOString(),
+                error: result.reason,
+                errorMessage
+              }
+            })
+          }
         }
       })
 
@@ -979,6 +1089,23 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
             }
             return inv
           }))
+          
+          // Store error details for modal
+          const invoice = invoices.find(inv => inv.id === invoiceId)
+          if (invoice) {
+            setErrorModal({
+              open: true,
+              invoice,
+              error: errorMessage,
+              details: {
+                type: 'bulk_publish',
+                environment: 'production',
+                timestamp: new Date().toISOString(),
+                error: result.reason,
+                errorMessage
+              }
+            })
+          }
         }
       })
 
@@ -1148,7 +1275,7 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                   disabled={bulkValidating}
                 >
                   {bulkValidating ? (
-                    <div className="animate-spin h-4 w-4 border-b-2 border-primary mr-2"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent mr-2"></div>
                   ) : (
                     <Check className="h-4 w-4 mr-2" />
                   )}
@@ -1160,7 +1287,7 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                   disabled={bulkPublishing}
                 >
                   {bulkPublishing ? (
-                    <div className="animate-spin h-4 w-4 border-b-2 border-primary mr-2"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent mr-2"></div>
                   ) : (
                     <Upload className="h-4 w-4 mr-2" />
                   )}
@@ -1192,6 +1319,9 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                 </th>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Invoice #
+                </th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  FBR Invoice #
                 </th>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Customer
@@ -1228,6 +1358,13 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                           <Square className="h-4 w-4" />
                         )}
                       </button>
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap text-sm">
+                      {invoice.fbrInvoiceNumber ? (
+                        <span className="font-medium text-green-600">{invoice.fbrInvoiceNumber}</span>
+                      ) : (
+                        <span className="text-gray-400">Not submitted</span>
+                      )}
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap text-sm">
                       {invoice.isEditing ? (
@@ -1298,10 +1435,21 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                     <td className="px-4 py-2 whitespace-nowrap text-sm">
                       {getStatusBadge(invoice.status, invoice.fbrStatus)}
                       {invoice.fbrErrorMessage && (
-                        <Alert className="mt-1 py-1">
+                        <Alert className="mt-1 py-1 cursor-pointer hover:bg-red-50 transition-colors" onClick={() => {
+                          setErrorModal({
+                            open: true,
+                            invoice,
+                            error: invoice.fbrErrorMessage || 'Unknown error',
+                            details: {
+                              type: 'stored_error',
+                              timestamp: new Date().toISOString(),
+                              error: invoice.fbrErrorMessage
+                            }
+                          })
+                        }}>
                           <AlertCircle className="h-3 w-3" />
                           <AlertDescription className="text-xs">
-                            {invoice.fbrErrorMessage}
+                            {invoice.fbrErrorMessage} (Click for details)
                           </AlertDescription>
                         </Alert>
                       )}
@@ -1315,9 +1463,11 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                               variant="ghost"
                               onClick={() => saveInvoice(invoice.id)}
                               disabled={saving.includes(invoice.id)}
+                              title="Save Invoice"
+                              className={invoice.status === 'DRAFT' ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : ''}
                             >
                               {saving.includes(invoice.id) ? (
-                                <div className="animate-spin h-4 w-4 border-b-2 border-primary"></div>
+                                <div className="animate-spin h-4 w-4 border-b-2 border-orange-600 mr-2"></div>
                               ) : (
                                 <Save className="h-4 w-4" />
                               )}
@@ -1325,74 +1475,152 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                             <Button
                               size="sm"
                               variant="ghost"
-                              onClick={() => deleteInvoice(invoice.id)}
+                              onClick={() => {
+                                if (invoice.isNew) {
+                                  deleteInvoice(invoice.id)
+                                } else {
+                                  updateInvoice(invoice.id, 'isEditing', false)
+                                  // For existing invoices, refresh the data to discard changes
+                                  if (!invoice.isNew) {
+                                    fetchInvoices()
+                                  }
+                                }
+                              }}
+                              title={invoice.isNew ? "Delete Invoice" : "Cancel Editing"}
                             >
                               <X className="h-4 w-4" />
                             </Button>
                           </>
                         ) : (
                           <>
+                            {/* Save button for DRAFT invoices */}
+                            {invoice.status === 'DRAFT' && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => saveInvoice(invoice.id)}
+                                disabled={saving.includes(invoice.id)}
+                                title="Save Invoice"
+                                className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                              >
+                                {saving.includes(invoice.id) ? (
+                                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-orange-600 border-t-transparent mr-2"></div>
+                                ) : (
+                                  <Save className="h-4 w-4" />
+                                )}
+                              </Button>
+                            )}
+                            
                             <Button
                               size="sm"
                               variant="ghost"
                               onClick={() => updateInvoice(invoice.id, 'isEditing', true)}
+                              title="Edit Invoice"
                             >
                               <Edit2 className="h-4 w-4" />
                             </Button>
+                            
+                            {/* FBR Action Buttons - Only show for non-editing invoices */}
                             {invoice.status === 'SAVED' && (
                               <Button
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => validateInvoice(invoice.id)}
                                 disabled={validating.includes(invoice.id)}
+                                title="Validate with FBR Sandbox"
+                                className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                               >
                                 {validating.includes(invoice.id) ? (
-                                  <div className="animate-spin h-4 w-4 border-b-2 border-primary"></div>
+                                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
                                 ) : (
                                   <Check className="h-4 w-4" />
                                 )}
                               </Button>
                             )}
+                            
                             {invoice.status === 'VALIDATED' && (
                               <Button
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => publishInvoice(invoice.id)}
                                 disabled={publishing.includes(invoice.id)}
+                                title="Submit to FBR Production"
+                                className="text-green-600 hover:text-green-700 hover:bg-green-50"
                               >
                                 {publishing.includes(invoice.id) ? (
-                                  <div className="animate-spin h-4 w-4 border-b-2 border-primary"></div>
+                                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-green-600 border-t-transparent"></div>
                                 ) : (
                                   <Upload className="h-4 w-4" />
                                 )}
                               </Button>
                             )}
+                            
+                            {/* PDF Download Button - Show for all saved/validated/published invoices */}
+                            {(invoice.status === 'SAVED' || invoice.status === 'VALIDATED' || invoice.status === 'PUBLISHED') && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={async () => {
+                                  try {
+                                    const response = await fetch(`/api/invoices/${invoice.id}/pdf`)
+                                    if (!response.ok) throw new Error('Failed to generate PDF')
+                                    const blob = await response.blob()
+                                    const url = window.URL.createObjectURL(blob)
+                                    const link = document.createElement('a')
+                                    link.href = url
+                                    link.download = `Invoice-${invoice.invoiceNumber || invoice.id}-${Date.now()}.pdf`
+                                    document.body.appendChild(link)
+                                    link.click()
+                                    document.body.removeChild(link)
+                                    window.URL.revokeObjectURL(url)
+                                  } catch (error) {
+                                    console.error('PDF download error:', error)
+                                    alert('Failed to download PDF')
+                                  }
+                                }}
+                                title="Download PDF"
+                                className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                              >
+                                <Download className="h-4 w-4" />
+                              </Button>
+                            )}
+                            
+                            {/* Dot menu with additional options */}
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button size="sm" variant="ghost" title="More Options">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => viewInvoiceJson(invoice)}>
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View JSON
+                                </DropdownMenuItem>
+                                {invoice.fbrInvoiceNumber && (
+                                  <DropdownMenuItem
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(invoice.fbrInvoiceNumber!)
+                                      alert('FBR Invoice Number copied to clipboard!')
+                                    }}
+                                  >
+                                    <FileText className="h-4 w-4 mr-2" />
+                                    Copy FBR Invoice #
+                                  </DropdownMenuItem>
+                                )}
+                                {(['DRAFT', 'SAVED', 'FAILED'].includes(invoice.status) && !invoice.fbrSubmitted) && (
+                                  <DropdownMenuItem
+                                    onClick={() => deleteInvoice(invoice.id)}
+                                    className="text-red-600"
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-2" />
+                                    Delete
+                                  </DropdownMenuItem>
+                                )}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </>
                         )}
-                        
-                        {/* Dot menu with view JSON option */}
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button size="sm" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => viewInvoiceJson(invoice)}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View JSON
-                            </DropdownMenuItem>
-                            {!invoice.isEditing && (
-                              <DropdownMenuItem
-                                onClick={() => deleteInvoice(invoice.id)}
-                                className="text-red-600"
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
                       </div>
                     </td>
                   </tr>
@@ -1400,7 +1628,7 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                   {/* Expanded row for editing items */}
                   {invoice.isEditing && (
                     <tr>
-                      <td colSpan={8} className="px-4 py-2 bg-gray-50">
+                      <td colSpan={9} className="px-4 py-2 bg-gray-50">
                         <div className="space-y-4">
                           {/* FBR Compliance Fields */}
                           <div className="border-b pb-2">
@@ -1559,6 +1787,109 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
                               </div>
                             </div>
                           </div>
+                          
+                          {/* FBR Invoice Number Display */}
+                          {invoice.fbrInvoiceNumber && (
+                            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <h4 className="font-medium text-sm mb-1 text-green-800">FBR Invoice Number</h4>
+                                  <p className="text-green-700 font-mono">{invoice.fbrInvoiceNumber}</p>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(invoice.fbrInvoiceNumber!)
+                                    alert('FBR Invoice Number copied to clipboard!')
+                                  }}
+                                  className="text-green-700 border-green-300 hover:bg-green-100"
+                                >
+                                  Copy
+                                </Button>
+                              </div>
+                              <p className="text-xs text-green-600 mt-2">This invoice has been submitted to FBR</p>
+                            </div>
+                          )}
+                          
+                          {/* Quick Actions - Always visible in expanded view */}
+                          {invoice.status !== 'DRAFT' && (
+                            <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                              <h4 className="font-medium text-sm mb-2 text-gray-700">Quick Actions</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {invoice.status === 'SAVED' && (
+                                  <Button
+                                    size="sm"
+                                    onClick={() => validateInvoice(invoice.id)}
+                                    disabled={validating.includes(invoice.id)}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                                  >
+                                    {validating.includes(invoice.id) ? (
+                                      <>
+                                        <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-2"></div>
+                                        Validating...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Check className="h-3 w-3 mr-2" />
+                                        Validate with FBR
+                                      </>
+                                    )}
+                                  </Button>
+                                )}
+                                
+                                {invoice.status === 'VALIDATED' && (
+                                  <Button
+                                    size="sm"
+                                    onClick={() => publishInvoice(invoice.id)}
+                                    disabled={publishing.includes(invoice.id)}
+                                    className="bg-green-600 hover:bg-green-700 text-white"
+                                  >
+                                    {publishing.includes(invoice.id) ? (
+                                      <>
+                                        <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-2"></div>
+                                        Submitting...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Send className="h-3 w-3 mr-2" />
+                                        Submit to FBR
+                                      </>
+                                    )}
+                                  </Button>
+                                )}
+                                
+                                {(invoice.status === 'SAVED' || invoice.status === 'VALIDATED' || invoice.status === 'PUBLISHED') && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={async () => {
+                                      try {
+                                        const response = await fetch(`/api/invoices/${invoice.id}/pdf`)
+                                        if (!response.ok) throw new Error('Failed to generate PDF')
+                                        const blob = await response.blob()
+                                        const url = window.URL.createObjectURL(blob)
+                                        const link = document.createElement('a')
+                                        link.href = url
+                                        link.download = `Invoice-${invoice.invoiceNumber || invoice.id}-${Date.now()}.pdf`
+                                        document.body.appendChild(link)
+                                        link.click()
+                                        document.body.removeChild(link)
+                                        window.URL.revokeObjectURL(url)
+                                      } catch (error) {
+                                        console.error('PDF download error:', error)
+                                        alert('Failed to download PDF')
+                                      }
+                                    }}
+                                    className="text-purple-700 border-purple-300 hover:bg-purple-50"
+                                  >
+                                    <Download className="h-3 w-3 mr-2" />
+                                    Download PDF
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          )}
                           
                           {/* Invoice Items */}
                           <div>
@@ -1827,6 +2158,122 @@ const SpreadsheetInvoiceCreator: React.FC = () => {
             <pre className="bg-gray-100 p-4 rounded text-xs overflow-auto">
               {JSON.stringify(jsonViewInvoice, null, 2)}
             </pre>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Error Modal Dialog */}
+      <Dialog open={errorModal.open} onOpenChange={() => setErrorModal({ open: false, invoice: null, error: null, details: null })}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-600">
+              <AlertCircle className="h-5 w-5" />
+              FBR Error Details
+            </DialogTitle>
+          </DialogHeader>
+          {errorModal.invoice && errorModal.error && (
+            <div className="space-y-4">
+              {/* Invoice Information */}
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <h3 className="font-medium text-sm mb-2">Invoice Information</h3>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="font-medium">Invoice #:</span> {errorModal.invoice.invoiceNumber || 'Draft'}
+                  </div>
+                  <div>
+                    <span className="font-medium">Status:</span>
+                    <Badge variant="destructive" className="ml-2">{errorModal.invoice.status}</Badge>
+                  </div>
+                  {errorModal.invoice.customerName && (
+                    <div>
+                      <span className="font-medium">Customer:</span> {errorModal.invoice.customerName}
+                    </div>
+                  )}
+                  {errorModal.invoice.fbrInvoiceNumber && (
+                    <div>
+                      <span className="font-medium">FBR Invoice #:</span> {errorModal.invoice.fbrInvoiceNumber}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Error Summary */}
+              <div className="bg-red-50 border border-red-200 p-3 rounded-lg">
+                <h3 className="font-medium text-sm mb-2 text-red-800">Error Summary</h3>
+                <p className="text-sm text-red-700">{errorModal.error}</p>
+              </div>
+
+              {/* Error Details */}
+              {errorModal.details && (
+                <div className="bg-blue-50 p-3 rounded-lg">
+                  <h3 className="font-medium text-sm mb-2 text-blue-800">Technical Details</h3>
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="font-medium">Error Type:</span> {errorModal.details.type}
+                    </div>
+                    <div>
+                      <span className="font-medium">Environment:</span> {errorModal.details.environment}
+                    </div>
+                    <div>
+                      <span className="font-medium">Timestamp:</span> {new Date(errorModal.details.timestamp).toLocaleString()}
+                    </div>
+                    {errorModal.details.errorMessage && (
+                      <div>
+                        <span className="font-medium">Full Error Message:</span>
+                        <pre className="mt-1 bg-white p-2 rounded text-xs overflow-auto border">
+                          {errorModal.details.errorMessage}
+                        </pre>
+                      </div>
+                    )}
+                    {errorModal.details.error && (
+                      <div>
+                        <span className="font-medium">Error Object:</span>
+                        <pre className="mt-1 bg-white p-2 rounded text-xs overflow-auto border">
+                          {JSON.stringify(errorModal.details.error, null, 2)}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-2 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `Invoice: ${errorModal.invoice?.invoiceNumber || 'Draft'}\nError: ${errorModal.error}\nTimestamp: ${errorModal.details?.timestamp}\n\nFull Details:\n${JSON.stringify(errorModal.details, null, 2)}`
+                    )
+                    alert('Error details copied to clipboard!')
+                  }}
+                >
+                  Copy Error Details
+                </Button>
+                {errorModal.invoice?.status === 'FAILED' && (
+                  <Button
+                    onClick={() => {
+                      setErrorModal({ open: false, invoice: null, error: null, details: null })
+                      // Retry the operation based on the error type
+                      if (errorModal.details?.type === 'validation') {
+                        validateInvoice(errorModal.invoice!.id)
+                      } else if (errorModal.details?.type === 'publish') {
+                        publishInvoice(errorModal.invoice!.id)
+                      }
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Retry Operation
+                  </Button>
+                )}
+                <Button
+                  variant="secondary"
+                  onClick={() => setErrorModal({ open: false, invoice: null, error: null, details: null })}
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
           )}
         </DialogContent>
       </Dialog>

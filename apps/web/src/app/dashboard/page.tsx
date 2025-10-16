@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileText, Users, DollarSign, TrendingUp, Plus, Download, ArrowRight, Wifi, Smartphone, Package, LogOut, Zap } from "lucide-react"
 import SpreadsheetInvoiceWrapper from "@/components/spreadsheet-invoice-wrapper"
+import DashboardStats from "@/components/dashboard-stats"
+import RecentInvoices from "@/components/recent-invoices"
 
 async function SignOutButton() {
   return (
@@ -164,59 +166,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Stats Cards - Mobile Responsive */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Total Invoices</CardTitle>
-              <FileText className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg sm:text-2xl font-bold">12</div>
-              <p className="text-xs text-muted-foreground">
-                +3 from last month
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Revenue</CardTitle>
-              <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg sm:text-2xl font-bold">PKR 45,231</div>
-              <p className="text-xs text-muted-foreground">
-                +20.1% from last month
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Customers</CardTitle>
-              <Users className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg sm:text-2xl font-bold">8</div>
-              <p className="text-xs text-muted-foreground">
-                +2 from last month
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">FBR Submissions</CardTitle>
-              <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg sm:text-2xl font-bold">10</div>
-              <p className="text-xs text-muted-foreground">
-                83% success rate
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+        <DashboardStats />
 
         {/* Rapid Invoice Creator Section */}
         <Card className="mb-6 sm:mb-8">
@@ -266,40 +216,7 @@ export default async function DashboardPage() {
 
         {/* Recent Activity - Mobile Responsive */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base sm:text-lg">Recent Invoices</CardTitle>
-              <CardDescription className="text-sm">Your latest invoice activity</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium">Invoice #INV-001</p>
-                    <p className="text-sm text-gray-600">ABC Company - PKR 15,000</p>
-                  </div>
-                  <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                    FBR Submitted
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium">Invoice #INV-002</p>
-                    <p className="text-sm text-gray-600">XYZ Corp - PKR 8,500</p>
-                  </div>
-                  <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
-                    Draft
-                  </span>
-                </div>
-              </div>
-              <Link href="/invoices">
-                <Button variant="ghost" className="w-full mt-4">
-                  View all invoices
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+          <RecentInvoices />
 
           <Card>
             <CardHeader>

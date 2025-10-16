@@ -35,41 +35,60 @@ export default function InvoicesPage() {
       return
     }
 
+    const loadData = async () => {
+      try {
+        setLoading(true)
+        
+        // Fetch invoices from API
+        const response = await fetch('/api/invoices')
+        if (response.ok) {
+          const invoicesResult = await response.json()
+          // The API now returns { success: true, invoices: [...] }
+          setInvoices(invoicesResult.invoices || [])
+        } else {
+          console.error('Failed to fetch invoices:', response.statusText)
+          setInvoices([])
+        }
+        
+        // Fetch business data
+        const businessResponse = await fetch('/api/settings/business')
+        if (businessResponse.ok) {
+          const businessResult = await businessResponse.json()
+          if (businessResult.business) {
+            const businesses = [
+              {
+                id: businessResult.business.id || '1',
+                name: businessResult.business.companyName || 'Demo Business',
+                ntn: businessResult.business.ntnNumber || '1234567',
+                address: businessResult.business.address || '123 Business Street'
+              }
+            ]
+            setBusinesses(businesses)
+          }
+        } else {
+          console.error('Failed to fetch business data:', businessResponse.statusText)
+          // Fallback to mock data if fetch fails
+          const mockBusinesses = [
+            {
+              id: '1',
+              name: session?.user?.name || 'Demo Business',
+              ntn: '1234567',
+              address: '123 Business Street'
+            }
+          ]
+          setBusinesses(mockBusinesses)
+        }
+        
+      } catch (error) {
+        console.error('Failed to load data:', error)
+        setInvoices([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
     loadData()
   }, [session, status])
-
-  const loadData = async () => {
-    try {
-      setLoading(true)
-      
-      // Fetch invoices from API
-      const response = await fetch('/api/invoices')
-      if (response.ok) {
-        const invoicesResult = await response.json()
-        setInvoices(invoicesResult || [])
-      } else {
-        console.error('Failed to fetch invoices:', response.statusText)
-        setInvoices([])
-      }
-      
-      // For now, use mock business data
-      const mockBusinesses = [
-        {
-          id: '1',
-          name: session?.user?.name || 'Demo Business',
-          ntn: '1234567',
-          address: '123 Business Street'
-        }
-      ]
-      setBusinesses(mockBusinesses)
-      
-    } catch (error) {
-      console.error('Failed to load data:', error)
-      setInvoices([])
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleSubmitToFBR = async (invoiceId: string) => {
     const invoice = invoices.find(inv => inv.id === invoiceId)
@@ -205,7 +224,21 @@ export default function InvoicesPage() {
   const handleFBRSubmission = async (environment: string) => {
     console.log('Submitting to FBR:', selectedInvoice, environment)
     // Reload invoice data after submission
-    await loadData()
+    try {
+      setLoading(true)
+      
+      // Fetch invoices from API
+      const response = await fetch('/api/invoices')
+      if (response.ok) {
+        const invoicesResult = await response.json()
+        setInvoices(invoicesResult.invoices || [])
+      }
+    } catch (error) {
+      console.error('Failed to reload invoices:', error)
+    } finally {
+      setLoading(false)
+    }
+    
     // Close modal
     setShowSubmissionModal(false)
     setSelectedInvoice(null)
@@ -224,7 +257,21 @@ export default function InvoicesPage() {
 
       if (response.ok) {
         // Success - reload invoice list
-        await loadData()
+        try {
+          setLoading(true)
+          
+          // Fetch invoices from API
+          const invoicesResponse = await fetch('/api/invoices')
+          if (invoicesResponse.ok) {
+            const invoicesResult = await invoicesResponse.json()
+            setInvoices(invoicesResult.invoices || [])
+          }
+        } catch (error) {
+          console.error('Failed to reload invoices:', error)
+        } finally {
+          setLoading(false)
+        }
+        
         setShowDeleteDialog(false)
         setInvoiceToDelete(null)
         alert(deleteResult.message || 'Invoice deleted successfully')
@@ -543,10 +590,24 @@ export default function InvoicesPage() {
       {showSubmissionModal && selectedInvoice && (
         <FBRSubmissionModal
           isOpen={showSubmissionModal}
-          onClose={() => {
+          onClose={async () => {
             setShowSubmissionModal(false)
             setSelectedInvoice(null)
-            loadData() // Refresh invoice list after modal closes
+            // Refresh invoice list after modal closes
+            try {
+              setLoading(true)
+              
+              // Fetch invoices from API
+              const response = await fetch('/api/invoices')
+              if (response.ok) {
+                const invoicesResult = await response.json()
+                setInvoices(invoicesResult.invoices || [])
+              }
+            } catch (error) {
+              console.error('Failed to reload invoices:', error)
+            } finally {
+              setLoading(false)
+            }
           }}
           invoice={selectedInvoice}
           onSubmit={handleFBRSubmission}

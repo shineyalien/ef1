@@ -58,10 +58,21 @@ interface Customer {
   name: string
   registrationType: 'REGISTERED' | 'UNREGISTERED'
   ntnCnic?: string
+  ntnNumber?: string
   address: string
   province: string
+  city?: string
   phoneNumber?: string
   email?: string
+  // Additional FBR fields
+  buyerCNIC?: string
+  buyerNTN?: string
+  buyerPassport?: string
+  buyerType?: string
+  buyerCity?: string
+  buyerProvince?: string
+  buyerContact?: string
+  buyerEmail?: string
 }
 
 interface LookupData {
@@ -100,6 +111,7 @@ export default function CreateInvoicePage() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [invoiceId, setInvoiceId] = useState<string | null>(null)
+  const [invoiceNumber, setInvoiceNumber] = useState<string | null>(null)
   
   // Lookup data
   const [lookupData, setLookupData] = useState<LookupData | null>(null)
@@ -109,6 +121,7 @@ export default function CreateInvoicePage() {
   const [availableUOMs, setAvailableUOMs] = useState<Record<string, Array<{ uoM_ID: number; description: string }>>>({}) // HS Code → UOMs mapping
   const [scenarios, setScenarios] = useState<Array<{ code: string; description: string; businessTypes?: string[]; sectors?: string[] }>>([])
   const [loadingScenarios, setLoadingScenarios] = useState(false)
+  const [nextInvoiceNumber, setNextInvoiceNumber] = useState<string | null>(null)
   
   // Product search state - using enhanced search
   const [productSearchQueries, setProductSearchQueries] = useState<Record<string, string>>({}) // itemId → search query
@@ -130,7 +143,14 @@ export default function CreateInvoicePage() {
     scenarioId: '',
     taxPeriod: new Date().toISOString().slice(0, 7), // YYYY-MM format
     invoiceRefNo: '', // For debit notes only
-    notes: ''
+    notes: '',
+    // FBR Buyer Information Fields
+    fbrBuyerNTN: '',
+    fbrBuyerCNIC: '',
+    fbrBuyerPassport: '',
+    fbrBuyerType: '1', // Default to NTN
+    fbrBuyerCity: '',
+    fbrBuyerProvince: ''
   })
   
   const [items, setItems] = useState<InvoiceItem[]>([
@@ -207,6 +227,9 @@ export default function CreateInvoicePage() {
         
         // Load scenarios based on user's business profile
         await loadScenarios()
+        
+        // Fetch next invoice number after scenarios are loaded
+        await fetchNextInvoiceNumber()
       } catch (error) {
         console.error('Error loading data:', error)
         handleGenericError(error instanceof Error ? error : new Error('Failed to load required data'), 'Loading initial data')
@@ -221,6 +244,28 @@ export default function CreateInvoicePage() {
     }
   }, [status])
 
+  // Fetch next invoice number
+  const fetchNextInvoiceNumber = async () => {
+    try {
+      const response = await fetch('/api/invoices/next-number')
+      if (response.ok) {
+        const data = await response.json()
+        setNextInvoiceNumber(data.nextInvoiceNumber)
+      } else {
+        console.error('Failed to fetch next invoice number')
+        // Generate a provisional invoice number as fallback
+        const currentYear = new Date().getFullYear()
+        const provisionalNumber = `INV-${currentYear}-????`
+        setNextInvoiceNumber(provisionalNumber)
+      }
+    } catch (error) {
+      console.error('Error fetching next invoice number:', error)
+      // Generate a provisional invoice number as fallback
+      const currentYear = new Date().getFullYear()
+      const provisionalNumber = `INV-${currentYear}-????`
+      setNextInvoiceNumber(provisionalNumber)
+    }
+  }
 
   // Load FBR scenarios based on business type and sector
   const loadScenarios = async () => {
@@ -686,6 +731,13 @@ export default function CreateInvoicePage() {
         totalFED: totals.totalFED,
         status: 'SAVED', // Save as SAVED status (can be edited later)
         mode: 'LOCAL',
+        // Include FBR Buyer Information fields
+        fbrBuyerNTN: invoiceData.fbrBuyerNTN,
+        fbrBuyerCNIC: invoiceData.fbrBuyerCNIC,
+        fbrBuyerPassport: invoiceData.fbrBuyerPassport,
+        fbrBuyerType: invoiceData.fbrBuyerType,
+        fbrBuyerCity: invoiceData.fbrBuyerCity,
+        fbrBuyerProvince: invoiceData.fbrBuyerProvince,
         items: items.map(item => ({
           description: item.description,
           hsCode: item.hsCode,
@@ -741,6 +793,12 @@ export default function CreateInvoicePage() {
       
       if (!invoiceId) {
         setInvoiceId(data.invoice.id)
+        setInvoiceNumber(data.invoice.invoiceNumber)
+      } else {
+        // For existing invoices, update the invoice number if it changed
+        if (data.invoice.invoiceNumber) {
+          setInvoiceNumber(data.invoice.invoiceNumber)
+        }
       }
       
       setLastSaved(new Date())
@@ -810,8 +868,9 @@ export default function CreateInvoicePage() {
       }
       
       const data = await response.json()
-      setSuccess(`Invoice submitted to FBR Sandbox! IRN: ${data.fbrInvoiceNumber}`)
-      showSuccessToast('Submitted to FBR', `Invoice submitted to FBR Sandbox! IRN: ${data.fbrInvoiceNumber}`)
+      const fbrInvoiceNumber = data.fbrInvoiceNumber || data.invoice?.fbrInvoiceNumber
+      setSuccess(`Invoice submitted to FBR Sandbox! IRN: ${fbrInvoiceNumber}`)
+      showSuccessToast('Submitted to FBR', `Invoice submitted to FBR Sandbox! IRN: ${fbrInvoiceNumber}`)
       
       // Redirect to invoice list after 2 seconds
       setTimeout(() => {
@@ -866,9 +925,17 @@ export default function CreateInvoicePage() {
           <h1 className="text-3xl font-bold text-gray-900">
             {invoiceId ? 'Edit Invoice' : 'Create New Invoice'}
           </h1>
-          <p className="text-gray-600 mt-1">
-            All fields marked with <span className="text-red-500">*</span> are required for FBR compliance
-          </p>
+          <div className="flex items-center mt-2 space-x-4">
+            <p className="text-gray-600">
+              All fields marked with <span className="text-red-500">*</span> are required for FBR compliance
+            </p>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium text-gray-500">System Invoice Number:</span>
+              <span className="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                {invoiceNumber || nextInvoiceNumber || 'Loading...'}
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Alerts */}
@@ -932,7 +999,14 @@ export default function CreateInvoicePage() {
                           setInvoiceData({
                             ...invoiceData,
                             customerId: customer.id,
-                            customerName: customer.name
+                            customerName: customer.name,
+                            // Map customer data to FBR Buyer Information fields
+                            fbrBuyerNTN: customer.ntnNumber || customer.buyerNTN || '',
+                            fbrBuyerCNIC: customer.buyerCNIC || '',
+                            fbrBuyerPassport: customer.buyerPassport || '',
+                            fbrBuyerType: customer.buyerType || (customer.ntnNumber ? '1' : '2'), // Default to NTN if available, otherwise CNIC
+                            fbrBuyerCity: customer.buyerCity || customer.city || '',
+                            fbrBuyerProvince: customer.buyerProvince || customer.province || ''
                           })
                           setCustomerSearch('')
                         }}
@@ -1111,6 +1185,117 @@ export default function CreateInvoicePage() {
                     />
                   </div>
                 )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* FBR Buyer Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle>FBR Buyer Information</CardTitle>
+              <CardDescription>Additional buyer details for FBR compliance</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="buyer-type">Buyer Type</Label>
+                  <Select
+                    value={invoiceData.fbrBuyerType || '1'}
+                    onValueChange={(value) => {
+                      setInvoiceData({ ...invoiceData, fbrBuyerType: value })
+                      // Clear irrelevant buyer ID fields when buyer type changes
+                      if (value === '1') { // NTN selected
+                        setInvoiceData(prev => ({
+                          ...prev,
+                          fbrBuyerType: value,
+                          fbrBuyerCNIC: '',
+                          fbrBuyerPassport: ''
+                        }))
+                      } else if (value === '2') { // CNIC selected
+                        setInvoiceData(prev => ({
+                          ...prev,
+                          fbrBuyerType: value,
+                          fbrBuyerNTN: '',
+                          fbrBuyerPassport: ''
+                        }))
+                      } else if (value === '3') { // Passport selected
+                        setInvoiceData(prev => ({
+                          ...prev,
+                          fbrBuyerType: value,
+                          fbrBuyerNTN: '',
+                          fbrBuyerCNIC: ''
+                        }))
+                      }
+                    }}
+                  >
+                    <SelectTrigger id="buyer-type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">NTN</SelectItem>
+                      <SelectItem value="2">CNIC</SelectItem>
+                      <SelectItem value="3">Passport</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                 
+                {/* Show NTN field only when NTN is selected */}
+                {invoiceData.fbrBuyerType === '1' && (
+                  <div>
+                    <Label htmlFor="buyer-ntn">Buyer NTN</Label>
+                    <Input
+                      id="buyer-ntn"
+                      placeholder="Buyer NTN"
+                      value={invoiceData.fbrBuyerNTN || ''}
+                      onChange={(e) => setInvoiceData({ ...invoiceData, fbrBuyerNTN: e.target.value })}
+                    />
+                  </div>
+                )}
+                 
+                {/* Show CNIC field only when CNIC is selected */}
+                {invoiceData.fbrBuyerType === '2' && (
+                  <div>
+                    <Label htmlFor="buyer-cnic">Buyer CNIC</Label>
+                    <Input
+                      id="buyer-cnic"
+                      placeholder="Buyer CNIC"
+                      value={invoiceData.fbrBuyerCNIC || ''}
+                      onChange={(e) => setInvoiceData({ ...invoiceData, fbrBuyerCNIC: e.target.value })}
+                    />
+                  </div>
+                )}
+                 
+                {/* Show Passport field only when Passport is selected */}
+                {invoiceData.fbrBuyerType === '3' && (
+                  <div>
+                    <Label htmlFor="buyer-passport">Buyer Passport</Label>
+                    <Input
+                      id="buyer-passport"
+                      placeholder="Buyer Passport"
+                      value={invoiceData.fbrBuyerPassport || ''}
+                      onChange={(e) => setInvoiceData({ ...invoiceData, fbrBuyerPassport: e.target.value })}
+                    />
+                  </div>
+                )}
+                 
+                <div>
+                  <Label htmlFor="buyer-city">Buyer City</Label>
+                  <Input
+                    id="buyer-city"
+                    placeholder="Buyer City"
+                    value={invoiceData.fbrBuyerCity || ''}
+                    onChange={(e) => setInvoiceData({ ...invoiceData, fbrBuyerCity: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="buyer-province">Buyer Province</Label>
+                  <Input
+                    id="buyer-province"
+                    placeholder="Buyer Province"
+                    value={invoiceData.fbrBuyerProvince || ''}
+                    onChange={(e) => setInvoiceData({ ...invoiceData, fbrBuyerProvince: e.target.value })}
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>

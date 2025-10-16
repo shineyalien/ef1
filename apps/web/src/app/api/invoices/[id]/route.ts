@@ -123,6 +123,16 @@ export async function PUT(
         totalFurtherTax: body.totalFurtherTax || 0,
         totalFED: body.totalFED || 0,
         status: body.status || existingInvoice.status,
+        // Include FBR Buyer Information fields
+        fbrBuyerNTN: body.fbrBuyerNTN || '',
+        fbrBuyerCNIC: body.fbrBuyerCNIC || '',
+        fbrBuyerPassport: body.fbrBuyerPassport || '',
+        fbrBuyerType: body.fbrBuyerType || '',
+        fbrBuyerCity: body.fbrBuyerCity || '',
+        fbrBuyerProvince: body.fbrBuyerProvince || '',
+        fbrBuyerAddress: body.fbrBuyerAddress || '',
+        fbrBuyerContact: body.fbrBuyerContact || '',
+        fbrBuyerEmail: body.fbrBuyerEmail || '',
         items: {
           create: body.items.map((item: any) => ({
             description: item.description,

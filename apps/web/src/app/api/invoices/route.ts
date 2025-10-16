@@ -355,7 +355,7 @@ export async function POST(request: NextRequest) {
           totalExtraTax: body.totalExtraTax || 0,
           totalFurtherTax: body.totalFurtherTax || 0,
           totalFED: body.totalFED || 0,
-          status: body.status || 'DRAFT',
+          status: body.status || 'SAVED', // Use provided status or default to SAVED
           mode: body.mode || 'LOCAL',
           
           // FBR Buyer Information Fields
