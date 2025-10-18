@@ -60,7 +60,9 @@ DATABASE_CONNECTION_TIMEOUT="30"
 
 ## Deployment Steps
 
-### Step 1: Prepare the Docker Environment
+### Option 1: Fresh Deployment with Migrations
+
+#### Step 1: Prepare the Docker Environment
 
 1. Create the production environment file:
 ```bash
@@ -73,7 +75,7 @@ cp .env.example .env.production
 docker build -t easyfiler-prod .
 ```
 
-### Step 2: Deploy Database Schema with Docker
+#### Step 2: Deploy Database Schema with Docker
 
 1. Start the PostgreSQL container first:
 ```bash
@@ -107,7 +109,7 @@ docker run --rm \
   npx prisma generate
 ```
 
-### Step 3: Start the Full Application Stack
+#### Step 3: Start the Full Application Stack
 
 1. Start all services:
 ```bash
@@ -119,7 +121,74 @@ docker-compose -f docker-compose.prod.yml up -d
 docker-compose -f docker-compose.prod.yml ps
 ```
 
-### Step 4: Verify Deployment
+### Option 2: Deploy from Existing Database Backup
+
+If you have an existing database with data that you want to migrate to the new machine:
+
+#### Step 1: Backup Current Database
+
+On your current machine:
+```bash
+# Run the backup script
+node scripts/backup-database.js
+
+# This will create a backup file in the backups/ directory
+# Example: backups/easyfiler-backup-2023-10-18T11-30-00.sql.gz
+```
+
+#### Step 2: Transfer Backup to New Machine
+
+1. Copy the backup file to the new machine:
+```bash
+# Using scp
+scp backups/easyfiler-backup-2023-10-18T11-30-00.sql.gz user@new-machine:/path/to/easyfiler/backups/
+
+# Or using rsync
+rsync -avz backups/ user@new-machine:/path/to/easyfiler/backups/
+```
+
+#### Step 3: Restore Database on New Machine
+
+1. Start the PostgreSQL container:
+```bash
+docker-compose -f docker-compose.prod.yml up -d postgres
+```
+
+2. Wait for PostgreSQL to be ready:
+```bash
+docker-compose -f docker-compose.prod.yml logs -f postgres
+# Wait until you see "database system is ready to accept connections"
+```
+
+3. Restore the database:
+```bash
+# Run the restore script
+node scripts/restore-database.js backups/easyfiler-backup-2023-10-18T11-30-00.sql.gz
+```
+
+4. Generate Prisma client:
+```bash
+docker run --rm \
+  --network easy-filer-network \
+  -e DATABASE_URL="postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/easyfiler" \
+  -v $(pwd)/apps/web/prisma:/app/prisma \
+  easyfiler-prod \
+  npx prisma generate
+```
+
+#### Step 4: Start the Full Application Stack
+
+1. Start all services:
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+2. Check that all services are running:
+```bash
+docker-compose -f docker-compose.prod.yml ps
+```
+
+### Step 5: Verify Deployment
 
 1. Check application logs:
 ```bash
