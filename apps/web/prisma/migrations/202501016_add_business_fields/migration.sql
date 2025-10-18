@@ -1,0 +1,18 @@
+-- AlterTable
+ALTER TABLE "businesses" ADD COLUMN     "sellerCity" TEXT,
+ADD COLUMN     "sellerContact" TEXT,
+ADD COLUMN     "sellerEmail" TEXT,
+ADD COLUMN     "posId" TEXT,
+ADD COLUMN     "electronicSoftwareRegNo" TEXT,
+ADD COLUMN     "fbrIntegratorLicenseNo" TEXT,
+ADD COLUMN     "logoUrl" TEXT,
+ADD COLUMN     "invoiceTemplate" TEXT,
+ADD COLUMN     "invoicePrefix" TEXT,
+ADD COLUMN     "footerText" TEXT,
+ADD COLUMN     "taxIdLabel" TEXT,
+ADD COLUMN     "defaultPaymentTerms" TEXT,
+ADD COLUMN     "primaryColor" TEXT,
+ADD COLUMN     "secondaryColor" TEXT,
+ADD COLUMN     "defaultCurrency" TEXT NOT NULL DEFAULT 'PKR',
+ADD COLUMN     "pdfTheme" TEXT,
+ADD COLUMN     "defaultScenario" TEXT;
