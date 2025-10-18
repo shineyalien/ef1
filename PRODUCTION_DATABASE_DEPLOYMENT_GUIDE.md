@@ -1,6 +1,6 @@
 # Production Database Deployment Guide
 
-This guide provides step-by-step instructions for deploying the Easy Filer v3 application database to production, ensuring all schema and migration issues are resolved.
+This guide provides step-by-step instructions for deploying the Easy Filer v3 application database to production using Docker, ensuring all schema and migration issues are resolved.
 
 ## Overview
 
@@ -9,101 +9,143 @@ The application has been updated to consolidate duplicate schema files and migra
 1. **Consolidated Schema**: Using `apps/web/prisma/schema.prisma` as the single source of truth
 2. **Unified Migrations**: All migrations are now in `apps/web/prisma/migrations/`
 3. **Removed Duplicates**: Eliminated redundant fields and inconsistent naming
+4. **Docker Integration**: Optimized for Docker-based deployment with docker-compose
 
 ## Pre-Deployment Checklist
 
-### 1. Database Configuration
+### 1. Docker Environment Setup
 
-- [ ] Production PostgreSQL database is ready
+- [ ] Docker and Docker Compose are installed on the production server
+- [ ] Sufficient disk space is available for Docker volumes
+- [ ] Docker daemon is running with appropriate resource limits
+
+### 2. Database Configuration
+
+- [ ] Production PostgreSQL database is ready (via Docker)
 - [ ] Database URL is configured in environment variables
 - [ ] Database user has necessary permissions (CREATE, ALTER, INSERT, UPDATE, DELETE, SELECT)
-- [ ] SSL connection is enabled for security
+- [ ] SSL connection is enabled for security (if required)
 - [ ] Connection pool size is configured for production load
 
-### 2. Environment Variables
+### 3. Environment Variables
+
+Create a `.env.production` file with the following variables:
 
 ```bash
 # Required for production
-DATABASE_URL="postgresql://username:password@host:port/database?sslmode=require"
 NODE_ENV="production"
+POSTGRES_PASSWORD="your_secure_password"  # Used by docker-compose.prod.yml
+DATABASE_URL="postgresql://postgres:your_secure_password@postgres:5432/easyfiler"
+
+# Application Configuration
+NEXTAUTH_URL="https://yourdomain.com"
+NEXTAUTH_SECRET="your_nextauth_secret"
+
+# FBR Integration
+FBR_SANDBOX_USERNAME="your_fbr_sandbox_username"
+FBR_SANDBOX_PASSWORD="your_fbr_sandbox_password"
+FBR_PRODUCTION_USERNAME="your_fbr_production_username"
+FBR_PRODUCTION_PASSWORD="your_fbr_production_password"
 
 # Optional but recommended
 DATABASE_POOL_SIZE="20"
 DATABASE_CONNECTION_TIMEOUT="30"
 ```
 
-### 3. Backup Strategy
+### 4. Backup Strategy
 
 - [ ] Create a full backup of the production database
 - [ ] Test backup restoration process
-- [ ] Set up automated daily backups
+- [ ] Set up automated daily backups using Docker volumes
 
 ## Deployment Steps
 
-### Step 1: Prepare the Application
+### Step 1: Prepare the Docker Environment
 
-1. Navigate to the application directory:
+1. Create the production environment file:
 ```bash
-cd apps/web
+cp .env.example .env.production
+# Edit .env.production with your production values
 ```
 
-2. Install dependencies:
+2. Build the Docker image:
 ```bash
-npm install --production
+docker build -t easyfiler-prod .
 ```
 
-3. Generate Prisma client:
+### Step 2: Deploy Database Schema with Docker
+
+1. Start the PostgreSQL container first:
 ```bash
-npx prisma generate
+docker-compose -f docker-compose.prod.yml up -d postgres
 ```
 
-### Step 2: Deploy Database Schema
-
-1. Check migration status:
+2. Wait for PostgreSQL to be ready:
 ```bash
-npx prisma migrate status
+docker-compose -f docker-compose.prod.yml logs -f postgres
+# Wait until you see "database system is ready to accept connections"
 ```
 
-2. Apply all migrations to production:
+3. Run migrations inside the application container:
 ```bash
-npx prisma migrate deploy
+# Create a temporary container to run migrations
+docker run --rm \
+  --network easy-filer-network \
+  -e DATABASE_URL="postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/easyfiler" \
+  -v $(pwd)/apps/web/prisma:/app/prisma \
+  easyfiler-prod \
+  npx prisma migrate deploy
 ```
 
-3. Verify the database schema:
+4. Generate Prisma client:
 ```bash
-npx prisma db pull
-npx prisma validate
+docker run --rm \
+  --network easy-filer-network \
+  -e DATABASE_URL="postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/easyfiler" \
+  -v $(pwd)/apps/web/prisma:/app/prisma \
+  easyfiler-prod \
+  npx prisma generate
 ```
 
-### Step 3: Seed Initial Data (Optional)
+### Step 3: Start the Full Application Stack
 
-If you need to seed initial data:
+1. Start all services:
 ```bash
-npx prisma db seed
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+2. Check that all services are running:
+```bash
+docker-compose -f docker-compose.prod.yml ps
 ```
 
 ### Step 4: Verify Deployment
 
-1. Check database connection:
+1. Check application logs:
 ```bash
-npx prisma db execute --stdin
+docker-compose -f docker-compose.prod.yml logs -f app
 ```
 
-2. Verify all tables exist:
-```sql
-SELECT table_name FROM information_schema.tables 
-WHERE table_schema = 'public' 
+2. Connect to the database to verify tables:
+```bash
+# Connect to PostgreSQL container
+docker exec -it easy-filer-db psql -U postgres -d easyfiler
+
+# Inside PostgreSQL, verify tables
+\dt
+SELECT table_name FROM information_schema.tables
+WHERE table_schema = 'public'
 ORDER BY table_name;
 ```
 
 3. Check foreign key constraints:
 ```sql
 SELECT
-  tc.table_name, 
-  kcu.column_name, 
+  tc.table_name,
+  kcu.column_name,
   ccu.table_name AS foreign_table_name,
-  ccu.column_name AS foreign_column_name 
-FROM information_schema.table_constraints AS tc 
+  ccu.column_name AS foreign_column_name
+FROM information_schema.table_constraints AS tc
 JOIN information_schema.key_column_usage AS kcu
   ON tc.constraint_name = kcu.constraint_name
   AND tc.table_schema = kcu.table_schema
