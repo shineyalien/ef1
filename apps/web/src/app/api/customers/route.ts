@@ -199,12 +199,8 @@ export async function POST(request: NextRequest) {
           buyerCity: body.buyerCity?.trim() || body.city?.trim() || null,
           buyerProvince: body.province?.trim() || null,
           buyerContact: body.phone?.trim() || body.buyerContact?.trim() || null,
-          buyerEmail: body.email?.trim().toLowerCase() || body.buyerEmail?.trim().toLowerCase() || null,
-          // Regular address fields
-          city: body.city?.trim() || null,
-          province: body.province?.trim() || null,
-          postalCode: body.postalCode?.trim() || null
-        } as any
+          buyerEmail: body.email?.trim().toLowerCase() || body.buyerEmail?.trim().toLowerCase() || null
+        }
       })
     } catch (createError) {
       console.error('Failed to create customer:', createError)
